@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Survey from './pages/survey/Index';
+import Advanced from './pages/home/Index';
 
 function App() {
+  const [preferences, setPreferences] = useState(null);
+
+  const handleSurveyComplete = (prefs) => {
+    setPreferences(prefs);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-red-400 to-blue-400">
+      {!preferences ? (
+        <Survey onComplete={handleSurveyComplete} />
+      ) : (
+        <Advanced preferences={preferences} />
+      )}
     </div>
   );
 }
