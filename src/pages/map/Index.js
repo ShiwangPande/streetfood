@@ -81,7 +81,7 @@ const MapComponent = () => {
 
     return (
         <div className="flex flex-col  w-screen h-screen">
-            <div className="relative px-0 lg:px-20  flex justify-between z-[1000] p-4 bg-gray-200">
+            <div className="relative px-5 lg:px-20  flex justify-between z-[1000] p-4 bg-gray-200">
                 <div className="relative">
                     <input
                         type="text"
@@ -92,7 +92,7 @@ const MapComponent = () => {
                         className="px-4 py-2 text-gray-800 bg-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {showOptions && (
-                        <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-lg shadow-md z-10 max-h-48 overflow-y-auto">
+                        <div className="absolute top-full  left-0 w-full mt-1 bg-white rounded-lg shadow-md z-10 max-h-48 overflow-y-auto">
                             {filteredOptions.map((option, index) => (
                                 <button
                                     key={index}
@@ -106,7 +106,7 @@ const MapComponent = () => {
                     )}
                 </div>
                 <div className="ml-4 flex">
-                    <div className="absolute right-[1rem] top-[2vh]">
+                    <div className="absolute right-0 lg:right-[1rem] top-[2vh]">
                         {selectedFoodItems.length > 0 && (
                             <div className="relative">
                                 <button
@@ -142,6 +142,10 @@ const MapComponent = () => {
                         userLocation?.longitude || 88.3639,
                     ]}
                     zoom={16}
+                    scrollWheelZoom={true}
+                    // shift the zoom control to the bottom right
+                    zoomControl={false}
+
                     className="h-full w-full"
                 >
                     <TileLayer
