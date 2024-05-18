@@ -55,6 +55,7 @@ const Survey = ({ onComplete }) => {
                     </button>
                 )}
             </div>
+            
         </div>
     );
 };

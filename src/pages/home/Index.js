@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Advanced from './Advanced';
 function Index(preferences) {
     return (
 
-        <div>
+        <div className='m-0'>
 
             <Advanced preferences={preferences} />
         </div>
