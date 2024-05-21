@@ -8,6 +8,7 @@ import Tabbar from './components/Tabbar';
 import VendorPage from './pages/vendors/Index';
 import Wishlist from './pages/wishlist/Index';
 import { WishlistProvider } from './pages/wishlist/WishlistContext';
+import Loader from './components/Loader';
 const App = () => {
   const [preferences, setPreferences] = useState(null);
   const [vendors, setVendors] = useState([]);
@@ -18,46 +19,45 @@ const App = () => {
     navigate('/advanced', { state: { preferences: prefs, vendors: vendors } });
   };
 
-  useEffect(() => {
-    // Fetch vendors data here or from wherever it is available
-    const fetchVendors = async () => {
-      try {
-        // Fetch vendors data from API or any other source
-        // Example:
-        const response = await fetch('http://localhost:3000/vendors');
-        const data = await response.json();
-        setVendors(data);
-      } catch (error) {
-        console.error('Error fetching vendors:', error);
-      }
-    };
 
-    // Call the fetchVendors function when component mounts
-    fetchVendors();
-  }, []);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500)
+  }, [])
 
   return (
     <div className=" h-[100vh] ">
-      <Routes>
-        <Route path="/" element={<Survey onComplete={handleSurveyComplete} />} />
-        <Route path="/advanced" element={<Advanced preferences={preferences} />} />
-        <Route path="/map" element={<Map />} />
-        <Route path="/vendors" element={<VendorPage />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-      </Routes>
+      {
+        loading ?
+
+          <Loader loading={loading} size={300} /> :
+          <Routes>
+            <Route path="/" element={<Survey onComplete={handleSurveyComplete} />} />
+            <Route path="/advanced" element={<Advanced preferences={preferences} />} />
+            <Route path="/map" element={<Map />} />
+            <Route path="/vendors" element={<VendorPage />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+          </Routes>
+      }
     </div>
   );
 };
 
 const AppWrapper = () => (
+
   <WishlistProvider>
+
     <Router>
-   
+
       <Routes>
         <Route path="/*" element={<App />} />
       </Routes>
       <Tabbar />
     </Router>
+
   </WishlistProvider>
 );
 
