@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 function Navbar({ wishlistCount }) {
     return (
-        <nav className="bg-gray-100  shadow-md">
-            <div className=" fixed bg-gray-100  w-[100vw] ">
+        <nav className=" shadow-md">
+            <div className=" fixed shadow-lg  bg-[#b9c1ea92] backdrop-blur-lg w-[100vw] ">
                 <div className="flex items-center z-100 container justify-between mx-auto px-6 py-4">
                     <div className="flex items-center">
                         <Link to="/" className="flex items-center mr-6">

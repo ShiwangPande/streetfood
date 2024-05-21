@@ -37,7 +37,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className=" h-[100vh] bg-gradient-to-b from-red-400 to-blue-400">
+    <div className=" h-[100vh] ">
       <Routes>
         <Route path="/" element={<Survey onComplete={handleSurveyComplete} />} />
         <Route path="/advanced" element={<Advanced preferences={preferences} />} />

@@ -4,7 +4,8 @@ import Data from '../../components/Data';
 import Navbar from '../../components/Navbar';
 import { useWishlist } from '../../pages/wishlist/WishlistContext';
 import { useNavigate } from 'react-router-dom';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUndo, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalityRating: 0 } }) {
     const [filteredData, setFilteredData] = useState([]);
@@ -59,22 +60,77 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             childRefs[idx].current.restoreCard();
         }
     };
+    useEffect(() => {
+        let isMounted = true;
+
+        const initializeRefs = async () => {
+            const newRefs = await Promise.all(filteredData.map(() => React.createRef()));
+            if (isMounted) {
+                childRefs.current = newRefs;
+            }
+        };
+
+        initializeRefs();
+
+        return () => {
+            isMounted = false; // Set to false when component unmounts to cancel async operations
+        };
+    }, [filteredData]);
 
     const swipe = async (dir) => {
-        if (canSwipe && currentIndex < filteredData.length) {
+        if (canSwipe && currentIndex >= 0 && currentIndex < filteredData.length) {
             const newIndex = currentIndex - 1;
-            await updateCurrentIndex(newIndex);
-            await childRefs[newIndex].current.swipe(dir);
+            updateCurrentIndex(newIndex); // Update currentIndex synchronously before swipe
+            const currentRef = childRefs[currentIndex]?.current; // Access current index
+            if (currentRef && currentRef.swipe) {
+                await currentRef.swipe(dir);
+            }
+        }
+    };
+
+    const removeFromWishlist = (item) => {
+        const index = wishlist.findIndex((wishlistItem) => wishlistItem.name === item.name);
+        if (index > -1) {
+            addToWishlist(wishlist[index]);
         }
     };
 
     const goBack = async () => {
         if (!canGoBack) return;
 
+        // Get the last added item from the wishlist
+        const removedItem = wishlist[wishlist.length - 1];
+
+        // Check if the removed item exists and has an ID
+        if (removedItem && removedItem.id) {
+            // Remove the last added item from the Wishlist
+            removeFromWishlist(removedItem.id);
+        }
+
+        // Update the current index
         const newIndex = currentIndex + 1;
-        await updateCurrentIndex(newIndex);
-        await childRefs[newIndex].current.restoreCard();
+        updateCurrentIndex(newIndex);
+
+        // Check if there are more cards to show
+        if (currentIndex < filteredData.length - 1) {
+            // If there are more cards, restore the card
+            await childRefs[newIndex].current.restoreCard();
+        } else {
+            // If no more cards to show after removing the last one, handle the end of the list
+            if (filteredData.length === 1) {
+                // If there's only one card left after removal, reset the list to show all cards again
+                setFilteredData([...Data]); // Reset the list to show all cards again
+                setCurrentIndex(Data.length - 1); // Reset the current index
+            } else {
+                // If there are still cards left after removal, just update the current index
+                setCurrentIndex(currentIndex - 1);
+            }
+        }
     };
+
+
+
+
 
     function generateStars(rating) {
         const starCount = 5;
@@ -92,9 +148,10 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
     return (
         <>
             <Navbar wishlistCount={wishlist.length} />
-            <div className="flex flex-col pt-32 items-center justify-center min-h-[100%] w-screen overflow-hidden bg-gradient-to-b from-red-400 to-blue-400">
-                <h1 className="text-white text-3xl md:text-5xl font-damion mb-3 md:mb-5 shadow-text">Street Food Tinder</h1>
-                <div className="relative flex justify-center items-center w-full max-w-screen-md h-72 md:h-96">
+            <div className="flex flex-col pt-10 items-center justify-center min-h-screen w-screen overflow-hidden bg-gradient-to-b from-[#B3DFEC] to-[#B9C0EA]">
+                <h1 className="text-[#e74f4f] text-3xl md:text-5xl font-damion font-bold mb-3 md:mb-5 drop-shadow-lg outline-black">KartMatch</h1>
+
+                <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-72 md:h-96">
                     {filteredData.map((character, index) => (
                         <TinderCard
                             ref={childRefs[index]}
@@ -129,35 +186,35 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                 </div>
                 <div className="flex flex-wrap justify-center mt-3 md:mt-5 space-y-3 md:space-y-0 md:space-x-3">
                     <button
-                        className={`px-4 md:px-5 py-2 md:py-3 rounded-lg text-white font-bold text-lg bg-indigo-400 shadow-lg transform transition-transform ${!canSwipe && 'opacity-50'}`}
+                        className={`px-4 md:px-5 py-2 md:py-3 rounded-lg text-white font-bold text-lg bg-[#F6AC5A] shadow-lg transform transition-transform ${!canSwipe && 'opacity-50'}`}
                         onClick={() => swipe('left')}
                     >
-                        Swipe left!
+                        <FontAwesomeIcon icon={faArrowLeft} />
                     </button>
                     <button
-                        className={`px-4 md:px-5 py-2 md:py-3 rounded-lg text-white font-bold text-lg bg-indigo-400 shadow-lg transform transition-transform ${!canGoBack && 'opacity-50'}`}
+                        className={`px-4 md:px-5 py-2 md:py-3 rounded-lg text-white font-bold text-lg bg-[#E8A5CC] shadow-lg transform transition-transform ${!canGoBack && 'opacity-50'}`}
                         onClick={() => goBack()}
                     >
-                        Undo swipe!
+                        <FontAwesomeIcon icon={faUndo} />
                     </button>
                     <button
-                        className={`px-4 md:px-5 py-2 md:py-3 rounded-lg text-white font-bold text-lg bg-indigo-400 shadow-lg transform transition-transform ${!canSwipe && 'opacity-50'}`}
+                        className={`px-4 md:px-5 py-2 md:py-3 rounded-lg text-white font-bold text-lg bg-[#F0725C] shadow-lg transform transition-transform ${!canSwipe && 'opacity-50'}`}
                         onClick={() => swipe('right')}
                     >
-                        Swipe right!
+                        <FontAwesomeIcon icon={faArrowRight} />
                     </button>
                 </div>
                 {lastDirection ? (
-                    <h2 className="text-white mt-3 md:mt-5 animate-popup">
+                    <h2 className="text-white mt-3  animate-popup">
                         You swiped {lastDirection}
                     </h2>
                 ) : (
-                    <h2 className="text-white mt-3 md:mt-5 animate-popup">
+                    <h2 className="text-white mt-3 animate-popup">
                         Swipe a card or press a button to get Restore Card button visible!
                     </h2>
                 )}
                 <button
-                    className="px-4 py-2 mt-5 bg-blue-500 text-white rounded-lg"
+                    className="px-4 py-2 mt-3 bg-blue-500 text-white rounded-lg"
                     onClick={() => navigate('/wishlist')}
                 >
                     View Wishlist

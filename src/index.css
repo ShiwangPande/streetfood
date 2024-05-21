@@ -1,3 +1,31 @@
+/* tailwind.css or your custom CSS file */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Define Karibites color theme */
+@layer utilities {
+  .from-karibites-light {
+    --bg-gradient-from: #b3dfec;
+  }
+  .to-karibites-dark {
+    --bg-gradient-to: #f6ac5a;
+  }
+  .bg-karibites-primary {
+    background-color: #f0725c;
+  }
+}
+
+.preference-button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: transform 0.3s;
+}
+
+.preference-button:hover {
+  transform: scale(1.05);
+}

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import VendorCard from './VendorCard';
 import vendorData from '../../components/Data';
-
+import logo from "../../components/logo256.png";
+import { Link } from 'react-router-dom';
 const VendorPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -20,8 +21,23 @@ const VendorPage = () => {
         });
     });
 
-    return (
-        <div className="container mx-auto p-4">
+
+    return (<>
+        <nav className=" shadow-md">
+            <div className=" fixed shadow-lg   bg-[#b9c1ea92] backdrop-blur-lg w-[100vw] ">
+                <div className="flex items-center z-100  container justify-between mx-auto px-6 py-4">
+                    <div className="flex items-center">
+                        <Link to="/" className="flex items-center mr-6">
+                            <img src={logo} className="h-10 mr-2" alt="KartMatch Logo" />
+                            <span className="text-xl font-semibold text-gray-800">KartMatch</span>
+                        </Link>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+        <div className="container mx-auto p-4bg-center px-20 py-24 " style={{ backgroundImage: "url('https://i.postimg.cc/W1wBQx1y/image.png')", backgroundRepeat: "repeat" }}>
             <h1 className="text-3xl font-bold mb-4">Vendor Information</h1>
             <div className="relative mb-4">
                 <input
@@ -46,6 +62,7 @@ const VendorPage = () => {
                 ))}
             </div>
         </div>
+    </>
     );
 };
 

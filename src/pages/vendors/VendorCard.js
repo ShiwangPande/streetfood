@@ -24,7 +24,7 @@ const VendorCard = ({ vendor }) => {
     };
 
     return (
-        <div className="border border-gray-200 rounded-lg shadow-md p-6 mb-4 hover:shadow-lg transition duration-300 ease-in-out">
+        <div className="border border-gray-200 bg-white/80 rounded-lg shadow-md p-6 mb-4 hover:shadow-lg transition duration-300 ease-in-out">
             <h2 className="text-xl font-bold mb-2">{name}</h2>
             <p><strong>Food Items:</strong> {foodItems.join(', ')}</p>
             <p><strong>Hygiene Rating:</strong> {renderStars(hygieneRating)}</p>
