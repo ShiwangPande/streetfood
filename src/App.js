@@ -9,6 +9,7 @@ import VendorPage from './pages/vendors/Index';
 import Wishlist from './pages/wishlist/Index';
 import { WishlistProvider } from './pages/wishlist/WishlistContext';
 import Loader from './components/Loader';
+import InstallPopup from './components/InstallButton';
 const App = () => {
   const [preferences, setPreferences] = useState(null);
   const [vendors, setVendors] = useState([]);
@@ -18,7 +19,22 @@ const App = () => {
     setPreferences(prefs);
     navigate('/advanced', { state: { preferences: prefs, vendors: vendors } });
   };
+  const [showPopup, setShowPopup] = useState(false);
 
+  const handleInstall = () => {
+    window.deferredPrompt.prompt();
+    setShowPopup(false);
+  };
+
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      window.deferredPrompt = e;
+      setShowPopup(true);
+    });
+    setTimeout(() => {
+      setShowPopup(true);
+    }, 5000);
+  }, []);
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -34,13 +50,15 @@ const App = () => {
         loading ?
 
           <Loader loading={loading} size={300} /> :
-          <Routes>
-            <Route path="/" element={<Survey onComplete={handleSurveyComplete} />} />
-            <Route path="/advanced" element={<Advanced preferences={preferences} />} />
-            <Route path="/map" element={<Map />} />
-            <Route path="/vendors" element={<VendorPage />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-          </Routes>
+          <>  <InstallPopup showPopup={showPopup} onInstall={handleInstall} />
+            <Routes>
+              <Route path="/" element={<Survey onComplete={handleSurveyComplete} />} />
+              <Route path="/advanced" element={<Advanced preferences={preferences} />} />
+              <Route path="/map" element={<Map />} />
+              <Route path="/vendors" element={<VendorPage />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+            </Routes>
+          </>
       }
     </div>
   );
