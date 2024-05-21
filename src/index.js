@@ -4,13 +4,11 @@ import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { WishlistProvider } from './pages/wishlist/WishlistContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <WishlistProvider>
-      <App />
-    </WishlistProvider>
+
+    <App />
   </React.StrictMode>
 );
 

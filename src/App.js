@@ -7,10 +7,9 @@ import Navbar from './components/Navbar';
 import Tabbar from './components/Tabbar';
 import VendorPage from './pages/vendors/Index';
 import Wishlist from './pages/wishlist/Index';
-
+import { WishlistProvider } from './pages/wishlist/WishlistContext';
 import Loader from './components/Loader';
 import InstallPopup from './components/InstallButton';
-
 const App = () => {
   const [preferences, setPreferences] = useState(null);
   const [vendors, setVendors] = useState([]);
@@ -51,8 +50,7 @@ const App = () => {
         loading ?
 
           <Loader loading={loading} size={300} /> :
-          <>  
-            <InstallPopup showPopup={showPopup} onInstall={handleInstall} />
+          <>  <InstallPopup showPopup={showPopup} onInstall={handleInstall} />
             <Routes>
               <Route path="/" element={<Survey onComplete={handleSurveyComplete} />} />
               <Route path="/advanced" element={<Advanced preferences={preferences} />} />
@@ -66,4 +64,19 @@ const App = () => {
   );
 };
 
-export default App;
+const AppWrapper = () => (
+
+  <WishlistProvider>
+
+    <Router>
+
+      <Routes>
+        <Route path="/*" element={<App />} />
+      </Routes>
+      <Tabbar />
+    </Router>
+
+  </WishlistProvider>
+);
+
+export default AppWrapper;
