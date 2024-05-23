@@ -22,7 +22,7 @@ const VendorPage = () => {
     });
 
 
-    return (<>
+    return (<div style={{ backgroundImage: "url('https://i.postimg.cc/W1wBQx1y/image.png')", backgroundRepeat: "repeat" }}>
         <nav className=" shadow-md">
             <div className=" fixed shadow-lg   bg-[#b9c1ea92] backdrop-blur-lg w-[100vw] ">
                 <div className="flex items-center z-100  container justify-between mx-auto px-6 py-4">
@@ -37,7 +37,7 @@ const VendorPage = () => {
             </div>
         </nav>
 
-        <div className="container mx-auto p-4bg-center px-20 py-24 " style={{ backgroundImage: "url('https://i.postimg.cc/W1wBQx1y/image.png')", backgroundRepeat: "repeat" }}>
+        <div className="container mx-auto p-4bg-center px-20 py-24 " >
             <h1 className="text-3xl font-bold mb-4">Vendor Information</h1>
             <div className="relative mb-4">
                 <input
@@ -62,7 +62,7 @@ const VendorPage = () => {
                 ))}
             </div>
         </div>
-    </>
+    </div>
     );
 };
 
