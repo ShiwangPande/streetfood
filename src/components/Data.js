@@ -128,18 +128,6 @@ const vendorData = [
 
     },
     {
-        name: 'Cafe Waterloo',
-        location: {
-            type: 'Point',
-            coordinates: [88.34975242204689, 22.567870209616625] // Updated coordinates near Kolkata
-        },
-        foodItems: ['Egg Cheese Mushroom Masala', 'Namkeen', 'Grilled Chicken'],
-        hygieneRating: 4,
-        tasteRating: 5,
-        hospitalityRating: 3,
-        photoUrl: "https://i.postimg.cc/rsffK7Dr/image.png",
-    },
-    {
         name: 'Song Hay',
         location: {
             type: 'Point',
@@ -371,19 +359,213 @@ const vendorData = [
         hospitalityRating: 5,
         photoUrl: "https://i.postimg.cc/DmVR2tHP/image.png",
     },
+
     {
-        name: 'Kishan Cafe',
+        name: 'Home Slice',
         location: {
             type: 'Point',
-            coordinates: [88.35330016322823, 22.580912701690835] // Updated coordinates near Kolkata
+            coordinates: [88.35417148835901, 22.547268463951735] // Updated coordinates near Kolkata
         },
-        foodItems: ['butter toast', 'plain', 'toasted sandwich', 'pizza', 'mocktails', 'garlic bread', 'butter sweet corn'],
+        foodItems: ['Margherita', 'HomeSLice Original tomato pizza', 'Mmother earth', 'funghetta', 'Goat Cheese Primo', 'Shrooms', 'Pesto Pizza', 'salad', 'pasta', 'white pizza'],
+        hygieneRating: 4,
+        tasteRating: 2,
+        hospitalityRating: 2,
+        photoUrl: "https://i.postimg.cc/ZRC1pXyj/image.png",
+    },
+    {
+        name: 'Bombay Shiv Sagar',
+        location: {
+            type: 'Point',
+            coordinates: [88.35395787159433, 22.54669739000189] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Rice', 'Chinese Gravy', 'Milk shake', 'Fresh Juice', 'veg fried rice', 'palak rice', 'Shanghai paneer', 'sweet/sour veg', 'veg manchurian'],
+        hygieneRating: 5,
+        tasteRating: 4,
+        hospitalityRating: 4,
+        photoUrl: "https://i.postimg.cc/66zvySfF/image.png",
+    },
+
+    {
+        name: 'Kartik Dosa',
+        location: {
+            type: 'Point',
+            coordinates: [88.35490426935324, 22.545054938141078]// Updated coordinates near Kolkata
+        },
+        foodItems: ['Plain Dosa', 'Masala Dosa', 'Onion Dosa', 'Paneer Dosa', 'Cheese Dosa', 'Mysore Dosa', 'Butter Dosa',],
+        hygieneRating: 2,
+        tasteRating: 4,
+        hospitalityRating: 3,
+        photoUrl: "https://i.postimg.cc/vZnTLS5Y/image.png",
+    },
+    {
+        name: 'Russel Street Puchka Wala',
+        location: {
+            type: 'Point',
+            coordinates: [88.35117733309602, 22.552855772354317] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Puchka', 'Dahi Puchka', 'Aloo Puchka', 'Churmur', 'Dahi Churmur', 'Aloo Churmur', 'Dahi Aloo Churmur'],
+        hygieneRating: 4,
+        tasteRating: 5,
+        hospitalityRating: 4,
+        photoUrl: "https://i.postimg.cc/vmzQ0RTs/image.png",
+    },
+    {
+        name: 'Puchka Rowland Road',
+        location: {
+            type: 'Point',
+            coordinates: [88.35840712345684, 22.537979450685043] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Puchka', 'Dahi Puchka', 'Aloo Puchka', 'Churmur', 'Dahi Churmur', 'Aloo Churmur', 'Dahi Aloo Churmur'],
+        hygieneRating: 4,
+        tasteRating: 4,
+        hospitalityRating: 4,
+        photoUrl: "https://i.postimg.cc/dtywzZ3n/image.png",
+    },
+    {
+        name: "Maharaja Chat (Dilip da's Puchka Centre)",
+        location: {
+            type: 'Point',
+            coordinates: [88.35904599885635, 22.51446394913886] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Puchka', 'Dahi Puchka', 'Aloo Puchka', 'Churmur', 'Dahi Churmur', 'Aloo Churmur', 'Dahi Aloo Churmur'],
+        hygieneRating: 4,
+        tasteRating: 4,
+        hospitalityRating: 4,
+        photoUrl: "https://i.postimg.cc/xTMqL4v0/image.png",
+    },
+    {
+        name: "Pravesh Pani Puri",
+        location: {
+            type: 'Point',
+            coordinates: [88.33167881822361, 22.531809954933014] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Ghughuni Phuchka', 'aaludum sejwan', 'sejwan phuchka', 'kairy phuchka', 'churmur Phuchaka', 'Dhokla puchaka', 'aalu chat', 'chunghuni chat', 'Pakoda chat', 'aalu chat'],
+        hygieneRating: 3,
+        tasteRating: 5,
+        hospitalityRating: 3,
+        photoUrl: "https://i.postimg.cc/7hvw6qQS/image.png",
+    },
+    {
+        name: "Maharaja Chat (Dilip da's Puchka Centre)",
+        location: {
+            type: 'Point',
+            coordinates: [88.35904599885635, 22.51446394913886] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Puchka', 'Dahi Puchka', 'Aloo Puchka', 'Churmur', 'Dahi Churmur', 'Aloo Churmur', 'Dahi Aloo Churmur'],
+        hygieneRating: 4,
+        tasteRating: 4,
+        hospitalityRating: 4,
+        photoUrl: "https://i.postimg.cc/xTMqL4v0/image.png",
+    },
+    {
+        name: "Bhawanipur Puchka wala",
+        location: {
+            type: 'Point',
+            coordinates: [88.34671121242069, 22.531376204485387] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Pani Phuchka', 'Alu Dam', 'Papri chat', 'Dahi Phuchka', 'Alu Chat', 'Mix Chat', 'Phuchka Chat'],
+        hygieneRating: 4,
+        tasteRating: 5,
+        hospitalityRating: 4,
+        photoUrl: "https://i.postimg.cc/FK74VYMj/image.png",
+    },
+    {
+        name: "Om Prakash Puchka",
+        location: {
+            type: 'Point',
+            coordinates: [88.35333174046067, 22.620750424115847] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Special Puchka', 'Normal Puchka', 'Dahi Puchka', 'alukat', 'churmur', 'Pakori Puchka'],
+        hygieneRating: 4,
+        tasteRating: 5,
+        hospitalityRating: 4,
+        photoUrl: "https://i.postimg.cc/Bnv9J8Qd/image.png",
+    },
+    {
+        name: "BADA PHUCHKA WALA",
+        location: {
+            type: 'Point',
+            coordinates: [88.33536938890995, 22.507252184328152] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Special Puchka', 'Normal Puchka', 'Dahi Puchka', 'alukat', 'churmur'],
         hygieneRating: 4,
         tasteRating: 4,
         hospitalityRating: 3,
-        photoUrl: "https://i.postimg.cc/HkRKMHnF/image.png",
+        photoUrl: "https://i.postimg.cc/Pr29VtzK/image.png",
     },
-    // Continue updating the coordinates for the remaining stalls...
+    {
+        name: "Shekhar Da's Phucka (panipuri)",
+        location: {
+            type: 'Point',
+            coordinates: [88.45066264071978, 22.633104173799406] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Special Puchka', 'Normal Puchka', 'Dahi Puchka', 'alukat', 'churmur'],
+        hygieneRating: 2,
+        tasteRating: 3,
+        hospitalityRating: 2,
+        photoUrl: "https://i.postimg.cc/BbJ7Nyjd/image.png",
+    },
+    {
+        name: "Rajendra Fuchka",
+        location: {
+            type: 'Point',
+            coordinates: [88.36678716588669, 22.509046820599114] // Updated coordinates near Kolkata
+        },
+        foodItems: ['special Alurdam', 'Alurdam fuchka', 'dahi fuchka', 'dahi alurdam', 'dahi aluradam fuchka', 'sweet fuchka', 'dahi churmur', 'alurdam churmur'],
+        hygieneRating: 3,
+        tasteRating: 4,
+        hospitalityRating: 3,
+        photoUrl: "https://i.postimg.cc/V6WDSRK4/image.png",
+    },
+    {
+        name: "Kakar Fuchka",
+        location: {
+            type: 'Point',
+            coordinates: [88.46348516909711, 22.583015077554126] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Special Puchka', 'Normal Puchka', 'special Alurdam', 'Alurdam fuchka', 'sweet fuchka', 'alurdam churmur'],
+        hygieneRating: 3,
+        tasteRating: 1,
+        hospitalityRating: 3,
+        photoUrl: "https://i.postimg.cc/9ftG1fyQ/image.png",
+    },
+    {
+        name: "Fuchka para Halisahar",
+        location: {
+            type: 'Point',
+            coordinates: [88.41382653222404, 22.956623281604024] // Updated coordinates near Kolkata
+        },
+        foodItems: ['Chicken Puchka', 'mutton Puchka', 'Chocolate Puchka', ' Jelly Puchka', 'cheese Puchka', 'Doi Fuchka'],
+        hygieneRating: 4,
+        tasteRating: 4,
+        hospitalityRating: 4,
+        photoUrl: "https://i.postimg.cc/cLfY4J9B/image.png",
+    },
+    {
+        name: "Basu Da r Ghugni",
+        location: {
+            type: 'Point',
+            coordinates: [88.3467885400697, 22.523273122208064] // Updated coordinates near Kolkata
+        },
+        foodItems: ['ghugni', 'aludum'],
+        hygieneRating: 4,
+        tasteRating: 4,
+        hospitalityRating: 3,
+        photoUrl: "https://i.postimg.cc/3wKy8FD3/image.png",
+    },
+    {
+        name: "Salam Street Food",
+        location: {
+            type: 'Point',
+            coordinates: [88.36083464788958, 22.56947944842543] // Updated coordinates near Kolkata
+        },
+        foodItems: ['kathi rolls', 'paneer roll'],
+        hygieneRating: 4,
+        tasteRating: 4,
+        hospitalityRating: 3,
+        photoUrl: "https://i.postimg.cc/SKTcHv1B/image.png",
+    },
+
 
 ];
 
