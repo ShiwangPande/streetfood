@@ -1,15 +1,17 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import TinderCard from 'react-tinder-card';
-import Data from '../../components/Data';
 import Navbar from '../../components/Navbar';
-import { useWishlist } from '../../pages/wishlist/WishlistContext';
+import { useWishlist } from '../wishlist/WishlistContext';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUndo, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalityRating: 0 } }) {
     const [filteredData, setFilteredData] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(Data.length - 1);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [lastDirection, setLastDirection] = useState();
     const currentIndexRef = useRef(currentIndex);
     const { addToWishlist } = useWishlist();
@@ -18,32 +20,41 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
 
     const childRefs = useMemo(
         () =>
-            Array(Data.length)
+            Array(filteredData.length)
                 .fill(0)
                 .map(() => React.createRef()),
-        []
+        [filteredData.length]
     );
 
     useEffect(() => {
-        let filtered;
-        if (preferences.hygieneRating || preferences.tasteRating || preferences.hospitalityRating) {
-            filtered = Data.filter(item =>
-                item.hygieneRating >= preferences.hygieneRating &&
-                item.tasteRating >= preferences.tasteRating &&
-                item.hospitalityRating >= preferences.hospitalityRating
-            );
-        } else {
-            filtered = [...Data];
-        }
-        setFilteredData(filtered);
-        setCurrentIndex(filtered.length - 1);
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/vendors');
+                const data = response.data;
+                let filtered;
+                if (preferences.hygieneRating || preferences.tasteRating || preferences.hospitalityRating) {
+                    filtered = data.filter(item =>
+                        item.hygieneRating >= preferences.hygieneRating &&
+                        item.tasteRating >= preferences.tasteRating &&
+                        item.hospitalityRating >= preferences.hospitalityRating
+                    );
+                } else {
+                    filtered = [...data];
+                }
+                setFilteredData(filtered);
+                setCurrentIndex(filtered.length - 1);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, [preferences]);
 
     const updateCurrentIndex = (val) => {
         setCurrentIndex(val);
         currentIndexRef.current = val;
     };
-
     const canGoBack = currentIndex < filteredData.length - 1;
     const canSwipe = currentIndex >= 0;
 
@@ -87,7 +98,6 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             }
         }
     };
-
     const removeFromWishlist = (item) => {
         const index = wishlist.findIndex((wishlistItem) => wishlistItem.name === item.name);
         if (index > -1) {
@@ -98,29 +108,32 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
     const goBack = async () => {
         if (!canGoBack) return;
 
+        // Get the index of the card to be removed
+        const removedIndex = currentIndex;
+
         // Get the last added item from the wishlist
         const removedItem = wishlist[wishlist.length - 1];
 
         // Check if the removed item exists and has an ID
         if (removedItem && removedItem.id) {
             // Remove the last added item from the Wishlist
-            removeFromWishlist(removedItem.id);
+            removeFromWishlist(removedItem);
         }
 
-        // Update the current index
-        const newIndex = currentIndex + 1;
+        // Update the current index to go back
+        const newIndex = removedIndex + 1;
         updateCurrentIndex(newIndex);
 
         // Check if there are more cards to show
-        if (currentIndex < filteredData.length - 1) {
-            // If there are more cards, restore the card
+        if (newIndex < filteredData.length) {
+            // If there are more cards, restore the next card
             await childRefs[newIndex].current.restoreCard();
         } else {
-            // If no more cards to show after removing the last one, handle the end of the list
+            // If no more cards to show after going back, handle the end of the list
             if (filteredData.length === 1) {
                 // If there's only one card left after removal, reset the list to show all cards again
-                setFilteredData([...Data]); // Reset the list to show all cards again
-                setCurrentIndex(Data.length - 1); // Reset the current index
+                setFilteredData([]); // Clear the filtered data array
+                setCurrentIndex(0); // Reset the current index
             } else {
                 // If there are still cards left after removal, just update the current index
                 setCurrentIndex(currentIndex - 1);
@@ -128,6 +141,14 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
         }
     };
 
+    function handleGetDirections(character) {
+        if (character?.location?.coordinates) {
+            const [longitude, latitude] = character.location.coordinates;
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`);
+        } else {
+            console.error("Coordinates not found:", character);
+        }
+    }
 
 
 
@@ -146,63 +167,65 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
     }
 
     return (
-        <>
+        <div className='overflow-hidden h-screen'>
             <Navbar wishlistCount={wishlist.length} />
-            <div className="flex flex-col pt-10 items-center justify-center min-h-screen w-screen overflow-hidden bg-gradient-to-b from-[#B3DFEC] to-[#B9C0EA]">
-                <h1 className="text-[#e74f4f] text-3xl md:text-5xl font-damion font-bold mb-3 md:mb-5 drop-shadow-lg outline-black">KartMatch</h1>
+            <div className=''>
+                {/* <h1 className="text-[#e74f4f] text-3xl md:text-5xl font-damion font-bold mb-3 md:mb-5 drop-shadow-lg outline-black">KartMatch</h1> */}
+                <div className="flex flex-col pt-10  items-center justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
+                    <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[70vh] ">
 
-                <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-72 md:h-96">
-                    {filteredData.map((character, index) => (
-                        <TinderCard
-                            ref={childRefs[index]}
-                            className="absolute w-full h-full flex items-center justify-center"
-                            key={character.name}
-                            onSwipe={(dir) => swiped(dir, character.name, index)}
-                            onCardLeftScreen={() => outOfFrame(character.name, index)}
-                        >
-                            <div
-                                style={{ backgroundImage: 'url(' + character.photoUrl + ')' }}
-                                className="relative bg-white w-4/5 max-w-xs h-full shadow-lg rounded-lg bg-cover bg-center p-4 flex flex-col justify-between"
+                        {filteredData.map((character, index) => (
+                            <TinderCard
+                                ref={childRefs[index]}
+                                className="absolute z-[10000] w-full h-full select-none flex items-center justify-center"
+                                key={character.name}
+                                onSwipe={(dir) => swiped(dir, character.name, index)}
+                                onCardLeftScreen={() => outOfFrame(character.name, index)}
                             >
-                                <div>
-                                    <h3 className="text-lg font-bold text-white">{character.name}</h3>
+                                <div
+                                    style={{ backgroundImage: 'url(' + character.photoUrl + ')' }}
+                                    className="relative bottom-10 bg-white w-4/5 max-w-xs h-full shadow-lg rounded-lg bg-cover bg-center p-4 flex flex-col justify-between"
+                                >
+                                    <div>
+                                        <h3 className="text-lg font-bold text-white">{character.name}</h3>
+                                    </div>
+                                    <div className="bg-white p-2 my-14 rounded-lg">
+                                        <p className="text-gray-800">Hygiene Rating: {generateStars(character.hygieneRating)}</p>
+                                        <p className="text-gray-800">Taste Rating: {generateStars(character.tasteRating)}</p>
+                                        <p className="text-gray-800">Hospitality Rating: {generateStars(character.hospitalityRating)}</p>
+                                        <button
+                                            onClick={() => handleGetDirections(character)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-blue-500 select-text underline"
+                                        >
+                                            View on Map
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="bg-white p-2 rounded-lg">
-                                    <p className="text-gray-800">Hygiene Rating: {generateStars(character.hygieneRating)}</p>
-                                    <p className="text-gray-800">Taste Rating: {generateStars(character.tasteRating)}</p>
-                                    <p className="text-gray-800">Hospitality Rating: {generateStars(character.hospitalityRating)}</p>
-                                    <a
-                                        href={character.geoLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-500 underline"
-                                    >
-                                        View on Map
-                                    </a>
-                                </div>
-                            </div>
-                        </TinderCard>
-                    ))}
-                </div>
-                <div className="flex flex-wrap justify-center mt-3 md:mt-5 space-y-3 md:space-y-0 md:space-x-3">
-                    <button
-                        className={`px-4 md:px-5 py-2 md:py-3 rounded-lg text-white font-bold text-lg bg-[#F6AC5A] shadow-lg transform transition-transform ${!canSwipe && 'opacity-50'}`}
-                        onClick={() => swipe('left')}
-                    >
-                        <FontAwesomeIcon icon={faArrowLeft} />
-                    </button>
-                    <button
-                        className={`px-4 md:px-5 py-2 md:py-3 rounded-lg text-white font-bold text-lg bg-[#E8A5CC] shadow-lg transform transition-transform ${!canGoBack && 'opacity-50'}`}
-                        onClick={() => goBack()}
-                    >
-                        <FontAwesomeIcon icon={faUndo} />
-                    </button>
-                    <button
-                        className={`px-4 md:px-5 py-2 md:py-3 rounded-lg text-white font-bold text-lg bg-[#F0725C] shadow-lg transform transition-transform ${!canSwipe && 'opacity-50'}`}
-                        onClick={() => swipe('right')}
-                    >
-                        <FontAwesomeIcon icon={faArrowRight} />
-                    </button>
+                            </TinderCard>
+                        ))}
+                    </div>
+                    <div className=' lg:absolute relative z-[1000] flex w-screen px-3 flex-row justify-evenly bottom-10 lg:top-[10%] 	backdrop-opacity-10 '>
+                        <button
+                            className={`p-3 text-3xl  absolute top-[92%]  lg:top-[50%]  left-10  lg:left-[25%] h-14 w-14   rounded-full bg-red-400 ${!canSwipe}`}
+                            onClick={() => swipe('left')}
+                        >
+                            <FontAwesomeIcon icon={faXmark} />
+                        </button>
+                        <button
+                            className={`p-3 text-3xl absolute lg:top-[90%] top-[50%] text-white h-14 w-14   rounded-full bg-black  ${!canGoBack}`}
+                            onClick={() => goBack()}
+                        >
+                            <FontAwesomeIcon icon={faUndo} />
+                        </button>
+                        <button
+                            className={`p-3 text-3xl absolute top-[92%] lg:top-[50%] right-10 lg:right-[25%] h-14 w-14    rounded-full bg-green-400   ${!canSwipe}`}
+                            onClick={() => swipe('right')}
+                        >
+                            <FontAwesomeIcon icon={faCheck} />
+                        </button>
+                    </div>
                 </div>
                 {lastDirection ? (
                     <h2 className="text-white mt-3  animate-popup">
@@ -213,14 +236,9 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                         Swipe a card or press a button to get Restore Card button visible!
                     </h2>
                 )}
-                <button
-                    className="px-4 py-2 mt-3 bg-blue-500 text-white rounded-lg"
-                    onClick={() => navigate('/wishlist')}
-                >
-                    View Wishlist
-                </button>
+
             </div>
-        </>
+        </div>
     );
 }
 

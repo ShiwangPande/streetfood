@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaStar } from 'react-icons/fa';
+import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 
 const VendorCard = ({ vendor }) => {
     const { name, foodItems, hygieneRating, tasteRating, hospitalityRating } = vendor;
@@ -25,14 +26,34 @@ const VendorCard = ({ vendor }) => {
 
     return (
         <div className="border border-gray-200 bg-white/80 rounded-lg shadow-md p-6 mb-4 hover:shadow-lg transition duration-300 ease-in-out">
-            <h2 className="text-xl font-bold mb-2">{name}</h2>
-            <p><strong>Food Items:</strong> {foodItems.join(', ')}</p>
-            <p><strong>Hygiene Rating:</strong> {renderStars(hygieneRating)}</p>
-            <p><strong>Taste Rating:</strong> {renderStars(tasteRating)}</p>
-            <p><strong>Hospitality Rating:</strong> {renderStars(hospitalityRating)}</p>
-            <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none" onClick={handleGetDirections}>
-                Get Directions
-            </button>
+            <Card  >
+
+                <CardBody className="overflow-visible p-0 ">
+                    <Image
+                        shadow="sm"
+                        radius="lg"
+                        width="100%"
+                        alt={vendor.name}
+                        className="w-full object-cover lg:min-h-96 min-h-56	max-h-96 rounded-t-lg"
+                        src={vendor.photoUrl}
+                    /> </CardBody>
+                <CardFooter className="text-small flex flex-col h-100 text-justifyitems-stretch	lg:h-72	w-100 p-5 justify-between">
+                    <h2 className="text-xl  font-bold mb-2">{name}</h2>
+                    <div className='flex flex-col  		'>
+                        <strong>Food Items:</strong>
+                        <div className="food-items overflow-auto min-h-5 " >
+                            <p>{foodItems.join(', ')}</p>
+                        </div>
+                        <p><strong>Hygiene Rating:</strong> {renderStars(hygieneRating)}</p>
+                        <p><strong>Taste Rating:</strong> {renderStars(tasteRating)}</p>
+                        <p><strong>Hospitality Rating:</strong> {renderStars(hospitalityRating)}</p>
+                        <button className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-[#e03757] font-semibold focus:outline-none" onClick={handleGetDirections}>
+                            Get Directions
+                        </button>
+                    </div>
+                </CardFooter>
+            </Card>
+
         </div>
     );
 };

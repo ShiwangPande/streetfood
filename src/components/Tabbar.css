@@ -2,7 +2,7 @@
 html {
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
-  background-color: #f6f6f6;
+  /* background-color: #f6f6f6; */
   margin: 0;
 }
 *,
@@ -18,8 +18,8 @@ a {
 .TabNavigationContainer {
   position: fixed;
   left: 50%;
-  bottom: 18px;
-  width: 95%;
+  bottom: 0;
+  width: 100%;
   z-index: 1000;
   transform: translate(-50%, 0);
   height: 60px;
@@ -28,9 +28,9 @@ a {
   padding-right: 28px;
   justify-content: space-around;
   align-items: center;
-
+  background-color: black;
   font-weight: bold;
-  border-radius: 38px;
+  /* border-radius: 38px; */
   box-shadow: 4px -4px 24px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -40,24 +40,25 @@ a {
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-size: 12px;
-
-  color: #030303;
+  font-size: 1.5rem;
+  height: 4rem;
+  width: 4rem;
+  color: gray; /* Default color for inactive icons */
+  margin: 0 10px;
   transition: color 0.4s ease-in;
 }
 
+.TabNavigationLink.active {
+  color: #e03757; /* Color for active icon */
+}
+
 .TabNavigationLink:hover {
-  color: #0284c7;
+  color: #e03757;
   font-weight: 700;
 }
 
 .active {
   color: #0284c7;
-}
-
-.TabNavigationLink .icon {
-  font-size: 18px;
-  margin-bottom: 8px;
 }
 
 @media (max-width: 768px) {

@@ -1,5 +1,4 @@
-// src/WishlistContext.js
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const WishlistContext = createContext();
 
@@ -8,21 +7,23 @@ export const useWishlist = () => {
 };
 
 export const WishlistProvider = ({ children }) => {
-    const [wishlist, setWishlist] = useState([]);
+    const [wishlist, setWishlist] = useState(() => {
+        const storedWishlist = JSON.parse(localStorage.getItem('wishlist'));
+        return storedWishlist || [];
+    });
+    useEffect(() => {
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    }, [wishlist]);
 
     const addToWishlist = (item) => {
-        // Check if the item already exists in the wishlist
-        const exists = wishlist.some((wishlistItem) => wishlistItem.name === item.name);
+        const exists = wishlist.some((wishlistItem) => wishlistItem.id === item.id);
         if (!exists) {
             setWishlist((prevWishlist) => [...prevWishlist, item]);
         }
     };
-
-
-    const removeFromWishlist = (itemIdToRemove) => {
-        setWishlist((prevWishlist) => prevWishlist.filter((item) => item.id !== itemIdToRemove));
+    const removeFromWishlist = (itemId) => {
+        setWishlist((prevWishlist) => prevWishlist.filter((wishlistItem) => wishlistItem.id !== itemId));
     };
-    
 
     return (
         <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist }}>
