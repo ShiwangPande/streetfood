@@ -35,7 +35,7 @@ const Survey = ({ onComplete }) => {
                     </div>
                 </div>
             </nav>
-            <div className="flex items-center justify-center min-h-screen  bg-center" style={{ backgroundImage: "url('https://i.postimg.cc/W1wBQx1y/image.png')", backgroundRepeat: "repeat" }}>
+            <div className="flex items-center justify-center min-h-screen  bg-center bg-blue-100" >
 
 
 

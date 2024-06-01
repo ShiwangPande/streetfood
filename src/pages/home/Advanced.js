@@ -29,7 +29,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/vendors');
+                const response = await axios.get('https://kartmatchbackend.onrender.com/vendors');
                 const data = response.data;
                 let filtered;
                 if (preferences.hygieneRating || preferences.tasteRating || preferences.hospitalityRating) {

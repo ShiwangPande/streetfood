@@ -14,7 +14,7 @@ function Wishlist() {
             setWishlistItems(storedWishlist);
         }
 
-        axios.get('http://localhost:3000/vendors')
+        axios.get('https://kartmatchbackend.onrender.com/vendors')
             .then(response => {
                 const apiWishlist = response.data.filter(apiItem =>
                     wishlist.some(wishlistItem => wishlistItem.id === apiItem.id)

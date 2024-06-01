@@ -36,7 +36,7 @@ const MapComponent = () => {
 
     useEffect(() => {
         // Fetch vendor data from API
-        axios.get('http://localhost:3000/vendors')  // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
+        axios.get('https://kartmatchbackend.onrender.com/vendors')  // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
             .then(response => {
                 setVendors(response.data);
             })

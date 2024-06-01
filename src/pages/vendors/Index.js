@@ -11,7 +11,7 @@ const VendorPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/vendors'); // Replace 'http://localhost:3000/vendors' with your API endpoint
+                const response = await axios.get('https://kartmatchbackend.onrender.com/vendors'); // Replace 'https://kartmatchbackend.onrender.com/vendors' with your API endpoint
                 setVendors(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
