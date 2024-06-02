@@ -67,7 +67,6 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
         }
         await updateCurrentIndex(index - 1);
     };
-
     const outOfFrame = (name, idx) => {
         if (currentIndexRef.current >= idx && idx >= 0 && idx < filteredData.length) {
             childRefs[idx].current.restoreCard();
@@ -171,9 +170,11 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
         console.log('Survey preferences:', preferences);
         setShowSurvey(false); // Hide the survey after completion
     };
+    const swipeFeedbackClass = lastDirection === 'right' ? 'bg-green-200' : lastDirection === 'left' ? 'bg-red-200' : '';
+
 
     return (
-        <div className='overflow-hidden h-screen'>
+        <div className={`overflow-hidden h-screen ${swipeFeedbackClass}`}>
             <Navbar wishlistCount={wishlist.length} />
             <div className=''>
                 {showSurvey && <Survey onComplete={handleSurveyComplete} />} {/* Show the Survey component as a popup */}
@@ -234,7 +235,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                             </button>
                         </div>
                     )}
-             
+
                 </div>
             </div>
         </div>
