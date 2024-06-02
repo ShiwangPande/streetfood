@@ -172,7 +172,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             <div className=''>
                 {/* <h1 className="text-[#e74f4f] text-3xl md:text-5xl font-damion font-bold mb-3 md:mb-5 drop-shadow-lg outline-black">KartMatch</h1> */}
                 <div className="flex flex-col pt-10  items-center justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
-                    <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[70vh] ">
+                    <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[68vh] ">
 
                         {filteredData.map((character, index) => (
                             <TinderCard
