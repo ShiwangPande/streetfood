@@ -178,7 +178,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             <div className=''>
                 {showSurvey && <Survey onComplete={handleSurveyComplete} />} {/* Show the Survey component as a popup */}
                 <div className="flex flex-col pt-10  items-center justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
-                    <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[68vh] ">
+                    <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[65vh] ">
 
                         {filteredData.map((character, index) => (
                             <TinderCard
@@ -213,7 +213,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                         ))}
                     </div>
                     {!showSurvey && ( // Conditionally render the buttons based on the showSurvey state
-                        <div className=' lg:absolute relative z-[1000] flex w-screen px-3 flex-row justify-evenly bottom-10 lg:top-[10%] 	backdrop-opacity-10 '>
+                        <div className=' lg:absolute relative z-[1000] flex w-screen px-3 flex-row justify-evenly bottom-5 lg:bottom-14 lg:top-[10%] 	backdrop-opacity-10 '>
                             <button
                                 className={`p-3 text-3xl  absolute top-[92%]  lg:top-[50%]  left-10  lg:left-[25%] h-14 w-14   rounded-full bg-red-400 ${!canSwipe}`}
                                 onClick={() => swipe('left')}
