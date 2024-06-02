@@ -177,20 +177,20 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             <Navbar wishlistCount={wishlist.length} />
             <div className=''>
                 {showSurvey && <Survey onComplete={handleSurveyComplete} />} {/* Show the Survey component as a popup */}
-                <div className="flex flex-col lg:pt-10 items-center pt-32 lg:justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
-                    <div className="relative flex justify-center  items-center mb-5 w-full max-w-screen-md h-[60vh] ">
+                <div className="flex flex-col pt-10  items-center justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
+                    <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[65vh] ">
 
                         {filteredData.map((character, index) => (
                             <TinderCard
                                 ref={childRefs[index]}
-                                className="absolute z-[10000] w-full h-full select-none flex   items-center  justify-center"
+                                className="absolute z-[10000] w-full h-full select-none flex items-center justify-center"
                                 key={character.name}
                                 onSwipe={(dir) => swiped(dir, character.name, index)}
                                 onCardLeftScreen={() => outOfFrame(character.name, index)}
                             >
                                 <div
                                     style={{ backgroundImage: 'url(' + character.photoUrl + ')' }}
-                                    className="relative bottom-10 bg-white w-4/5 max-w-xs h-full  shadow-lg rounded-lg bg-cover bg-center p-4 flex flex-col justify-between"
+                                    className="relative bottom-10 bg-white w-4/5 max-w-xs h-full shadow-lg rounded-lg bg-cover bg-center p-4 flex flex-col justify-between"
                                 >
                                     <div>
                                         <h3 className="text-lg font-bold text-white">{character.name}</h3>
@@ -234,7 +234,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                             </button>
                         </div>
                     )}
-
+             
                 </div>
             </div>
         </div>
