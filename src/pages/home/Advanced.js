@@ -8,7 +8,7 @@ import { faUndo, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-i
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import Survey from '../survey/Index'; // Import the Survey component
+import Survey from '../survey/Index';
 
 function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalityRating: 0 } }) {
     const [filteredData, setFilteredData] = useState([]);
@@ -188,6 +188,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                 onSwipe={(dir) => swiped(dir, character.name, index)}
                                 onCardLeftScreen={() => outOfFrame(character.name, index)}
                             >
+
                                 <div
                                     style={{ backgroundImage: 'url(' + character.photoUrl + ')' }}
                                     className="relative bottom-10 bg-white w-4/5 max-w-xs h-full shadow-lg rounded-lg bg-cover bg-center p-4 flex flex-col justify-between"
@@ -234,7 +235,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                             </button>
                         </div>
                     )}
-             
+
                 </div>
             </div>
         </div>
