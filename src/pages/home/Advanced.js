@@ -43,14 +43,13 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                 } else {
                     filtered = [...data];
                 }
-                // Reverse the order of the filtered data
-                setFilteredData(filtered.reverse());
-                setCurrentIndex(0); // Reset the current index to start from the beginning
+                setFilteredData(filtered);
+                setCurrentIndex(filtered.length - 1);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-    
+
         fetchData();
     }, [preferences]);
 
