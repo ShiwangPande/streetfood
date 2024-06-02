@@ -14,6 +14,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
     const [filteredData, setFilteredData] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [lastDirection, setLastDirection] = useState();
+    const [swipeFeedback, setSwipeFeedback] = useState(''); // State for swipe feedback color
     const currentIndexRef = useRef(currentIndex);
     const { addToWishlist } = useWishlist();
     const { wishlist } = useWishlist();
@@ -62,6 +63,9 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
 
     const swiped = async (direction, nameToDelete, index) => {
         setLastDirection(direction);
+        setSwipeFeedback(direction); // Set swipe feedback color
+        setTimeout(() => setSwipeFeedback(''), 200); // Clear feedback color after 200ms
+
         if (direction === 'right') {
             addToWishlist(filteredData[index]);
         }
@@ -177,13 +181,13 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             <Navbar wishlistCount={wishlist.length} />
             <div className=''>
                 {showSurvey && <Survey onComplete={handleSurveyComplete} />} {/* Show the Survey component as a popup */}
-                <div className="flex flex-col pt-10  items-center justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
-                    <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[68vh] ">
+                <div className={`flex flex-col pt-10  items-center justify-center min-h-screen w-screen overflow-hidden bg-blue-100 ${swipeFeedback === 'right' ? 'bg-green-200' : swipeFeedback === 'left' ? 'bg-red-200' : ''}`}>
+                    <div className={`relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[68vh] `}>
 
                         {filteredData.map((character, index) => (
                             <TinderCard
                                 ref={childRefs[index]}
-                                className="absolute z-[10000] w-full h-96 lg:h-full select-none flex items-center justify-center"
+                                className="absolute z-[10000] w-full h-full select-none flex items-center justify-center"
                                 key={character.name}
                                 onSwipe={(dir) => swiped(dir, character.name, index)}
                                 onCardLeftScreen={() => outOfFrame(character.name, index)}
@@ -212,36 +216,29 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                             </TinderCard>
                         ))}
                     </div>
-                    <div className=' lg:absolute relative z-[1000] flex w-screen px-3 flex-row justify-evenly bottom-10 lg:top-[10%] 	backdrop-opacity-10 '>
-                        <button
-                            className={`p-3 text-3xl  absolute top-[92%]  lg:top-[50%]  left-10  lg:left-[25%] h-14 w-14   rounded-full bg-red-400 ${!canSwipe}`}
-                            onClick={() => swipe('left')}
-                        >
-                            <FontAwesomeIcon icon={faXmark} />
-                        </button>
-                        <button
-                            className={`p-3 text-3xl absolute lg:top-[90%] top-[50%] text-white h-14 w-14   rounded-full bg-black  ${!canGoBack}`}
-                            onClick={() => goBack()}
-                        >
-                            <FontAwesomeIcon icon={faUndo} />
-                        </button>
-                        <button
-                            className={`p-3 text-3xl absolute top-[92%] lg:top-[50%] right-10 lg:right-[25%] h-14 w-14    rounded-full bg-green-400   ${!canSwipe}`}
-                            onClick={() => swipe('right')}
-                        >
-                            <FontAwesomeIcon icon={faCheck} />
-                        </button>
-                    </div>
+                    {!showSurvey && ( // Conditionally render the buttons based on the showSurvey state
+                        <div className=' lg:absolute relative z-[1000] flex w-screen px-3 flex-row justify-evenly bottom-10 lg:top-[10%] 	backdrop-opacity-10 '>
+                            <button
+                                className={`p-3 text-3xl  absolute top-[92%]  lg:top-[50%]  left-10  lg:left-[25%] h-14 w-14   rounded-full bg-red-400 ${!canSwipe}`}
+                                onClick={() => swipe('left')}
+                            >
+                                <FontAwesomeIcon icon={faXmark} />
+                            </button>
+                            <button
+                                className={`p-3 text-3xl absolute lg:top-[90%] top-[50%] text-white h-14 w-14   rounded-full bg-black  ${!canGoBack}`}
+                                onClick={() => goBack()}
+                            >
+                                <FontAwesomeIcon icon={faUndo} />
+                            </button>
+                            <button
+                                className={`p-3 text-3xl absolute top-[92%] lg:top-[50%] right-10 lg:right-[25%] h-14 w-14    rounded-full bg-green-400   ${!canSwipe}`}
+                                onClick={() => swipe('right')}
+                            >
+                                <FontAwesomeIcon icon={faCheck} />
+                            </button>
+                        </div>
+                    )}
                 </div>
-                {lastDirection ? (
-                    <h2 className="text-white mt-3  animate-popup">
-                        You swiped {lastDirection}
-                    </h2>
-                ) : (
-                    <h2 className="text-white mt-3 animate-popup">
-                        Swipe a card or press a button to get Restore Card button visible!
-                    </h2>
-                )}
             </div>
         </div>
     );

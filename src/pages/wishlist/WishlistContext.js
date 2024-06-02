@@ -11,6 +11,7 @@ export const WishlistProvider = ({ children }) => {
         const storedWishlist = JSON.parse(localStorage.getItem('wishlist'));
         return storedWishlist || [];
     });
+
     useEffect(() => {
         localStorage.setItem('wishlist', JSON.stringify(wishlist));
     }, [wishlist]);
@@ -21,12 +22,17 @@ export const WishlistProvider = ({ children }) => {
             setWishlist((prevWishlist) => [...prevWishlist, item]);
         }
     };
+
     const removeFromWishlist = (itemId) => {
         setWishlist((prevWishlist) => prevWishlist.filter((wishlistItem) => wishlistItem.id !== itemId));
     };
 
+    const clearWishlist = () => {
+        setWishlist([]);
+    };
+
     return (
-        <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist }}>
+        <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, clearWishlist }}>
             {children}
         </WishlistContext.Provider>
     );

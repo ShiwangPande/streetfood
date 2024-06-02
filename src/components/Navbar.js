@@ -6,7 +6,7 @@ function Navbar({ wishlistCount }) {
     return (
         <nav className=" shadow-md">
             <div className=" fixed  shadow-lg  bg-black backdrop-blur-lg w-[100vw] ">
-                <div className="flex items-center z-100 container justify-between mx-auto px-6 py-4">
+                <div className="flex items-center z-100  justify-between mx-auto px-6 py-4">
                     <div className="flex items-center">
                         <Link to="/" className="flex items-center mr-6">
                             <img src={logo} className="h-10 mr-2" alt="Streetfood Logo" />
