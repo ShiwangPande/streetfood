@@ -66,6 +66,11 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             addToWishlist(filteredData[index]);
         }
         await updateCurrentIndex(index - 1);
+    
+        // Reset the swipe feedback color after a brief delay
+        setTimeout(() => {
+            setLastDirection(null); // Reset lastDirection after the delay
+        }, 1000); // Adjust the delay as needed (e.g., 1000ms = 1 second)
     };
     const outOfFrame = (name, idx) => {
         if (currentIndexRef.current >= idx && idx >= 0 && idx < filteredData.length) {
