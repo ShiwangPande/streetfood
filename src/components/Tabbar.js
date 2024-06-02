@@ -12,7 +12,7 @@ function Tabbar() {
 
         // Map URL paths to tab names
         const tabMappings = {
-            '/advanced': 'advanced',
+            '/': 'advanced',
             '/map': 'map',
             '/vendors': 'vendors'
         };
@@ -29,7 +29,7 @@ function Tabbar() {
         <div className="h-0">
             <nav className="TabNavigationContainer shadow-lg bg-black/30 backdrop-blur-lg">
                 <a
-                    href="/advanced" setActiveTab
+                    href="/" setActiveTab
                     className={`TabNavigationLink ${activeTab === 'advanced' ? 'active' : ''}`}
                     onClick={() => handleTabClick('advanced')}
                 >

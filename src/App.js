@@ -52,8 +52,8 @@ const App = () => {
           <Loader loading={loading} size={300} /> :
           <>  <InstallPopup showPopup={showPopup} onInstall={handleInstall} />
             <Routes>
-              <Route path="/" element={<Survey onComplete={handleSurveyComplete} />} />
-              <Route path="/advanced" element={<Advanced preferences={preferences} />} />
+              <Route element={<Survey onComplete={handleSurveyComplete} />} />
+              <Route path="/" element={<Advanced preferences={preferences} />} />
               <Route path="/map" element={<Map />} />
               <Route path="/vendors" element={<VendorPage />} />
               <Route path="/wishlist" element={<Wishlist />} />

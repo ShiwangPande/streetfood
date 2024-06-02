@@ -8,6 +8,7 @@ import { faUndo, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-i
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import Survey from '../survey/Index'; // Import the Survey component
 
 function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalityRating: 0 } }) {
     const [filteredData, setFilteredData] = useState([]);
@@ -17,6 +18,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
     const { addToWishlist } = useWishlist();
     const { wishlist } = useWishlist();
     const navigate = useNavigate();
+    const [showSurvey, setShowSurvey] = useState(true); // State to show/hide the survey
 
     const childRefs = useMemo(
         () =>
@@ -150,9 +152,6 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
         }
     }
 
-
-
-
     function generateStars(rating) {
         const starCount = 5;
         const fullStars = Math.floor(rating);
@@ -166,18 +165,25 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
         return fullStarsString + halfStarsString + emptyStarsString;
     }
 
+    // Handle survey completion
+    const handleSurveyComplete = (preferences) => {
+        // Process the preferences here (e.g., update state, make an API call, etc.)
+        console.log('Survey preferences:', preferences);
+        setShowSurvey(false); // Hide the survey after completion
+    };
+
     return (
         <div className='overflow-hidden h-screen'>
             <Navbar wishlistCount={wishlist.length} />
             <div className=''>
-                {/* <h1 className="text-[#e74f4f] text-3xl md:text-5xl font-damion font-bold mb-3 md:mb-5 drop-shadow-lg outline-black">KartMatch</h1> */}
+                {showSurvey && <Survey onComplete={handleSurveyComplete} />} {/* Show the Survey component as a popup */}
                 <div className="flex flex-col pt-10  items-center justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
                     <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[68vh] ">
 
                         {filteredData.map((character, index) => (
                             <TinderCard
                                 ref={childRefs[index]}
-                                className="absolute z-[10000] w-full h-full select-none flex items-center justify-center"
+                                className="absolute z-[10000] w-full h-96 lg:h-full select-none flex items-center justify-center"
                                 key={character.name}
                                 onSwipe={(dir) => swiped(dir, character.name, index)}
                                 onCardLeftScreen={() => outOfFrame(character.name, index)}
@@ -236,7 +242,6 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                         Swipe a card or press a button to get Restore Card button visible!
                     </h2>
                 )}
-
             </div>
         </div>
     );

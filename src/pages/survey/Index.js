@@ -23,12 +23,12 @@ const Survey = ({ onComplete }) => {
     return (
         <>
             <nav className=" shadow-md">
-                <div className=" fixed shadow-lg  bg-[#b9c1ea92] backdrop-blur-lg w-[100vw] ">
+                <div className=" fixed shadow-lg  bg-black backdrop-blur-lg w-[100vw] ">
                     <div className="flex items-center z-100 container justify-between mx-auto px-6 py-4">
                         <div className="flex items-center">
                             <Link to="/" className="flex items-center mr-6">
                                 <img src={logo} className="h-10 mr-2" alt="KartMatch Logo" />
-                                <span className="text-xl font-semibold text-gray-800">KartMatch</span>
+                                <span className="text-xl font-semibold text-[#e03757]">KartMatch</span>
                             </Link>
                         </div>
 
@@ -49,21 +49,21 @@ const Survey = ({ onComplete }) => {
                     <div className="flex flex-wrap justify-center">
                         <button
                             onClick={() => handlePreferenceClick('Hygiene')}
-                            className={`px-6 py-3 mb-4 mr-4 text-lg font-semibold rounded-lg shadow-md transition-transform hover:scale-105 ${preferences.includes('Hygiene') ? 'bg-[#F0725C] text-white' : 'bg-gray-200 text-gray-800'
+                            className={`px-6 py-3 mb-4 mr-4 text-lg font-semibold rounded-lg shadow-md transition-transform hover:scale-105 ${preferences.includes('Hygiene') ? 'bg-[#e03757] text-white' : 'bg-gray-200 text-gray-800'
                                 }`}
                         >
                             Hygiene
                         </button>
                         <button
                             onClick={() => handlePreferenceClick('Taste')}
-                            className={`px-6 py-3 mb-4 mr-4 text-lg font-semibold rounded-lg shadow-md transition-transform hover:scale-105 ${preferences.includes('Taste') ? 'bg-[#F0725C] text-white' : 'bg-gray-200 text-gray-800'
+                            className={`px-6 py-3 mb-4 mr-4 text-lg font-semibold rounded-lg shadow-md transition-transform hover:scale-105 ${preferences.includes('Taste') ? 'bg-[#e03757] text-white' : 'bg-gray-200 text-gray-800'
                                 }`}
                         >
                             Taste
                         </button>
                         <button
                             onClick={() => handlePreferenceClick('Hospitality')}
-                            className={`px-6 py-3 mb-4 mr-4 text-lg font-semibold rounded-lg shadow-md transition-transform hover:scale-105 ${preferences.includes('Hospitality') ? 'bg-[#F0725C] text-white' : 'bg-gray-200 text-gray-800'
+                            className={`px-6 py-3 mb-4 mr-4 text-lg font-semibold rounded-lg shadow-md transition-transform hover:scale-105 ${preferences.includes('Hospitality') ? 'bg-[#e03757] text-white' : 'bg-gray-200 text-gray-800'
                                 }`}
                         >
                             Hospitality
@@ -72,7 +72,7 @@ const Survey = ({ onComplete }) => {
                     {preferences.length === 2 && (
                         <button
                             onClick={handleSubmit}
-                            className="block w-full mt-4 py-3 bg-[#F0725C] text-white font-semibold rounded-lg shadow-md transition-transform hover:scale-105"
+                            className="block w-full mt-4 py-3 bg-[#e03757] text-white font-semibold rounded-lg shadow-md transition-transform hover:scale-105"
                         >
                             Submit
                         </button>
