@@ -66,12 +66,8 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             addToWishlist(filteredData[index]);
         }
         await updateCurrentIndex(index - 1);
-    
-        // Reset the swipe feedback color after a brief delay
-        setTimeout(() => {
-            setLastDirection(null); // Reset lastDirection after the delay
-        }, 1000); // Adjust the delay as needed (e.g., 1000ms = 1 second)
     };
+
     const outOfFrame = (name, idx) => {
         if (currentIndexRef.current >= idx && idx >= 0 && idx < filteredData.length) {
             childRefs[idx].current.restoreCard();
@@ -175,16 +171,14 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
         console.log('Survey preferences:', preferences);
         setShowSurvey(false); // Hide the survey after completion
     };
-    const swipeFeedbackClass = lastDirection === 'right' ? 'bg-green-200' : lastDirection === 'left' ? 'bg-red-200' : '';
-
 
     return (
-        <div className={`overflow-hidden h-screen ${swipeFeedbackClass}`}>
+        <div className='overflow-hidden h-screen'>
             <Navbar wishlistCount={wishlist.length} />
             <div className=''>
                 {showSurvey && <Survey onComplete={handleSurveyComplete} />} {/* Show the Survey component as a popup */}
-                <div className="flex flex-col lg:pt-10 pt-32 items-center lg:justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
-                    <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[65vh] ">
+                <div className="flex flex-col pt-10  items-center justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
+                    <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[68vh] ">
 
                         {filteredData.map((character, index) => (
                             <TinderCard
@@ -219,7 +213,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                         ))}
                     </div>
                     {!showSurvey && ( // Conditionally render the buttons based on the showSurvey state
-                        <div className=' lg:absolute relative z-[1000] flex w-screen px-3 flex-row justify-evenly bottom-5 lg:bottom-14 lg:top-[10%] 	backdrop-opacity-10 '>
+                        <div className=' lg:absolute relative z-[1000] flex w-screen px-3 flex-row justify-evenly bottom-10 lg:top-[10%] 	backdrop-opacity-10 '>
                             <button
                                 className={`p-3 text-3xl  absolute top-[92%]  lg:top-[50%]  left-10  lg:left-[25%] h-14 w-14   rounded-full bg-red-400 ${!canSwipe}`}
                                 onClick={() => swipe('left')}
@@ -227,7 +221,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                 <FontAwesomeIcon icon={faXmark} />
                             </button>
                             <button
-                                className={`p-3 text-3xl absolute lg:top-[90%] top-[50%] text-white h-14 w-14   rounded-full bg-black  ${!canGoBack}`}
+                                className={`p-3 text-3xl absolute lg:top-[89%] top-[50%] text-white h-14 w-14   rounded-full bg-black  ${!canGoBack}`}
                                 onClick={() => goBack()}
                             >
                                 <FontAwesomeIcon icon={faUndo} />
@@ -240,7 +234,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                             </button>
                         </div>
                     )}
-
+             
                 </div>
             </div>
         </div>
