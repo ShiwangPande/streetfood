@@ -178,7 +178,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             <Navbar wishlistCount={wishlist.length} />
             <div className=''>
                 {showSurvey && <Survey onComplete={handleSurveyComplete} />} {/* Show the Survey component as a popup */}
-                <div className="flex flex-col pt-10  items-center justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
+                <div className="flex flex-col lg:pt-10 pt-32 items-center lg:justify-center min-h-screen w-screen overflow-hidden bg-blue-100">
                     <div className="relative flex justify-center items-center mb-5 w-full max-w-screen-md h-[65vh] ">
 
                         {filteredData.map((character, index) => (
