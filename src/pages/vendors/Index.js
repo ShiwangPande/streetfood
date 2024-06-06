@@ -43,11 +43,10 @@ const VendorPage = () => {
         <div className='bg-white'>
             <nav className="shadow-md relative z-[1000]">
                 <div className="fixed shadow-lg bg-white backdrop-blur-lg w-[100vw]">
-                    <div className="flex items-center z-100  justify-between mx-auto px-6 py-4">
+                    <div className="flex items-center z-100  justify-center mx-auto px-6 py-3">
                         <div className="flex items-center">
                             <Link to="/" className="flex items-center mr-6">
-                                <img src={logo} className="h-10 mr-2" alt="KartMatch Logo" />
-                                <span className="text-xl font-semibold text-black">KartMatch</span>
+                                <span className="text-2xl font-semibold text-center w-full text-black">KartMatch</span>
                             </Link>
                         </div>
                     </div>
@@ -67,7 +66,7 @@ const VendorPage = () => {
                         value={searchQuery}
                         onChange={handleSearch}
                         placeholder="Search by vendor name or food items..."
-                        className="px-4 py-2 w-full text-gray-800 bg-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="px-4 py-2 w-full text-gray-800 bg-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50"
                     />
                     {searchQuery && (
                         <button

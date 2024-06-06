@@ -25,7 +25,7 @@ const VendorCard = ({ vendor }) => {
     };
 
     return (
-        <div className="border border-gray-200 bg-white/80 rounded-lg shadow-md p-6 mb-4 hover:shadow-lg transition duration-300 ease-in-out">
+        <div>
             <Card  >
 
                 <CardBody className="overflow-visible p-0 ">

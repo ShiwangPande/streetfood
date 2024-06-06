@@ -27,7 +27,7 @@ function Tabbar() {
 
     return (
         <div className="h-0">
-            <nav className="TabNavigationContainer shadow-lg bg-white backdrop-blur-lg">
+            <nav className="TabNavigationContainer  bg-white backdrop-blur-lg">
                 <a
                     href="/" setActiveTab
                     className={`TabNavigationLink ${activeTab === 'advanced' ? 'active' : ''}`}

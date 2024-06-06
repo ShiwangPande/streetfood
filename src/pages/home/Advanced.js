@@ -227,20 +227,20 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
 
                                         <div
                                             style={{ backgroundImage: 'url(' + character.photoUrl + ')' }}
-                                            className="relative bottom-10 bg-white w-full max-w-xs h-full shadow-lg rounded-lg bg-cover bg-center p-4 flex flex-col justify-between"
+                                            className="relative bottom-10  bg-white w-full max-w-xs h-full shadow-lg rounded-lg bg-cover bg-center p-4 flex flex-col justify-between"
                                         >
                                             <div>
-                                                <h3 className="text-lg font-bold text-white">{character.name}</h3>
+                                                <h3 className="text-lg font-bold  text-white">{character.name}</h3>
                                             </div>
-                                            <div className="bg-white p-2 my-14 rounded-lg">
-                                                <p className="text-gray-800">Hygiene Rating: {generateStars(character.hygieneRating)}</p>
-                                                <p className="text-gray-800">Taste Rating: {generateStars(character.tasteRating)}</p>
-                                                <p className="text-gray-800">Hospitality Rating: {generateStars(character.hospitalityRating)}</p>
+                                            <div className="bg-black/50 p-2  rounded-xl">
+                                                <p className="text-white font-semibold">Hygiene Rating: {generateStars(character.hygieneRating)}</p>
+                                                <p className="text-white font-semibold">Taste Rating: {generateStars(character.tasteRating)}</p>
+                                                <p className="text-white font-semibold">Hospitality Rating: {generateStars(character.hospitalityRating)}</p>
                                                 <button
                                                     onClick={() => handleGetDirections(character)}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-blue-500 select-text underline"
+                                                    className=" select-text text-sm mt-2  bg-black text-white px-2 py-1 rounded hover:bg-[white] hover:text-black border-2 border-black font-semibold focus:outline-none"
                                                 >
                                                     View on Map
                                                 </button>
