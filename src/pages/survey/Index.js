@@ -21,65 +21,60 @@ const Survey = ({ onComplete }) => {
     };
 
     return (
-        <>
+        <div className='relative z-[10000]'>
             <nav className=" shadow-md">
-                <div className=" fixed shadow-lg  bg-black backdrop-blur-lg w-[100vw] ">
-                    <div className="flex items-center z-100  justify-between mx-auto px-6 py-4">
-                        <div className="flex items-center">
-                            <Link to="/" className="flex items-center mr-6">
-                                <img src={logo} className="h-10 mr-2" alt="KartMatch Logo" />
-                                <span className="text-xl font-semibold text-[#e03757]">KartMatch</span>
-                            </Link>
-                        </div>
+                <div className=" fixed h-24 bg-white w-[100vw] ">
 
-                    </div>
                 </div>
             </nav>
-            <div className="flex items-center justify-center min-h-screen  bg-center bg-blue-100" >
+            <div className="flex items-center  justify-center min-h-screen  bg-center bg-white" >
 
 
 
 
 
 
-                <div className=" p-6 rounded-xl shadow-lg  bg-[#b9c1ea92] backdrop-blur-lg" >
-                    {/* welcome to kartmatch */}
-                    <h1 className="text-3xl font-semibold text-center text-gray-800 mb-4">Welcome to Kartmatch</h1>
-                    <p className="text-center text-lg italic  text-gray-800 mb-6"> Please select any two preferences</p>
-                    <div className="flex flex-wrap justify-center">
-                        <button
-                            onClick={() => handlePreferenceClick('Hygiene')}
-                            className={`px-6 py-3 mb-4 mr-4 text-lg font-semibold rounded-lg shadow-md transition-transform hover:scale-105 ${preferences.includes('Hygiene') ? 'bg-[#e03757] text-white' : 'bg-gray-200 text-gray-800'
-                                }`}
-                        >
-                            Hygiene
-                        </button>
-                        <button
-                            onClick={() => handlePreferenceClick('Taste')}
-                            className={`px-6 py-3 mb-4 mr-4 text-lg font-semibold rounded-lg shadow-md transition-transform hover:scale-105 ${preferences.includes('Taste') ? 'bg-[#e03757] text-white' : 'bg-gray-200 text-gray-800'
-                                }`}
-                        >
-                            Taste
-                        </button>
-                        <button
-                            onClick={() => handlePreferenceClick('Hospitality')}
-                            className={`px-6 py-3 mb-4 mr-4 text-lg font-semibold rounded-lg shadow-md transition-transform hover:scale-105 ${preferences.includes('Hospitality') ? 'bg-[#e03757] text-white' : 'bg-gray-200 text-gray-800'
-                                }`}
-                        >
-                            Hospitality
-                        </button>
+                <div className=" flex h-[60vh] justify-between flex-col " >
+                    <div className=''>
+                        <h1 className="lg:text-3xl text-2xl font-semibold text-left ml-3 text-black mb-3">Welcome to Kartmatch</h1>
+                        <p className="text-left text-lg  ml-3 text-black mb-6"> Pick any 2 preferences</p>
+                        <div className="flex flex-wrap mt-14 justify-center">
+                            <button
+                                onClick={() => handlePreferenceClick('Hygiene')}
+                                className={`px-2  h-[5.85rem] border-2 border-black  mb-4 mr-4 text-lg font-medium rounded-full cursor-pointer shadow-md transition-transform hover:scale-105 ${preferences.includes('Hygiene') ? 'bg-black text-white' : 'bg-white text-black'
+                                    }`}
+                            >
+                                Hygiene
+                            </button>
+                            <button
+                                onClick={() => handlePreferenceClick('Taste')}
+                                className={`px-6  h-[5.8rem] border-2 border-black  mb-4 mr-4 text-lg font-medium rounded-full cursor-pointer shadow-md transition-transform hover:scale-105 ${preferences.includes('Taste') ? 'bg-black text-white' : 'bg-white text-black'
+                                    }`}
+                            >
+                                Taste
+                            </button>
+                            <button
+                                onClick={() => handlePreferenceClick('Hospitality')}
+                                className={`px-0 tracking-tight	  h-[5.8rem] border-2 border-black  mb-4 mr-4 text-lg font-medium cursor-pointer rounded-full shadow-md transition-transform hover:scale-105 ${preferences.includes('Hospitality') ? 'bg-black text-white' : 'bg-white text-black'
+                                    }`}
+                            >
+                                Hospitality
+                            </button>
+                        </div>
                     </div>
-                    {preferences.length === 2 && (
-                        <button
-                            onClick={handleSubmit}
-                            className="block w-full mt-4 py-3 bg-[#e03757] text-white font-semibold rounded-lg shadow-md transition-transform hover:scale-105"
-                        >
-                            Submit
-                        </button>
-                    )}
+                    <div className=''>
+                        {preferences.length === 2 && (
+                            <button
+                                onClick={handleSubmit}
+                                className="block w-[5rem]  h-[5rem] mx-auto bg-black text-white font-semibold rounded-full shadow-md transition-transform hover:scale-105"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className='mx-auto' width={50} height={50} viewBox="0 0 25 25"><path style={{ fill: '#fff' }} d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z" data-name="Right" /></svg>
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

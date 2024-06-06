@@ -5,6 +5,7 @@ import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
 import logo from "../../components/logo256.png";
 import { Link } from 'react-router-dom';
+import Tabbar from '../../components/Tabbar';
 const streetVendorIcon = new L.Icon({
     iconUrl: 'https://i.postimg.cc/W1WXqByq/street-food.png',
     iconSize: [40, 40],
@@ -117,13 +118,13 @@ const MapComponent = () => {
     };
 
     return (
-        <div className='overflow-hidden overflow-x-hidden h-screen bg-blue-100'>  <nav className=" shadow-md h-20">
-            <div className=" fixed shadow-lg   bg-black backdrop-blur-lg w-[100vw] ">
+        <div className='overflow-hidden overflow-x-hidden h-screen bg-white'>  <nav className=" shadow-md h-20">
+            <div className=" fixed shadow-lg   bg-white backdrop-blur-lg w-[100vw] ">
                 <div className="flex items-center z-100  justify-between mx-auto px-6 py-4">
                     <div className="flex items-center">
                         <Link to="/" className="flex items-center mr-6">
                             <img src={logo} className="h-10 mr-2" alt="KartMatch Logo" />
-                            <span className="text-xl font-semibold text-[#e03757]">KartMatch</span>
+                            <span className="text-xl font-semibold text-black">KartMatch</span>
                         </Link>
                     </div>
 
@@ -131,7 +132,7 @@ const MapComponent = () => {
             </div>
         </nav>
             <div className="flex flex-col w-screen h-screen">
-                <div className="relative px-5 lg:px-20 flex justify-between z-[1000] p-4 bg-blue-100">
+                <div className="relative px-5 lg:px-20 flex justify-between z-[1000] p-4 bg-white">
                     <div className="relative">
                         <input
                             type="text"
@@ -142,7 +143,7 @@ const MapComponent = () => {
                             className="px-4 py-2 text-gray-800 bg-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         {showOptions && (
-                            <div className="absolute top-full left-0 w-full mt-1 bg-blue-100 rounded-lg shadow-md z-10 max-h-48 overflow-y-auto">
+                            <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-lg shadow-md z-10 max-h-48 overflow-y-auto">
                                 {filteredOptions.map((option, index) => (
                                     <button
                                         key={index}
@@ -161,12 +162,12 @@ const MapComponent = () => {
                                 <div className="relative">
                                     <button
                                         onClick={toggleDropdown}
-                                        className="bg-blue-100 text-black px-4 mr-5 py-2 rounded focus:outline-none focus:ring-2 focus:gray-500"
+                                        className="bg-white text-black px-4 mr-5 py-2 rounded focus:outline-none focus:ring-2 focus:gray-500"
                                     >
                                         {isOpen ? "" : ""} ^
                                     </button>
                                     {isOpen && (
-                                        <div className="absolute right-0 top-full mt-2 w-48 bg-blue-100 rounded-lg shadow-md z-10">
+                                        <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-md z-10">
                                             {selectedFoodItems.map((item, index) => (
                                                 <div className="relative flex justify-between px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white" key={index}>
                                                     <span>{item}</span>
@@ -266,6 +267,7 @@ const MapComponent = () => {
                     )}
                 </div>
             </div>
+            <Tabbar />
         </div>
     );
 };

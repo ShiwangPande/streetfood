@@ -46,11 +46,9 @@ const App = () => {
 
   return (
     <div className=" h-[100vh] ">
-      {
-        loading ?
-
-          <Loader loading={loading} size={300} /> :
-          <>  <InstallPopup showPopup={showPopup} onInstall={handleInstall} />
+   
+          <> 
+           {/* <InstallPopup showPopup={showPopup} onInstall={handleInstall} /> */}
             <Routes>
               <Route element={<Survey onComplete={handleSurveyComplete} />} />
               <Route path="/" element={<Advanced preferences={preferences} />} />
@@ -59,7 +57,6 @@ const App = () => {
               <Route path="/wishlist" element={<Wishlist />} />
             </Routes>
           </>
-      }
     </div>
   );
 };
@@ -73,7 +70,7 @@ const AppWrapper = () => (
       <Routes>
         <Route path="/*" element={<App />} />
       </Routes>
-      <Tabbar />
+      
     </Router>
 
   </WishlistProvider>

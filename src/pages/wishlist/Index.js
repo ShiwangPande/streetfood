@@ -3,6 +3,7 @@ import { useWishlist } from './WishlistContext';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import logo from "../../components/logo256.png";
+import Tabbar from '../../components/Tabbar';
 
 function Wishlist() {
     const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
@@ -87,7 +88,7 @@ function Wishlist() {
                                                 <p className="text-gray-700 mb-1">Taste Rating: {generateStars(item.tasteRating)}</p>
                                                 <p className="text-gray-700 mb-1">Hospitality Rating: {generateStars(item.hospitalityRating)}</p>
                                                 <button
-                                                    className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-black/80 focus:outline-none"
+                                                    className="mt-4 bg-black text-white px-4 py-2 rounded border-2 border-black hover:bg-white hover:text-black focus:outline-none"
                                                     onClick={() => handleGetDirections(item)}
                                                 >
                                                     Get Directions
@@ -109,6 +110,7 @@ function Wishlist() {
                     )}
                 </div>
             </div>
+            <Tabbar/>
         </div>
     );
 }

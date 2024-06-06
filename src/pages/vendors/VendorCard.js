@@ -47,7 +47,7 @@ const VendorCard = ({ vendor }) => {
                         <p><strong>Hygiene Rating:</strong> {renderStars(hygieneRating)}</p>
                         <p><strong>Taste Rating:</strong> {renderStars(tasteRating)}</p>
                         <p><strong>Hospitality Rating:</strong> {renderStars(hospitalityRating)}</p>
-                        <button className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-[#e03757] font-semibold focus:outline-none" onClick={handleGetDirections}>
+                        <button className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-[white] hover:text-black border-2 border-black font-semibold focus:outline-none" onClick={handleGetDirections}>
                             Get Directions
                         </button>
                     </div>
