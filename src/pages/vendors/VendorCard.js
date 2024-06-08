@@ -33,16 +33,16 @@ const VendorCard = ({ vendor }) => {
                         radius="lg"
                         width="100%"
                         alt={vendor.name}
-                        className="w-full object-cover lg:min-h-96 min-h-56 max-h-96 rounded-t-lg"
+                        className="w-full object-cover  lg:min-h-96 min-h-56 max-h-96 rounded-t-lg"
                         src={vendor.photoUrl}
                     />
                 </CardBody>
                 <CardFooter className="text-small flex flex-col h-100 text-justify items-stretch lg:h-72 w-100 p-5 justify-between">
-                    <h2 className="text-xl font-bold mb-2">{name}</h2>
+                    <h2 className="text-xl font-bold capitalize mb-2">{name}</h2>
                     <div className='flex flex-col'>
                         <strong>Food Items:</strong>
                         <div className="food-items overflow-auto min-h-5">
-                            <p>{foodItems.join(', ')}</p>
+                            <p className='capitalize'>{foodItems.join(', ')}</p>
                         </div>
                         <p><strong>Hygiene Rating:</strong> {renderStars(hygieneRating)}</p>
                         <p><strong>Taste Rating:</strong> {renderStars(tasteRating)}</p>
