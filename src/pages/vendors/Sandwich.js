@@ -24,6 +24,9 @@ const VendorCard = ({ vendor }) => {
         return stars;
     };
 
+    // Filter food items to show only "sandwich"
+    const sandwichItems = foodItems.filter(item => item.toLowerCase() === 'sandwich');
+
     return (
         <div>
             <Card>
@@ -42,7 +45,7 @@ const VendorCard = ({ vendor }) => {
                     <div className='flex flex-col'>
                         <strong>Food Items:</strong>
                         <div className="food-items overflow-auto min-h-5">
-                            <p>{foodItems.join(', ')}</p>
+                            <p>{sandwichItems.length > 0 ? sandwichItems.join(', ') : 'No sandwich available'}</p>
                         </div>
                         <p><strong>Hygiene Rating:</strong> {renderStars(hygieneRating)}</p>
                         <p><strong>Taste Rating:</strong> {renderStars(tasteRating)}</p>

@@ -138,7 +138,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                     <>
                         {showSurvey && <Survey onComplete={handleSurveyComplete} />}
                         <div className="flex flex-col pt-10 items-center justify-center min-h-screen h-full w-screen overflow-hidden bg-white">
-                            <div className="relative flex justify-center items-center mb-5 w-[100vw] lg:w-4/5 h-[85vh] top-8 lg:h-[68vh] ">
+                            <div className="relative flex justify-center items-center mb-5 w-[100vw] lg:w-4/5 h-[80vh] top-8 lg:h-[68vh] ">
                                 {filteredData.map((character, index) => (
                                     index === currentIndex && (
                                         <motion.div
@@ -173,7 +173,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                         </motion.div>
                                     )))}
                             </div>
-                            <div className='fixed bottom-2 lg:bottom-10 flex'>
+                            <div className='fixed bottom-2 hidden lg:bottom-10 lg:flex'>
                                 <button onClick={goBack} className="rounded-full text-black bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faUndo} /></button>
                                 <button onClick={() => swiped('left', currentIndex)} className="rounded-full text-red-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faXmark} /></button>
                                 <button onClick={() => swiped('right', currentIndex)} className="rounded-full text-green-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faCheck} /></button>

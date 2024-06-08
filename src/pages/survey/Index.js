@@ -31,8 +31,8 @@ const Survey = ({ onComplete }) => {
             <div className="flex items-center  justify-center min-h-screen  bg-center bg-white" >
                 <div className=" flex h-[60vh] justify-between flex-col " >
                     <div className=''>
-                        <h1 className="lg:text-3xl text-2xl font-semibold text-left ml-3 raleway text-black mb-3">Welcome to Kartmatch</h1>
-                        <p className="text-left text-lg  ml-3 text-black mb-6"> Pick any 2 preferences</p>
+                        <h1 className="lg:text-3xl text-3xl font-semibold text-left ml-3 raleway text-black mb-3">Welcome to Kartmatch</h1>
+                        <p className="text-left text-xl  ml-3 text-black mb-6"> Pick any 2 preferences</p>
                         <div className="flex flex-wrap mt-14 justify-center">
                             <button
                                 onClick={() => handlePreferenceClick('Hygiene')}
