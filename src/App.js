@@ -10,6 +10,7 @@ import Wishlist from './pages/wishlist/Index';
 import { WishlistProvider } from './pages/wishlist/WishlistContext';
 import Loader from './components/Loader';
 import InstallPopup from './components/InstallButton';
+import "./App.css";
 const App = () => {
   const [preferences, setPreferences] = useState(null);
   const [vendors, setVendors] = useState([]);

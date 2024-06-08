@@ -214,7 +214,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                     <>
                         {showSurvey && <Survey onComplete={handleSurveyComplete} />} {/* Show the Survey component as a popup */}
                         <div className="flex flex-col pt-10  items-center justify-center min-h-screen h-full w-screen overflow-hidden bg-white">
-                            <div className="relative flex justify-center items-center mb-5 w-[100vw] lg:w-4/5 h-[85vh] top-8 lg:h-[68vh] ">
+                            <div className="relative flex justify-center items-center mb-5 w-[100vw] lg:w-4/5 h-[80vh] top-5 lg:h-[68vh] ">
                                 {loading ? ( // Render loader when loading is true
                                     <div className="flex justify-center z-[1000000] items-center h-screen">
                                         <Loader type="bubble-loop" bgColor={"#000000"} size={100} />
@@ -224,25 +224,20 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                         {filteredData.map((character, index) => (
                                             <TinderCard
                                                 ref={childRefs[index]}
-                                                className="absolute z-[100]  w-full h-full cursor-grab select-none flex items-center justify-center"
+                                                className="absolute z-[1000] w-full h-full cursor-grab select-none flex items-center justify-center"
                                                 key={character.name}
                                                 onSwipe={(dir) => swiped(dir, character.name, index)}
-
-                                                preventSwipe={['up', 'down']}
-                                                swipeThreshold={0.3} // Adjust the swipe threshold
-                                                swipeVelocity={0.3}
-
                                                 onCardLeftScreen={() => outOfFrame(character.name, index)}
                                             >
 
                                                 <div
                                                     style={{ backgroundImage: 'url(' + character.photoUrl + ')' }}
-                                                    className="relative bottom-10   bg-white w-full max-w-sm lg:max-w-xl h-full  rounded-lg bg-cover bg-center p-4 flex flex-col justify-between"
+                                                    className="relative bottom-10  bg-white w-full max-w-xs h-full shadow-lg rounded-lg bg-cover bg-center p-4 flex flex-col justify-between"
                                                 >
                                                     <div>
-                                                        <h3 className=" rounded-lg text-lg font-bold text-center text-white">{character.name}</h3>
+                                                        <h3 className="text-lg font-bold  text-white">{character.name}</h3>
                                                     </div>
-                                                    <div className="bg-black/25 p-2  rounded-xl">
+                                                    <div className="bg-black/50 p-2  rounded-xl">
                                                         <p className="text-white font-semibold">Hygiene Rating: {generateStars(character.hygieneRating)}</p>
                                                         <p className="text-white font-semibold">Taste Rating: {generateStars(character.tasteRating)}</p>
                                                         <p className="text-white font-semibold">Hospitality Rating: {generateStars(character.hospitalityRating)}</p>
@@ -262,25 +257,25 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                 )}
                             </div>
                             {!showSurvey && (
-                                <div className=' lg:absolute flex w-screen px-3 flex-row justify-evenly 	backdrop-opacity-10 '>
-                                    {/* <button
-                                        className={`p-3 text-3xl z-[1000] hidden lg:block absolute top-[92%]  lg:top-[50%] text-white    left-10  lg:left-[25%] h-14 w-14   rounded-full bg-black ${!canSwipe}`}
+                                <div className=' lg:absolute relative z-[100] flex w-screen px-3 flex-row justify-evenly bottom-10 lg:top-[10%] 	backdrop-opacity-10 '>
+                                    <button
+                                        className={`p-3 text-3xl hidden lg:block absolute top-[92%]  lg:top-[50%] text-white    left-10  lg:left-[25%] h-14 w-14   rounded-full bg-black ${!canSwipe}`}
                                         onClick={() => swipe('left')}
                                     >
                                         <FontAwesomeIcon icon={faXmark} />
-                                    </button> */}
+                                    </button>
                                     {/* <button
                                         className={`p-3 text-3xl absolute lg:top-[89%] top-[50%] text-white h-14 w-14   rounded-full bg-black  ${!canGoBack}`}
                                         onClick={() => goBack()}
                                     >
                                         <FontAwesomeIcon icon={faUndo} />
                                     </button> */}
-                                    {/* <button
-                                        className={`p-3 text-3xl hidden z-[1000] lg:block absolute top-[92%] lg:top-[50%] right-10 lg:right-[25%] h-14 w-14 text-white    rounded-full bg-black  ${!canSwipe}`}
+                                    <button
+                                        className={`p-3 text-3xl hidden lg:block absolute top-[92%] lg:top-[50%] right-10 lg:right-[25%] h-14 w-14 text-white    rounded-full bg-black  ${!canSwipe}`}
                                         onClick={() => swipe('right')}
                                     >
                                         <FontAwesomeIcon icon={faCheck} />
-                                    </button> */}
+                                    </button>
                                 </div>
                             )}
 

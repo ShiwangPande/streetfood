@@ -52,11 +52,11 @@ function Wishlist() {
 
     return (
         <div className='overflow-y-hidden '>
-            <nav className="fixed items-center z-100 flex  justify-between mx-auto px-6 py-4  bg-black backdrop-blur-lg shadow-md h-20 w-screen">
+            <nav className="fixed items-center z-100 flex  justify-between mx-auto px-6 py-4  bg-white  h-20 w-screen">
 
                 <Link to="/" className="flex items-center mr-6">
-                    <img src={logo} className="h-10 mr-2" alt="KartMatch Logo" />
-                    <span className="text-xl font-semibold text-[#e03757]">KartMatch</span>
+                    {/* <img src={logo} className="h-10 mr-2" alt="KartMatch Logo" /> */}
+                    <span className="text-xl font-semibold text-black">KartMatch</span>
                 </Link>
 
             </nav>
