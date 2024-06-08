@@ -237,7 +237,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
 
                                                 <div
                                                     style={{ backgroundImage: 'url(' + character.photoUrl + ')' }}
-                                                    className="relative bottom-10   bg-white w-full max-w-sm lg:max-w-xl h-full  rounded-lg bg-cover bg-center p-4 flex flex-col justify-between"
+                                                    className="relative bottom-10   bg-white w-full max-w-sm mx-3 lg:max-w-xl h-full  rounded-sm bg-cover bg-center p-4 flex flex-col justify-between"
                                                 >
                                                     <div>
                                                         <h3 className=" rounded-lg text-lg font-bold text-center text-white">{character.name}</h3>
