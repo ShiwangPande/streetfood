@@ -2,8 +2,8 @@
   
   "name": "KartMatch",
   "short_name": "KartMatch",
-  "theme_color": "#f282a7",
-  "background_color": "#b3dfec",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
