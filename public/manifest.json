@@ -1,5 +1,5 @@
 {
-  "name": "KartMatch",
+  "name": "KartMatch: Find the Best Street Food",
   "short_name": "KartMatch",
   "theme_color": "#000000",
   "background_color": "#ffffff",
@@ -49,5 +49,15 @@
       "type": "image/png"
     }
   ],
-  "id": "KartMatch"
+  "id": "KartMatch",
+  "description": "Discover top-rated street food around you with reviews from fellow food lovers. Whether you want a quick snack or to explore new spots, KartMatch helps you find the best.",
+  "dir": "auto",
+  "lang": "en",
+  "display_override": [
+    "standalone",
+    "window-controls-overlay"
+  ],
+  "categories": [
+    "food"
+  ]
 }
