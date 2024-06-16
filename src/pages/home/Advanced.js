@@ -26,6 +26,16 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             try {
                 const response = await axios.get('https://kartmatchbackend.onrender.com/vendors');
                 const data = response.data;
+                const imagePromises = data.map(item => {
+                    return new Promise((resolve, reject) => {
+                        const img = new Image();
+                        img.src = item.photoUrl;
+                        img.onload = resolve;
+                        img.onerror = reject;
+                    });
+                });
+
+                await Promise.all(imagePromises);
                 let filtered;
                 if (preferences.hygieneRating || preferences.tasteRating || preferences.hospitalityRating) {
                     filtered = data.filter(item =>

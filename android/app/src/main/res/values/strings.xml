@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">kartmatch</string>
+    <string name="title_activity_main">kartmatch</string>
+    <string name="package_name">com.kartmatch.app</string>
+    <string name="custom_url_scheme">com.kartmatch.app</string>
+</resources>
