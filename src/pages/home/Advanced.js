@@ -148,7 +148,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                     <>
                         {showSurvey && <Survey onComplete={handleSurveyComplete} />}
                         <div className="flex flex-col pt-10 items-center justify-center min-h-screen h-full w-screen overflow-hidden bg-white">
-                            <div className="relative flex justify-center items-center mb-5 w-[100vw] lg:w-4/5 h-[80vh] top-8 lg:h-[68vh] ">
+                            <div className="relative flex justify-center items-center mb-5 w-[100vw] lg:w-4/5 h-[80vh] lg-top-0 top-8 lg:h-[68vh] ">
                                 {filteredData.map((character, index) => (
                                     index === currentIndex && (
                                         <motion.div
@@ -161,7 +161,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                         >
                                             <div
                                                 style={{ backgroundImage: 'url(' + character.photoUrl + ')' }}
-                                                className="relative bottom-10 bg-white w-full max-w-sm mx-3 lg:max-w-xl h-full rounded-sm bg-cover bg-center p-4 flex flex-col justify-between"
+                                                className="relative lg:bottom-16 bottom-10 bg-white w-full max-w-sm mx-3 lg:max-w-xl h-full rounded-sm bg-cover bg-center p-4 flex flex-col justify-between"
                                             >
                                                 <div>
                                                     <h3 className="rounded-lg text-lg font-bold text-center text-white">{character.name}</h3>

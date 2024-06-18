@@ -27,6 +27,8 @@ const App = () => {
     setShowPopup(false);
   };
 
+  
+
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
       window.deferredPrompt = e;
