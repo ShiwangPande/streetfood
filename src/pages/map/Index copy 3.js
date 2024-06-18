@@ -5,6 +5,7 @@ import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
 import { IconCurrentLocation } from '@tabler/icons-react';
 
+// Define custom icons
 const streetVendorIcon = new L.Icon({
     iconUrl: 'https://i.postimg.cc/W1WXqByq/street-food.png',
     iconSize: [40, 40],
@@ -32,6 +33,7 @@ const MapComponent = () => {
     const mapRef = useRef();
     const base_url = process.env.REACT_APP_API_URL;
 
+    // Function to calculate distance between two points
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
         const R = 6371; // Radius of the Earth in km
         const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -45,8 +47,8 @@ const MapComponent = () => {
         return distance; // Distance in km
     };
 
+    // Function to reverse geocode coordinates to get address
     const reverseGeocode = async (lat, lon) => {
-
         const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${base_url}`;
 
         try {
@@ -62,6 +64,7 @@ const MapComponent = () => {
         }
     };
 
+    // Fetch vendors data and user location on component mount
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -101,6 +104,7 @@ const MapComponent = () => {
         }
     }, []);
 
+    // Watch user's current location and update
     useEffect(() => {
         const watchId = navigator.geolocation.watchPosition(
             (position) => {
@@ -115,6 +119,7 @@ const MapComponent = () => {
         return () => navigator.geolocation.clearWatch(watchId);
     }, []);
 
+    // Filter vendors based on search, food items, and radius
     useEffect(() => {
         const radiusValue = radius === 'other' ? parseFloat(customRadius) : radius;
 
@@ -135,11 +140,13 @@ const MapComponent = () => {
         setFilteredVendors(filtered);
     }, [vendors, searchQuery, selectedFoodItems, userLocation, radius, customRadius]);
 
+    // Handle search input change
     const handleSearch = (event) => {
         setSearchQuery(event.target.value);
         setShowOptions(true);
     };
 
+    // Generate filtered food item options for autocomplete
     const filteredOptions = Array.from(
         new Set(vendors.flatMap((vendor) => vendor.foodItems))
     ).filter((option) =>
@@ -147,12 +154,14 @@ const MapComponent = () => {
         !selectedFoodItems.includes(option)
     );
 
+    // Adjust map view on user location or radius change
     useEffect(() => {
         if (userLocation && mapRef.current) {
             mapRef.current.setView([userLocation.latitude, userLocation.longitude], getZoomLevel(radius));
         }
     }, [userLocation, radius]);
 
+    // Get appropriate zoom level based on radius
     const getZoomLevel = (radius) => {
         const radiusValue = radius === 'other' ? parseFloat(customRadius) : radius;
         if (radiusValue <= 5) return 13;
@@ -160,22 +169,26 @@ const MapComponent = () => {
         return 11; // Adjust as necessary
     };
 
+    // Toggle dropdown visibility for selected food items
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
 
+    // Remove selected food item from the list
     const removeSelectedFoodItem = (itemToRemove) => {
         setSelectedFoodItems((prevItems) =>
             prevItems.filter((item) => item !== itemToRemove)
         );
     };
 
+    // Redirect to user's current location on the map
     const redirectToCurrentLocation = () => {
         if (userLocation && mapRef.current) {
             mapRef.current.setView([userLocation.latitude, userLocation.longitude], getZoomLevel(radius));
         }
     };
 
+    // Generate Google Maps directions URL for a vendor
     const getDirectionsUrl = (vendor) => {
         if (userLocation) {
             return `https://www.google.com/maps/dir/?api=1&origin=${userLocation.latitude},${userLocation.longitude}&destination=${vendor.location.coordinates[1]},${vendor.location.coordinates[0]}`;
@@ -183,9 +196,24 @@ const MapComponent = () => {
         return `https://www.google.com/maps/search/?api=1&query=${vendor.location.coordinates[1]},${vendor.location.coordinates[0]}`;
     };
 
+    // Function to generate star ratings based on a given rating
+    function generateStars(rating) {
+        const starCount = 5;
+        const fullStars = Math.floor(rating);
+        const halfStars = Math.ceil(rating - fullStars);
+
+        const fullStarsString = Array(fullStars).fill('★').join('');
+        const halfStarsString = Array(halfStars).fill('½').join('');
+        const emptyStars = starCount - fullStars - halfStars;
+        const emptyStarsString = Array(emptyStars).fill('☆').join('');
+
+        return fullStarsString + halfStarsString + emptyStarsString;
+    }
+
     return (
         <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
 
+            {/* Sidebar for filtering and vendor list */}
             <div className="w-full lg:w-1/3 h-1/3 lg:h-full bg-white p-4 overflow-y-auto order-2 lg:order-1">
                 <div className="mb-4">
                     <label htmlFor="search" className="block text-gray-700 font-semibold mb-2">Search</label>
@@ -239,6 +267,7 @@ const MapComponent = () => {
                     )}
                 </div>
                 <div className="relative mb-4">
+                    {/* Dropdown for selected food items */}
                     {selectedFoodItems.length > 0 && (
                         <div className="mb-4">
                             <button
@@ -265,6 +294,7 @@ const MapComponent = () => {
                         </div>
                     )}
                 </div>
+                {/* List of filtered vendors */}
                 <div className="relative">
                     <h2 className="text-xl font-bold mb-4">Vendors</h2>
                     {filteredVendors.map((vendor, index) => (
@@ -277,20 +307,20 @@ const MapComponent = () => {
                             </button>
                             <div className='flex flex-row gap-4'>
                                 <div>
-                                    <img src={vendor.photoUrl} alt={vendor.name} className="w-full h-32 object-cover rounded-lg mb-2" />
+                                    <img src={vendor.photoUrl} alt={vendor.name} className="w-full  object-cover rounded-lg mb-2" />
                                 </div>
                                 <div className='flex flex-col'>
-                                    <h3 className="text-lg font-semibold">{vendor.name}</h3>
+                                    <h3 className="rounded-lg font-semibold text-lg font-bold text-center text-black">{vendor.name}</h3>
                                     <p className="text-gray-600">{vendor.address}</p>
                                     <p>Food Items: {vendor.foodItems.join(', ')}</p>
-                                    <p>Hygiene Rating: {vendor.hygieneRating}</p>
-                                    <p>Taste Rating: {vendor.tasteRating}</p>
-                                    <p>Hospitality Rating: {vendor.hospitalityRating}</p>
+                                    <p>Hygiene Rating: {generateStars(vendor.hygieneRating)}</p>
+                                    <p>Taste Rating: {generateStars(vendor.tasteRating)}</p>
+                                    <p>Hospitality Rating: {generateStars(vendor.hospitalityRating)}</p>
                                     <a
                                         href={getDirectionsUrl(vendor)}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-2 text-blue-500 hover:underline"
+                                        className="text-white font-semibold bg-green-500 w-[50%] text-center p-2 rounded-lg"
                                     >
                                         Get Directions
                                     </a>
@@ -300,6 +330,8 @@ const MapComponent = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Map section */}
             <div className="w-full lg:w-2/3 h-2/3 lg:h-full relative order-1 lg:order-2">
                 <MapContainer
                     center={userLocation ? [userLocation.latitude, userLocation.longitude] : [51.505, -0.09]}
@@ -308,10 +340,13 @@ const MapComponent = () => {
                     style={{ height: "100%", width: "100%" }}
                     ref={mapRef}
                 >
+                    {/* OpenStreetMap tile layer */}
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
+
+                    {/* Marker for user's location */}
                     {userLocation && (
                         <Marker
                             position={[userLocation.latitude, userLocation.longitude]}
@@ -326,6 +361,8 @@ const MapComponent = () => {
                             />
                         </Marker>
                     )}
+
+                    {/* Markers for filtered vendors */}
                     {filteredVendors.map((vendor, index) => (
                         <Marker
                             key={index}
@@ -348,7 +385,7 @@ const MapComponent = () => {
                                         href={getDirectionsUrl(vendor)}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-2 text-blue-500 hover:underline"
+                                        className="text-white font-semibold bg-green-500 w-full p-2 rounded-lg"
                                     >
                                         Get Directions
                                     </a>
@@ -357,6 +394,8 @@ const MapComponent = () => {
                         </Marker>
                     ))}
                 </MapContainer>
+
+                {/* Button to redirect to user's current location */}
                 <button
                     onClick={redirectToCurrentLocation}
                     className="absolute z-[1000] bottom-24 right-8 bg-white text-white p-2 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-black"
@@ -370,3 +409,4 @@ const MapComponent = () => {
 };
 
 export default MapComponent;
+

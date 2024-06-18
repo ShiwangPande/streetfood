@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
-import logo from "../../components/logo256.png";
-import { Link } from 'react-router-dom';
-import Tabbar from '../../components/Tabbar';
+import { IconCurrentLocation } from '@tabler/icons-react';
+
 const streetVendorIcon = new L.Icon({
     iconUrl: 'https://i.postimg.cc/W1WXqByq/street-food.png',
     iconSize: [40, 40],
@@ -26,16 +25,67 @@ const MapComponent = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedFoodItems, setSelectedFoodItems] = useState([]);
     const [showOptions, setShowOptions] = useState(false);
-    const [showFilteredVendors, setShowFilteredVendors] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedVendorLocation, setSelectedVendorLocation] = useState(null);
+    const [radius, setRadius] = useState(5); // Default radius is 5km
+    const [customRadius, setCustomRadius] = useState(''); // Custom radius input
+    const [filteredVendors, setFilteredVendors] = useState([]);
     const mapRef = useRef();
+    const base_url = process.env.REACT_APP_API_URL;
 
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
+    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+        const R = 6371; // Radius of the Earth in km
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c;
+        return distance; // Distance in km
     };
 
-    const getUserLocation = () => {
+    const reverseGeocode = async (lat, lon) => {
+
+        const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${base_url}`;
+
+        try {
+            const response = await axios.get(url);
+            const results = response.data.results;
+            if (results.length > 0) {
+                return results[0].formatted;
+            }
+            return 'Unknown location';
+        } catch (error) {
+            console.error('Error fetching address:', error);
+            return 'Unknown location';
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('https://kartmatchbackend.onrender.com/vendors');
+                const vendorsData = response.data;
+
+                const updatedVendors = await Promise.all(
+                    vendorsData.map(async (vendor) => {
+                        const address = await reverseGeocode(
+                            vendor.location.coordinates[1],
+                            vendor.location.coordinates[0]
+                        );
+                        return { ...vendor, address };
+                    })
+                );
+
+                setVendors(updatedVendors);
+            } catch (error) {
+                console.error('Error fetching vendor data:', error);
+            }
+        };
+
+        fetchData();
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -47,115 +97,128 @@ const MapComponent = () => {
                 }
             );
         } else {
-            // Geolocation is not supported by the browser
             console.error('Geolocation is not supported by this browser.');
+        }
+    }, []);
+
+    useEffect(() => {
+        const watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setUserLocation({ latitude, longitude });
+            },
+            (error) => {
+                console.error('Error getting user location:', error);
+            }
+        );
+
+        return () => navigator.geolocation.clearWatch(watchId);
+    }, []);
+
+    useEffect(() => {
+        const radiusValue = radius === 'other' ? parseFloat(customRadius) : radius;
+
+        const filtered = vendors.filter((vendor) => {
+            const matchesFoodItem = selectedFoodItems.length === 0 ||
+                vendor.foodItems.some((foodItem) => selectedFoodItems.includes(foodItem));
+            const matchesSearchQuery = searchQuery === '' ||
+                vendor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                vendor.foodItems.some((foodItem) => foodItem.toLowerCase().includes(searchQuery.toLowerCase()));
+            return matchesFoodItem && matchesSearchQuery &&
+                (userLocation ? calculateDistance(
+                    userLocation.latitude,
+                    userLocation.longitude,
+                    vendor.location.coordinates[1],
+                    vendor.location.coordinates[0]
+                ) <= radiusValue : true);
+        });
+        setFilteredVendors(filtered);
+    }, [vendors, searchQuery, selectedFoodItems, userLocation, radius, customRadius]);
+
+    const handleSearch = (event) => {
+        setSearchQuery(event.target.value);
+        setShowOptions(true);
+    };
+
+    const filteredOptions = Array.from(
+        new Set(vendors.flatMap((vendor) => vendor.foodItems))
+    ).filter((option) =>
+        option.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !selectedFoodItems.includes(option)
+    );
+
+    useEffect(() => {
+        if (userLocation && mapRef.current) {
+            mapRef.current.setView([userLocation.latitude, userLocation.longitude], getZoomLevel(radius));
+        }
+    }, [userLocation, radius]);
+
+    const getZoomLevel = (radius) => {
+        const radiusValue = radius === 'other' ? parseFloat(customRadius) : radius;
+        if (radiusValue <= 5) return 13;
+        if (radiusValue <= 10) return 12;
+        return 11; // Adjust as necessary
+    };
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const removeSelectedFoodItem = (itemToRemove) => {
+        setSelectedFoodItems((prevItems) =>
+            prevItems.filter((item) => item !== itemToRemove)
+        );
+    };
+
+    const redirectToCurrentLocation = () => {
+        if (userLocation && mapRef.current) {
+            mapRef.current.setView([userLocation.latitude, userLocation.longitude], getZoomLevel(radius));
         }
     };
 
-    useEffect(() => {
-        // Fetch vendor data from API
-        axios.get('https://kartmatchbackend.onrender.com/vendors')
-            .then(response => {
-                setVendors(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching vendor data:', error);
-            });
+    const getDirectionsUrl = (vendor) => {
+        if (userLocation) {
+            return `https://www.google.com/maps/dir/?api=1&origin=${userLocation.latitude},${userLocation.longitude}&destination=${vendor.location.coordinates[1]},${vendor.location.coordinates[0]}`;
+        }
+        return `https://www.google.com/maps/search/?api=1&query=${vendor.location.coordinates[1]},${vendor.location.coordinates[0]}`;
+    };
+    function generateStars(rating) {
+        const starCount = 5;
+        const fullStars = Math.floor(rating);
+        const halfStars = Math.ceil(rating - fullStars);
 
-        getUserLocation();
-    }, []);
+        const fullStarsString = Array(fullStars).fill('★').join('');
+        const halfStarsString = Array(halfStars).fill('½').join('');
+        const emptyStars = starCount - fullStars - halfStars;
+        const emptyStarsString = Array(emptyStars).fill('☆').join('');
 
-
-
-useEffect(() => {
-    if (userLocation && mapRef.current) {
-        mapRef.current.setView([userLocation.latitude, userLocation.longitude], 16);
+        return fullStarsString + halfStarsString + emptyStarsString;
     }
-}, [userLocation]);
+    return (
+        <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
 
-const filterVendors = (foodItem) => {
-    const filteredVendor = vendors.find((vendor) =>
-        vendor.foodItems.includes(foodItem)
-    );
-    if (filteredVendor) {
-        setSelectedVendorLocation({
-            latitude: filteredVendor.location.coordinates[1],
-            longitude: filteredVendor.location.coordinates[0],
-        });
-    }
-    setSelectedFoodItems((prevItems) => [...prevItems, foodItem]);
-    setSearchQuery('');
-    setShowOptions(false);
-};
-
-const removeSelectedFoodItem = (itemToRemove) => {
-    setSelectedFoodItems((prevItems) =>
-        prevItems.filter((item) => item !== itemToRemove)
-    );
-};
-
-const filteredVendors = vendors.filter((vendor) =>
-    selectedFoodItems.length > 0
-        ? selectedFoodItems.some((item) => vendor.foodItems.includes(item))
-        : true
-);
-
-const handleSearch = (event) => {
-    setSearchQuery(event.target.value);
-    setShowOptions(true);
-};
-
-const filteredOptions = Array.from(
-    new Set(vendors.flatMap((vendor) => vendor.foodItems))
-).filter((option) =>
-    option.toLowerCase().includes(searchQuery.toLowerCase()) &&
-    !selectedFoodItems.includes(option)
-);
-
-useEffect(() => {
-    if (selectedVendorLocation && mapRef.current) {
-        mapRef.current.setView([selectedVendorLocation.latitude, selectedVendorLocation.longitude], 16);
-    }
-}, [selectedVendorLocation]);
-
-const redirectToCurrentLocation = () => {
-    if (userLocation && mapRef.current) {
-        mapRef.current.setView([userLocation.latitude, userLocation.longitude], 16);
-    }
-};
-
-return (
-    <div className='overflow-hidden overflow-x-hidden h-screen bg-white'>
-        {/* <nav className=" shadow-md h-14">
-            <div className=" fixed shadow-sm  bg-white  w-[100vw] ">
-                <div className="flex items-center z-100  justify-center mx-auto px-6 py-4">
-                    <div className="flex items-center">
-                        <Link to="/" className="flex items-center mr-6">
-                            <span className="text-xl font-semibold text-black">KartMatch</span>
-                        </Link>
-                    </div>
-
-                </div>
-            </div>
-        </nav> */}
-        <div className="flex flex-col w-screen h-screen">
-            <div className="relative px-5 lg:px-20 flex justify-between z-[1000] p-4 bg-white">
-                <div className="relative">
+            <div className="w-full lg:w-1/3 h-1/3 lg:h-full bg-white p-4 overflow-y-auto order-2 lg:order-1">
+                <div className="mb-4">
+                    <label htmlFor="search" className="block text-gray-700 font-semibold mb-2">Search</label>
                     <input
+                        id="search"
                         type="text"
                         value={searchQuery}
                         onChange={handleSearch}
-                        onFocus={() => setShowOptions(true)}
-                        placeholder="Search food items..."
-                        className="px-4 py-2 text-gray-800 bg-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-black"
+                        placeholder="Search by food item or vendor name"
+                        className="block w-full p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
                     />
-                    {showOptions && (
-                        <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-lg shadow-md z-10 max-h-48 overflow-y-auto">
+                    {showOptions && searchQuery && (
+                        <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1">
                             {filteredOptions.map((option, index) => (
                                 <button
                                     key={index}
-                                    onClick={() => filterVendors(option)}
-                                    className="block w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                                    onClick={() => {
+                                        setSelectedFoodItems([...selectedFoodItems, option]);
+                                        setSearchQuery('');
+                                        setShowOptions(false);
+                                    }}
+                                    className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 focus:outline-none"
                                 >
                                     {option}
                                 </button>
@@ -163,45 +226,98 @@ return (
                         </div>
                     )}
                 </div>
-                <div className="ml-4 flex items-center">
-                    <div className="absolute right-0 lg:right-[1rem] top-[2vh]">
-                        {selectedFoodItems.length > 0 && (
-                            <div className="relative">
-                                <button
-                                    onClick={toggleDropdown}
-                                    className="bg-white text-black px-4 mr-5 py-2 rounded focus:outline-none focus:ring-2 focus:gray-500"
-                                >
-                                    {isOpen ? "" : ""} ^
-                                </button>
-                                {isOpen && (
-                                    <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-md z-10">
-                                        {selectedFoodItems.map((item, index) => (
-                                            <div className="relative flex justify-between px-4 py-2 text-sm text-gray-700 hover:bg-black hover:text-white" key={index}>
-                                                <span>{item}</span>
-                                                <button
-                                                    onClick={() => removeSelectedFoodItem(item)}
-                                                    className="text-gray-600 hover:text-red-600 focus:outline-none"
-                                                >
-                                                    <FaTimes />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                <div className="mb-4">
+                    <label htmlFor="radius" className="block text-gray-700 font-semibold mb-2">Search Radius (km)</label>
+                    <select
+                        id="radius"
+                        value={radius}
+                        onChange={(e) => setRadius(e.target.value)}
+                        className="block w-full p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
+                    >
+                        <option value={5}>5 km</option>
+                        <option value={10}>10 km</option>
+                        <option value={20}>20 km</option>
+                        <option value="other">Other</option>
+                    </select>
+                    {radius === 'other' && (
+                        <input
+                            type="number"
+                            value={customRadius}
+                            onChange={(e) => setCustomRadius(e.target.value)}
+                            placeholder="Enter custom radius in km"
+                            className="block w-full p-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
+                        />
+                    )}
+                </div>
+                <div className="relative mb-4">
+                    {selectedFoodItems.length > 0 && (
+                        <div className="mb-4">
+                            <button
+                                onClick={toggleDropdown}
+                                className="text-gray-700 font-semibold focus:outline-none focus:ring-2 focus:ring-black w-full text-left"
+                            >
+                                {isOpen ? 'Hide Selected Food Items' : 'Show Selected Food Items'}
+                            </button>
+                            {isOpen && (
+                                <div className="bg-white rounded-lg shadow-md p-4">
+                                    {selectedFoodItems.map((item, index) => (
+                                        <div key={index} className="flex justify-between items-center mb-2">
+                                            <span>{item}</span>
+                                            <button
+                                                onClick={() => removeSelectedFoodItem(item)}
+                                                className="text-gray-600 hover:text-red-600 focus:outline-none"
+                                            >
+                                                <FaTimes />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+                <div className="relative">
+                    <h2 className="text-xl font-bold mb-4">Vendors</h2>
+                    {filteredVendors.map((vendor, index) => (
+                        <div key={index} className="bg-white rounded-lg shadow-md p-4 mb-4 relative">
+                            <button
+                                onClick={() => setFilteredVendors(filteredVendors.filter((_, i) => i !== index))}
+                                className="absolute top-2 right-2 text-gray-600 hover:text-red-600 focus:outline-none"
+                            >
+                                <FaTimes />
+                            </button>
+                            <div className='flex flex-row gap-4'>
+                                <div>
+                                    <img src={vendor.photoUrl} alt={vendor.name} className="w-full  object-cover rounded-lg mb-2" />
+                                </div>
+                                <div className='flex flex-col'>
+                                    <h3 lassName="rounded-lg font-semibold text-lg font-bold text-center text-black">{vendor.name}</h3>
+                                    <p className="text-gray-600">{vendor.address}</p>
+                                    <p >Food Items: {vendor.foodItems.join(', ')}</p>
+                                    <p >Hygiene Rating: {generateStars(vendor.hygieneRating)}</p>
+                                    <p >Taste Rating: {generateStars(vendor.tasteRating)} </p>
+                                    <p >Hospitality Rating:{generateStars(vendor.hospitalityRating)} </p>
+                                    <a
+                                        href={getDirectionsUrl(vendor)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-white font-semibold bg-green-500 w-[50%] text-center p-2 rounded-lg"
+                                    >
+                                        Get Directions
+                                    </a>
+                                </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    ))}
                 </div>
             </div>
-            <div className="flex-grow relative">
+            <div className="w-full lg:w-2/3 h-2/3 lg:h-full relative order-1 lg:order-2">
                 <MapContainer
-                    center={userLocation ? [userLocation.latitude, userLocation.longitude] : [22.5726, 88.3639]}
-                    zoom={16}
+                    center={userLocation ? [userLocation.latitude, userLocation.longitude] : [51.505, -0.09]}
+                    zoom={getZoomLevel(radius)}
                     scrollWheelZoom={true}
+                    style={{ height: "100%", width: "100%" }}
                     ref={mapRef}
-                    zoomControl={false}
-                    maxZoom={25}
-                    className="h-full w-full"
                 >
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -209,17 +325,16 @@ return (
                     />
                     {userLocation && (
                         <Marker
-                            position={[
-                                userLocation.latitude,
-                                userLocation.longitude,
-                            ]}
+                            position={[userLocation.latitude, userLocation.longitude]}
                             icon={userLocationIcon}
                         >
-                            <Popup>
-                                <div>
-                                    <h3>Your Location</h3>
-                                </div>
-                            </Popup>
+                            <Popup>Your location</Popup>
+                            <Circle
+                                center={[userLocation.latitude, userLocation.longitude]}
+                                radius={(radius === 'other' ? customRadius : radius) * 1000} // Convert km to meters
+                                color="blue"
+                                fillOpacity={0.2}
+                            />
                         </Marker>
                     )}
                     {filteredVendors.map((vendor, index) => (
@@ -227,56 +342,42 @@ return (
                             key={index}
                             position={[
                                 vendor.location.coordinates[1],
-                                vendor.location.coordinates[0],
+                                vendor.location.coordinates[0]
                             ]}
                             icon={streetVendorIcon}
                         >
                             <Popup>
                                 <div>
-                                    <h3>{vendor.name}</h3>
+                                    <img src={vendor.photoUrl} alt={vendor.name} className="w-full h-32 object-cover rounded-lg mb-2" />
+                                    <h3 className="text-lg font-semibold">{vendor.name}</h3>
+                                    <p className="text-gray-600">{vendor.address}</p>
                                     <p>Food Items: {vendor.foodItems.join(', ')}</p>
                                     <p>Hygiene Rating: {vendor.hygieneRating}</p>
                                     <p>Taste Rating: {vendor.tasteRating}</p>
                                     <p>Hospitality Rating: {vendor.hospitalityRating}</p>
+                                    <a
+                                        href={getDirectionsUrl(vendor)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-white font-semibold bg-green-500 w-full p-2 rounded-lg"
+                                    >
+                                        Get Directions
+                                    </a>
                                 </div>
                             </Popup>
                         </Marker>
                     ))}
                 </MapContainer>
-
                 <button
                     onClick={redirectToCurrentLocation}
                     className="absolute z-[1000] bottom-24 right-8 bg-white text-white p-2 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-black"
                     title="Go to Current Location"
                 >
-                    <img
-                        src="https://i.postimg.cc/fLJLT990/placeholder.png"
-                        alt="Current Location"
-                        className="w-6 h-6"
-                    />
+                    <IconCurrentLocation color="black" />
                 </button>
-
-                {showFilteredVendors && (
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded-md shadow-md z-10">
-                        <h3 className="text-lg font-semibold mb-2">Filtered Vendors</h3>
-                        <ul className="overflow-y-auto max-h-60">
-                            {filteredVendors.length > 0 ? (
-                                filteredVendors.map((vendor, index) => (
-                                    <li key={index} className="py-1">
-                                        {vendor.name}
-                                    </li>
-                                ))
-                            ) : (
-                                <li className="py-1">No filtered vendors found.</li>
-                            )}
-                        </ul>
-                    </div>
-                )}
             </div>
         </div>
-        <Tabbar />
-    </div>
-);
+    );
 };
 
 export default MapComponent;
