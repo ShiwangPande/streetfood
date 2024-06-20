@@ -5,6 +5,7 @@ import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
 import { IconCurrentLocation } from '@tabler/icons-react';
 import Tabbar from '../../components/Tabbar';
+import { Geolocation } from '@capacitor/geolocation';
 
 // Define custom icons
 const streetVendorIcon = new L.Icon({
@@ -90,34 +91,38 @@ const MapComponent = () => {
 
         fetchData();
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setUserLocation({ latitude, longitude });
-                },
-                (error) => {
-                    console.error('Error getting user location:', error);
-                }
-            );
-        } else {
-            console.error('Geolocation is not supported by this browser.');
-        }
+        const getUserLocation = async () => {
+            try {
+                const position = await Geolocation.getCurrentPosition();
+                const { latitude, longitude } = position.coords;
+                setUserLocation({ latitude, longitude });
+            } catch (error) {
+                console.error('Error getting user location:', error);
+            }
+        };
+
+        getUserLocation();
     }, []);
 
     // Watch user's current location and update
     useEffect(() => {
-        const watchId = navigator.geolocation.watchPosition(
-            (position) => {
+        const watchId = Geolocation.watchPosition(
+            {},
+            (position, err) => {
+                if (err) {
+                    console.error('Error getting user location:', err);
+                    return;
+                }
                 const { latitude, longitude } = position.coords;
                 setUserLocation({ latitude, longitude });
-            },
-            (error) => {
-                console.error('Error getting user location:', error);
             }
         );
 
-        return () => navigator.geolocation.clearWatch(watchId);
+        return () => {
+            if (watchId !== null) {
+                Geolocation.clearWatch({ id: watchId });
+            }
+        };
     }, []);
 
     // Filter vendors based on search, food items, and radius
@@ -191,33 +196,19 @@ const MapComponent = () => {
 
     // Generate Google Maps directions URL for a vendor
     const getDirectionsUrl = (vendor) => {
-        if (userLocation) {
-            return `https://www.google.com/maps/dir/?api=1&origin=${userLocation.latitude},${userLocation.longitude}&destination=${vendor.location.coordinates[1]},${vendor.location.coordinates[0]}`;
-        }
-        return `https://www.google.com/maps/search/?api=1&query=${vendor.location.coordinates[1]},${vendor.location.coordinates[0]}`;
+        if (!userLocation) return '';
+
+        const { latitude, longitude } = userLocation;
+        const vendorLat = vendor.location.coordinates[1];
+        const vendorLon = vendor.location.coordinates[0];
+
+        return `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${vendorLat},${vendorLon}`;
     };
-
-
-
-    // Function to generate star ratings based on a given rating
-    function generateStars(rating) {
-        const starCount = 5;
-        const fullStars = Math.floor(rating);
-        const halfStars = Math.ceil(rating - fullStars);
-
-        const fullStarsString = Array(fullStars).fill('★').join('');
-        const halfStarsString = Array(halfStars).fill('½').join('');
-        const emptyStars = starCount - fullStars - halfStars;
-        const emptyStarsString = Array(emptyStars).fill('☆').join('');
-
-        return fullStarsString + halfStarsString + emptyStarsString;
-    }
 
     return (
         <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
 
-            {/* Sidebar for filtering and vendor list */}
-            <div className="w-full lg:w-1/3 h-1/2 lg:h-full  bg-white p-1 lg:p-4 overflow-y-auto order-2 lg:order-1">
+            <div className="w-full lg:w-1/3 h-1/3 lg:h-full bg-white p-4 overflow-y-auto order-2 lg:order-1">
                 <div className="mb-4">
                     <label htmlFor="search" className="block text-gray-700 font-semibold mb-2">Search</label>
                     <input
@@ -270,7 +261,6 @@ const MapComponent = () => {
                     )}
                 </div>
                 <div className="relative mb-4">
-                    {/* Dropdown for selected food items */}
                     {selectedFoodItems.length > 0 && (
                         <div className="mb-4">
                             <button
@@ -297,7 +287,6 @@ const MapComponent = () => {
                         </div>
                     )}
                 </div>
-                {/* List of filtered vendors */}
                 <div className="relative">
                     <h2 className="text-xl font-bold mb-4">Vendors</h2>
                     {filteredVendors.map((vendor, index) => (
@@ -308,38 +297,32 @@ const MapComponent = () => {
                             >
                                 <FaTimes />
                             </button>
-                            <div className='flex flex-col lg:grid  lg:grid-cols-2 mb-10  gap-1 lg:gap-4'>
+                            <div className='flex flex-row gap-4'>
                                 <div>
-                                    <img src={vendor.photoUrl} alt={vendor.name} className="w-full h-fit lg:h-full  object-cover rounded-lg mb-2" />
+                                    <img src={vendor.photoUrl} alt={vendor.name} className="w-full h-32 object-cover rounded-lg mb-2" />
                                 </div>
-                                <div className='flex flex-col justify-between items-center'>
-                                    <div>
-                                        <h3 className="rounded-lg font-semibold text-md lg:text-lg  text-center text-black">{vendor.name}</h3>
-                                        <p className="text-gray-600 mb-1 font-sans leading-tight text-base">{vendor.address}</p>
-                                        <p className='text-base font-sans  mb-1 leading-tight tracking-tight line-clamp-2 lg:line-clamp-3 capitalize'><span className="font-semibold">Food Items:</span> {vendor.foodItems.join(', ')}</p>
-                                        <p className='text-black font-sans  font-semibold'>Hygiene Rating: {generateStars(vendor.hygieneRating)}</p>
-                                        <p className='text-black font-sans font-semibold'>Taste Rating: {generateStars(vendor.tasteRating)}</p>
-                                        <p className='text-black font-sans '>Hospitality Rating: {generateStars(vendor.hospitalityRating)}</p>
-                                    </div>
-                                    <div className='mt-3'>
-                                        <a
-                                            href={getDirectionsUrl(vendor)}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-white  font-semibold bg-green-500 w-full text-center p-2 rounded-lg"
-                                        >
-                                            Get Directions
-                                        </a>
-                                    </div>
+                                <div className='flex flex-col'>
+                                    <h3 className="text-lg font-semibold">{vendor.name}</h3>
+                                    <p className="text-gray-600">{vendor.address}</p>
+                                    <p>Food Items: {vendor.foodItems.join(', ')}</p>
+                                    <p>Hygiene Rating: {vendor.hygieneRating}</p>
+                                    <p>Taste Rating: {vendor.tasteRating}</p>
+                                    <p>Hospitality Rating: {vendor.hospitalityRating}</p>
+                                    <a
+                                        href={getDirectionsUrl(vendor)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-2 text-blue-500 hover:underline"
+                                    >
+                                        Get Directions
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
-
-            {/* Map section */}
-            <div className="w-full lg:w-2/3 h-1/2 lg:h-full relative order-1 lg:order-2">
+            <div className="w-full lg:w-2/3 h-2/3 lg:h-full relative order-1 lg:order-2">
                 <MapContainer
                     center={userLocation ? [userLocation.latitude, userLocation.longitude] : [51.505, -0.09]}
                     zoom={getZoomLevel(radius)}
@@ -347,13 +330,10 @@ const MapComponent = () => {
                     style={{ height: "100%", width: "100%" }}
                     ref={mapRef}
                 >
-                    {/* OpenStreetMap tile layer */}
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
-
-                    {/* Marker for user's location */}
                     {userLocation && (
                         <Marker
                             position={[userLocation.latitude, userLocation.longitude]}
@@ -368,8 +348,6 @@ const MapComponent = () => {
                             />
                         </Marker>
                     )}
-
-                    {/* Markers for filtered vendors */}
                     {filteredVendors.map((vendor, index) => (
                         <Marker
                             key={index}
@@ -380,46 +358,35 @@ const MapComponent = () => {
                             icon={streetVendorIcon}
                         >
                             <Popup>
-                                <div className='flex flex-col lg:grid  lg:grid-cols-2 mb-10  gap-1 lg:gap-4'>
-                                    <div>
-                                        <img src={vendor.photoUrl} alt={vendor.name} className="w-20 h-fit lg:h-full  object-contain rounded-lg mb-2" />
-                                    </div>
-                                    <div className='flex flex-col justify-between items-center'>
-                                        <div>
-                                            <h3 className="rounded-lg font-semibold text-md lg:text-lg  text-center text-black">{vendor.name}</h3>
-                                            <p className="text-gray-600 mb-1 font-sans leading-tight text-base">{vendor.address}</p>
-                                            <p className='text-base font-sans  mb-1 leading-tight tracking-tight line-clamp-2 lg:line-clamp-3 capitalize'><span className="font-semibold">Food Items:</span> {vendor.foodItems.join(', ')}</p>
-                                            <p className='text-black font-sans  font-semibold'>Hygiene Rating: {generateStars(vendor.hygieneRating)}</p>
-                                            <p className='text-black font-sans font-semibold'>Taste Rating: {generateStars(vendor.tasteRating)}</p>
-                                            <p className='text-black font-sans '>Hospitality Rating: {generateStars(vendor.hospitalityRating)}</p>
-                                        </div>
-                                        <div className='mt-3'>
-                                            <a
-                                                href={getDirectionsUrl(vendor)}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-white  font-semibold bg-green-500 w-full text-center p-2 rounded-lg"
-                                            >
-                                                Get Directions
-                                            </a>
-                                        </div>
-                                    </div>
+                                <div>
+                                    <img src={vendor.photoUrl} alt={vendor.name} className="w-full h-32 object-cover rounded-lg mb-2" />
+                                    <h3 className="text-lg font-semibold">{vendor.name}</h3>
+                                    <p className="text-gray-600">{vendor.address}</p>
+                                    <p>Food Items: {vendor.foodItems.join(', ')}</p>
+                                    <p>Hygiene Rating: {vendor.hygieneRating}</p>
+                                    <p>Taste Rating: {vendor.tasteRating}</p>
+                                    <p>Hospitality Rating: {vendor.hospitalityRating}</p>
+                                    <a
+                                        href={getDirectionsUrl(vendor)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-2 text-blue-500 hover:underline"
+                                    >
+                                        Get Directions
+                                    </a>
                                 </div>
                             </Popup>
                         </Marker>
                     ))}
                 </MapContainer>
-
-                {/* Button to redirect to user's current location */}
                 <button
                     onClick={redirectToCurrentLocation}
-                    className="absolute z-[1000] bottom-16 right-8 bg-white text-white p-2 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-black"
+                    className="absolute z-[1000] bottom-24 right-8 bg-white text-white p-2 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-black"
                     title="Go to Current Location"
                 >
                     <IconCurrentLocation color="black" />
                 </button>
             </div>
-            <Tabbar />
         </div>
     );
 };
