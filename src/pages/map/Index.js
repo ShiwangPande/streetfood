@@ -303,7 +303,9 @@ const MapComponent = () => {
             <div className="w-full lg:w-2/3 h-2/3 lg:h-full relative order-1 lg:order-2">
                 <MapContainer
                     center={userLocation ? [userLocation.latitude, userLocation.longitude] : [51.505, -0.09]}
-                    zoom={getZoomLevel(radius)}
+                    // zoom={getZoomLevel(radius)}
+                    // center={[0, 0]} // Set initial center
+                    zoom={13} // Set initial zoom level
                     scrollWheelZoom={true}
                     style={{ height: "100%", width: "100%" }}
                     ref={mapRef}
