@@ -197,6 +197,8 @@ const MapComponent = () => {
         return `https://www.google.com/maps/search/?api=1&query=${vendor.location.coordinates[1]},${vendor.location.coordinates[0]}`;
     };
 
+    
+
     // Function to generate star ratings based on a given rating
     function generateStars(rating) {
         const starCount = 5;
@@ -378,23 +380,31 @@ const MapComponent = () => {
                             icon={streetVendorIcon}
                         >
                             <Popup>
-                                <div>
-                                    <img src={vendor.photoUrl} alt={vendor.name} className="w-full h-32 object-cover rounded-lg mb-2" />
-                                    <h3 className="text-lg font-semibold">{vendor.name}</h3>
-                                    <p className="text-gray-600">{vendor.address}</p>
-                                    <p>Food Items: {vendor.foodItems.join(', ')}</p>
-                                    <p>Hygiene Rating: {vendor.hygieneRating}</p>
-                                    <p>Taste Rating: {vendor.tasteRating}</p>
-                                    <p>Hospitality Rating: {vendor.hospitalityRating}</p>
-                                    <a
-                                        href={getDirectionsUrl(vendor)}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-white font-semibold bg-green-500 w-full p-2 rounded-lg"
-                                    >
-                                        Get Directions
-                                    </a>
-                                </div>
+                                <div className='flex flex-col lg:grid  lg:grid-cols-2 mb-10  gap-1 lg:gap-4'>
+                                    <div>
+                                        <img src={vendor.photoUrl} alt={vendor.name} className="w-20 h-fit lg:h-full  object-contain rounded-lg mb-2" />
+                                    </div>
+                                    <div className='flex flex-col justify-between items-center'>
+                                        <div>
+                                            <h3 className="rounded-lg font-semibold text-md lg:text-lg  text-center text-black">{vendor.name}</h3>
+                                            <p className="text-gray-600 mb-1 font-sans leading-tight text-base">{vendor.address}</p>
+                                            <p className='text-base font-sans  mb-1 leading-tight tracking-tight line-clamp-2 lg:line-clamp-3 capitalize'><span className="font-semibold">Food Items:</span> {vendor.foodItems.join(', ')}</p>
+                                            <p className='text-black font-sans  font-semibold'>Hygiene Rating: {generateStars(vendor.hygieneRating)}</p>
+                                            <p className='text-black font-sans font-semibold'>Taste Rating: {generateStars(vendor.tasteRating)}</p>
+                                            <p className='text-black font-sans '>Hospitality Rating: {generateStars(vendor.hospitalityRating)}</p>
+                                        </div>
+                                        <div className='mt-3'>
+                                            <a
+                                                href={getDirectionsUrl(vendor)}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-white  font-semibold bg-green-500 w-full text-center p-2 rounded-lg"
+                                            >
+                                                Get Directions
+                                            </a>
+                                        </div>
+                                    </div>
+                                    </div>
                             </Popup>
                         </Marker>
                     ))}

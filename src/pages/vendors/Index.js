@@ -44,8 +44,7 @@ const VendorPage = () => {
     const categories = [
         { name: 'All', imageUrl: 'https://i.postimg.cc/xTSfD37k/allproduct.png' },
         { name: 'Tea', imageUrl: 'https://i.postimg.cc/kgW9XW56/tea.png' },
-        { name: 'Sandwich', imageUrl: 'https://i.postimg.cc/wvjdVPQL/sandiwch.png' },
-        { name: 'Coffee', imageUrl: 'https://i.postimg.cc/MHh2zG2m/coffee.png' },
+        { name: 'Sandwich', imageUrl: 'https://i.postimg.cc/wvWjG0WV/sandwich.jpg' },
         { name: 'Puchka', imageUrl: 'https://i.postimg.cc/43n771Xf/Premium-Photo-Cheese-puchka-indian-chat-with-lots-of-cheese-in-golgappe-panipuri-waterballs.jpg' }
     ];
 
@@ -137,20 +136,20 @@ const VendorPage = () => {
                             }}
                             className="category-swiper mySwiper mb-4">
                             {categories.map((category, index) => (
-                                <SwiperSlide key={index}>
+                                <SwiperSlide className='min-h-60' key={index}>
                                     <button
                                         className={`category-button ${selectedCategory === category.name ? 'active' : ''}`}
                                         onClick={() => setSelectedCategory(category.name)} // Update selectedCategory with category.name
                                     >
-                                        <Card shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
+                                        <Card shadow="sm" className='h-60' key={index} isPressable onPress={() => console.log("item pressed")}>
                                             <CardBody className="overflow-visible p-0">
                                                 <Image
                                                     shadow="sm"
                                                     autoHeight={true}
                                                     radius="lg"
-                                                    width="100%"
+
                                                     alt={category.name}
-                                                    className="w-full object-cover h-full "
+                                                    className="object-cover min-h-52 "
                                                     src={category.imageUrl}
                                                     onClick={() => setSelectedCategory(category.name)}
                                                 />
