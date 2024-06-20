@@ -4,10 +4,7 @@ import L from 'leaflet';
 import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
 import { IconCurrentLocation } from '@tabler/icons-react';
-import Tabbar from '../../components/Tabbar';
-import { Geolocation } from '@capacitor/geolocation';
 
-// Define custom icons
 const streetVendorIcon = new L.Icon({
     iconUrl: 'https://i.postimg.cc/W1WXqByq/street-food.png',
     iconSize: [40, 40],
@@ -35,7 +32,6 @@ const MapComponent = () => {
     const mapRef = useRef();
     const base_url = process.env.REACT_APP_API_URL;
 
-    // Function to calculate distance between two points
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
         const R = 6371; // Radius of the Earth in km
         const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -49,8 +45,8 @@ const MapComponent = () => {
         return distance; // Distance in km
     };
 
-    // Function to reverse geocode coordinates to get address
     const reverseGeocode = async (lat, lon) => {
+
         const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${base_url}`;
 
         try {
@@ -66,7 +62,6 @@ const MapComponent = () => {
         }
     };
 
-    // Fetch vendors data and user location on component mount
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -91,41 +86,35 @@ const MapComponent = () => {
 
         fetchData();
 
-        const getUserLocation = async () => {
-            try {
-                const position = await Geolocation.getCurrentPosition();
-                const { latitude, longitude } = position.coords;
-                setUserLocation({ latitude, longitude });
-            } catch (error) {
-                console.error('Error getting user location:', error);
-            }
-        };
-
-        getUserLocation();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation({ latitude, longitude });
+                },
+                (error) => {
+                    console.error('Error getting user location:', error);
+                }
+            );
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+        }
     }, []);
 
-    // Watch user's current location and update
     useEffect(() => {
-        const watchId = Geolocation.watchPosition(
-            {},
-            (position, err) => {
-                if (err) {
-                    console.error('Error getting user location:', err);
-                    return;
-                }
+        const watchId = navigator.geolocation.watchPosition(
+            (position) => {
                 const { latitude, longitude } = position.coords;
                 setUserLocation({ latitude, longitude });
+            },
+            (error) => {
+                console.error('Error getting user location:', error);
             }
         );
 
-        return () => {
-            if (watchId !== null) {
-                Geolocation.clearWatch({ id: watchId });
-            }
-        };
+        return () => navigator.geolocation.clearWatch(watchId);
     }, []);
 
-    // Filter vendors based on search, food items, and radius
     useEffect(() => {
         const radiusValue = radius === 'other' ? parseFloat(customRadius) : radius;
 
@@ -146,13 +135,11 @@ const MapComponent = () => {
         setFilteredVendors(filtered);
     }, [vendors, searchQuery, selectedFoodItems, userLocation, radius, customRadius]);
 
-    // Handle search input change
     const handleSearch = (event) => {
         setSearchQuery(event.target.value);
         setShowOptions(true);
     };
 
-    // Generate filtered food item options for autocomplete
     const filteredOptions = Array.from(
         new Set(vendors.flatMap((vendor) => vendor.foodItems))
     ).filter((option) =>
@@ -160,14 +147,12 @@ const MapComponent = () => {
         !selectedFoodItems.includes(option)
     );
 
-    // Adjust map view on user location or radius change
     useEffect(() => {
         if (userLocation && mapRef.current) {
             mapRef.current.setView([userLocation.latitude, userLocation.longitude], getZoomLevel(radius));
         }
     }, [userLocation, radius]);
 
-    // Get appropriate zoom level based on radius
     const getZoomLevel = (radius) => {
         const radiusValue = radius === 'other' ? parseFloat(customRadius) : radius;
         if (radiusValue <= 5) return 13;
@@ -175,34 +160,27 @@ const MapComponent = () => {
         return 11; // Adjust as necessary
     };
 
-    // Toggle dropdown visibility for selected food items
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
 
-    // Remove selected food item from the list
     const removeSelectedFoodItem = (itemToRemove) => {
         setSelectedFoodItems((prevItems) =>
             prevItems.filter((item) => item !== itemToRemove)
         );
     };
 
-    // Redirect to user's current location on the map
     const redirectToCurrentLocation = () => {
         if (userLocation && mapRef.current) {
             mapRef.current.setView([userLocation.latitude, userLocation.longitude], getZoomLevel(radius));
         }
     };
 
-    // Generate Google Maps directions URL for a vendor
     const getDirectionsUrl = (vendor) => {
-        if (!userLocation) return '';
-
-        const { latitude, longitude } = userLocation;
-        const vendorLat = vendor.location.coordinates[1];
-        const vendorLon = vendor.location.coordinates[0];
-
-        return `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${vendorLat},${vendorLon}`;
+        if (userLocation) {
+            return `https://www.google.com/maps/dir/?api=1&origin=${userLocation.latitude},${userLocation.longitude}&destination=${vendor.location.coordinates[1]},${vendor.location.coordinates[0]}`;
+        }
+        return `https://www.google.com/maps/search/?api=1&query=${vendor.location.coordinates[1]},${vendor.location.coordinates[0]}`;
     };
 
     return (
