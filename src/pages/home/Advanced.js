@@ -153,7 +153,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                     index === currentIndex && (
                                         <motion.div
                                             key={character.name}
-                                            className="absolute z-[100] w-full h-full cursor-grab select-none flex items-center justify-center"
+                                            className="absolute lg:bottom-16 bottom-10 z-[100] w-full h-full cursor-grab select-none flex items-center justify-center"
                                             drag="x"
                                             onDragEnd={(event, info) => handleDragEnd(event, info, index)}
                                             initial={{ x: 0, opacity: 1 }}
@@ -161,7 +161,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                         >
                                             <div
                                                 style={{ backgroundImage: 'url(' + character.photoUrl + ')' }}
-                                                className="relative lg:bottom-16 bottom-10 bg-white w-full max-w-sm mx-3 lg:max-w-xl h-full rounded-sm bg-cover bg-center p-4 flex flex-col justify-between"
+                                                className="relative  bg-white w-full max-w-sm mx-3 lg:max-w-xl h-full rounded-sm bg-cover bg-center p-4 flex flex-col justify-between"
                                             >
                                                 <div>
                                                     <h3 className="rounded-lg text-lg font-bold text-center text-white">{character.name}</h3>
