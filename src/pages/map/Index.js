@@ -387,6 +387,7 @@ const MapComponent = () => {
                     <IconCurrentLocation color="black" />
                 </button>
             </div>
+            <Tabbar />
         </div>
     );
 };
