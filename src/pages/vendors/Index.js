@@ -43,7 +43,7 @@ const VendorPage = () => {
 
     const categories = [
         { name: 'All', imageUrl: 'https://i.postimg.cc/xTSfD37k/allproduct.png' },
-        { name: 'Tea', imageUrl: 'https://i.postimg.cc/kgW9XW56/tea.png' },
+        { name: 'Tea ', imageUrl: 'https://i.postimg.cc/kgW9XW56/tea.png' },
         { name: 'Sandwich', imageUrl: 'https://i.postimg.cc/wvWjG0WV/sandwich.jpg' },
         { name: 'puri', imageUrl: 'https://i.postimg.cc/7PdxbTZB/screenshot-9.png' },
         { name: 'Puchka', imageUrl: 'https://i.postimg.cc/43n771Xf/Premium-Photo-Cheese-puchka-indian-chat-with-lots-of-cheese-in-golgappe-panipuri-waterballs.jpg' }
