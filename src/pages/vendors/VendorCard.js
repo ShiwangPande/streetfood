@@ -37,7 +37,7 @@ const VendorCard = ({ vendor }) => {
                         src={vendor.photoUrl}
                     />
                 </CardBody>
-                <CardFooter className="text-small flex flex-col h-100 text-justify items-stretch lg:h-72 w-100 p-5 justify-between">
+                <CardFooter className="text-small flex flex-col h-100 text-justify items-stretch lg:h-fit w-100 p-5 justify-between">
                     <h2 className="text-xl font-bold capitalize mb-2">{name}</h2>
                     <div className='flex flex-col'>
                         <strong>Food Items:</strong>
