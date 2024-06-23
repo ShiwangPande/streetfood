@@ -59,7 +59,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
 
     const swiped = async (direction, index) => {
         setLastDirection(direction);
-        if (direction === 'right' && filteredData[index]) {
+        if (direction === 'right') {
             addToWishlist(filteredData[index]);
         }
         setCurrentIndex(prevIndex => prevIndex - 1);
@@ -67,10 +67,10 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
 
     const handleDragEnd = (event, info, index) => {
         const offset = info.offset.x;
-        if (offset > 150 && filteredData[index]) {
+        if (offset > 150) {
             swiped('right', index);
             controls.start({ x: 1000, opacity: 0 });
-        } else if (offset < -150 && filteredData[index]) {
+        } else if (offset < -150) {
             swiped('left', index);
             controls.start({ x: -1000, opacity: 0 });
         } else {
@@ -183,13 +183,21 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                         </motion.div>
                                     )))}
                             </div>
-                            {filteredData.length > 0 && (
-                                <div className='fixed bottom-2 hidden lg:bottom-14 lg:flex'>
-                                    <button onClick={goBack} className="rounded-full text-black bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faUndo} /></button>
-                                    <button onClick={() => swiped('left', currentIndex)} className="rounded-full text-red-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faXmark} /></button>
-                                    <button onClick={() => swiped('right', currentIndex)} className="rounded-full text-green-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faCheck} /></button>
-                                </div>
-                            )}
+                            <div className='fixed bottom-2 hidden lg:bottom-14 lg:flex'>
+    {filteredData.length > 0 && (
+        <>
+            <button onClick={goBack} className="rounded-full text-black bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faUndo} /></button>
+            <button onClick={() => swiped('left', currentIndex)} className="rounded-full text-red-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faXmark} /></button>
+            <button onClick={() => swiped('right', currentIndex)} className="rounded-full text-green-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faCheck} /></button>
+        </>
+    )}
+</div>
+{/* 
+                            <div className='fixed bottom-2 hidden lg:bottom-14 lg:flex'>
+                                <button onClick={goBack} className="rounded-full text-black bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faUndo} /></button>
+                                <button onClick={() => swiped('left', currentIndex)} className="rounded-full text-red-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faXmark} /></button>
+                                <button onClick={() => swiped('right', currentIndex)} className="rounded-full text-green-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faCheck} /></button>
+                            </div> */}
                         </div>
                     </>
                 )}
