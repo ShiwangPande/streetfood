@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useWishlist } from '../wishlist/WishlistContext';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUndo, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import Survey from '../survey/Index';
 import Loader from 'react-js-loader';
 import { Link } from 'react-router-dom';
-const Survey = lazy(() => import('../survey/Index'));
-const LazyImage = lazy(() => import('./LazyImage'));
 
 function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalityRating: 0 } }) {
     const [loading, setLoading] = useState(true);
@@ -33,7 +32,16 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                 }
             });
             const data = response.data;
+            const imagePromises = data.map(item => {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.src = item.photoUrl;
+                    img.onload = resolve;
+                    img.onerror = reject;
+                });
+            });
 
+            await Promise.all(imagePromises);
             let filtered;
             if (preferences.hygieneRating || preferences.tasteRating || preferences.hospitalityRating) {
                 filtered = data.filter(item =>
@@ -121,7 +129,6 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
     const handleSurveyComplete = (preferences) => {
         console.log('Survey preferences:', preferences);
         setShowSurvey(false);
-        fetchData();
     };
 
     return (
@@ -159,11 +166,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                     </div>
                 ) : (
                     <>
-                        {showSurvey && (
-                            <Suspense fallback={<Loader type="bubble-loop" bgColor={"#000000"} size={100} />}>
-                                <Survey onComplete={handleSurveyComplete} />
-                            </Suspense>
-                        )}
+                        {showSurvey && <Survey onComplete={handleSurveyComplete} />}
                         <div className="flex flex-col pt-10 items-center justify-center min-h-screen h-full w-screen overflow-hidden bg-white">
                             <div className="relative flex justify-center items-center mb-5 w-[100vw] lg:w-4/5 h-[80vh] lg-top-0 top-8 lg:h-[68vh] ">
                                 {filteredData.map((character, index) => (
@@ -176,32 +179,27 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                             initial={{ x: 0, opacity: 1 }}
                                             animate={controls}
                                         >
-                                            <Suspense fallback={<div className="relative  bg-black w-full text-black   lg:max-w-xl lg:h-[43rem] rounded-lg p-4 flex flex-col  justify-between">Loading Image...</div>}>
-                                                <div className='relative w-full p-2 rounded-xl lg:w-fit lg:h-[43rem] h-full'>
-                                                    <LazyImage
-                                                        src={character.photoUrl}
-                                                        className="  w-full  lg:max-w-xl mx-auto h-full   rounded-sm  "
-                                                    />
-                                                    <div className='absolute inset-0 flex flex-col lg:my-5 lg:mx-8 justify-between items-center'>
-                                                        <div>
-                                                            <h3 className="rounded-lg text-lg font-bold text-center capitalize mt-5 text-white">{character.name}</h3>
-                                                        </div>
-                                                        <div className="bg-black/25 lg:max-w-lg w-[90%] p-2 lg:mx-5 mx-5 mb-4 rounded-lg">
-                                                            <p className="text-white font-semibold">Hygiene Rating: {generateStars(character.hygieneRating)}</p>
-                                                            <p className="text-white font-semibold">Taste Rating: {generateStars(character.tasteRating)}</p>
-                                                            <p className="text-white font-semibold">Hospitality Rating: {generateStars(character.hospitalityRating)}</p>
-                                                            <button
-                                                                onClick={() => handleGetDirections(character)}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="text-white font-semibold bg-green-500 w-full p-2 rounded-lg"
-                                                            >
-                                                                Get Directions
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                            <div
+                                                style={{ backgroundImage: 'url(' + character.photoUrl + ')' }}
+                                                className="relative  bg-white w-full max-w-sm mx-3 lg:max-w-xl h-full rounded-sm bg-cover bg-center p-4 flex flex-col justify-between"
+                                            >
+                                                <div>
+                                                    <h3 className="rounded-lg text-lg font-bold text-center text-white">{character.name}</h3>
                                                 </div>
-                                            </Suspense>
+                                                <div className="bg-black/25 p-2 rounded-xl">
+                                                    <p className="text-white font-semibold">Hygiene Rating: {generateStars(character.hygieneRating)}</p>
+                                                    <p className="text-white font-semibold">Taste Rating: {generateStars(character.tasteRating)}</p>
+                                                    <p className="text-white font-semibold">Hospitality Rating: {generateStars(character.hospitalityRating)}</p>
+                                                    <button
+                                                        onClick={() => handleGetDirections(character)}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-white font-semibold bg-green-500 w-full p-2 rounded-lg"
+                                                    >
+                                                        Get Directions
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </motion.div>
                                     )))}
                             </div>
