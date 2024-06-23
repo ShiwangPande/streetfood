@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useWishlist } from '../wishlist/WishlistContext';
 import { useNavigate } from 'react-router-dom';
@@ -14,48 +14,63 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
     const [filteredData, setFilteredData] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [lastDirection, setLastDirection] = useState();
+    const [hasMoreData, setHasMoreData] = useState(true);
     const { addToWishlist } = useWishlist();
     const { wishlist } = useWishlist();
     const navigate = useNavigate();
     const [showSurvey, setShowSurvey] = useState(true);
 
     const controls = useAnimation();
+    const PAGE_SIZE = 10; // Number of items to fetch at a time
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('https://kartmatchbackend.onrender.com/vendors');
-                const data = response.data;
-                const imagePromises = data.map(item => {
-                    return new Promise((resolve, reject) => {
-                        const img = new Image();
-                        img.src = item.photoUrl;
-                        img.onload = resolve;
-                        img.onerror = reject;
-                    });
-                });
-
-                await Promise.all(imagePromises);
-                let filtered;
-                if (preferences.hygieneRating || preferences.tasteRating || preferences.hospitalityRating) {
-                    filtered = data.filter(item =>
-                        item.hygieneRating >= preferences.hygieneRating &&
-                        item.tasteRating >= preferences.tasteRating &&
-                        item.hospitalityRating >= preferences.hospitalityRating
-                    );
-                } else {
-                    filtered = [...data];
+    const fetchData = useCallback(async (append = false) => {
+        try {
+            const response = await axios.get('https://kartmatchbackend.onrender.com/vendors', {
+                params: {
+                    offset: append ? filteredData.length : 0,
+                    limit: PAGE_SIZE
                 }
+            });
+            const data = response.data;
+            const imagePromises = data.map(item => {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.src = item.photoUrl;
+                    img.onload = resolve;
+                    img.onerror = reject;
+                });
+            });
+
+            await Promise.all(imagePromises);
+            let filtered;
+            if (preferences.hygieneRating || preferences.tasteRating || preferences.hospitalityRating) {
+                filtered = data.filter(item =>
+                    item.hygieneRating >= preferences.hygieneRating &&
+                    item.tasteRating >= preferences.tasteRating &&
+                    item.hospitalityRating >= preferences.hospitalityRating
+                );
+            } else {
+                filtered = data;
+            }
+
+            if (append) {
+                setFilteredData(prevData => [...prevData, ...filtered]);
+            } else {
                 setFilteredData(filtered);
                 setCurrentIndex(filtered.length - 1);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching data:', error);
             }
-        };
+            setHasMoreData(data.length === PAGE_SIZE);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setLoading(false);
+        }
+    }, [preferences, filteredData.length]);
 
+    useEffect(() => {
+        setLoading(true);
         fetchData();
-    }, [preferences]);
+    }, [fetchData]);
 
     const swiped = async (direction, index) => {
         setLastDirection(direction);
@@ -63,6 +78,11 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             addToWishlist(filteredData[index]);
         }
         setCurrentIndex(prevIndex => prevIndex - 1);
+
+        // Load more data if needed
+        if (currentIndex <= PAGE_SIZE / 2 && hasMoreData) {
+            fetchData(true);
+        }
     };
 
     const handleDragEnd = (event, info, index) => {
@@ -183,18 +203,20 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                         </motion.div>
                                     )))}
                             </div>
-                            {filteredData.length > 0 && (
-                                <div className='fixed bottom-2 hidden lg:bottom-14 lg:flex'>
-                                    <button onClick={goBack} className="rounded-full text-black bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faUndo} /></button>
-                                    <button onClick={() => swiped('left', currentIndex)} className="rounded-full text-red-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faXmark} /></button>
-                                    <button onClick={() => swiped('right', currentIndex)} className="rounded-full text-green-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faCheck} /></button>
-                                </div>
-                            )}
+                            <div className='fixed bottom-2 hidden lg:bottom-14 lg:flex'>
+                                {filteredData.length > 0 && (
+                                    <>
+                                        <button onClick={goBack} className="rounded-full text-black bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faUndo} /></button>
+                                        <button onClick={() => swiped('left', currentIndex)} className="rounded-full text-red-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faXmark} /></button>
+                                        <button onClick={() => swiped('right', currentIndex)} className="rounded-full text-green-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faCheck} /></button>
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </>
                 )}
             </div>
-        </div>
+        </div >
     );
 }
 
