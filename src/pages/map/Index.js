@@ -6,8 +6,7 @@ import { FaTimes } from 'react-icons/fa';
 import { IconCurrentLocation } from '@tabler/icons-react';
 import Tabbar from '../../components/Tabbar';
 import { Geolocation } from '@capacitor/geolocation';
-
-// Define custom icons
+import { useMemo } from 'react';
 const streetVendorIcon = new L.Icon({
     iconUrl: 'https://i.postimg.cc/W1WXqByq/street-food.png',
     iconSize: [40, 40],
@@ -29,9 +28,11 @@ const MapComponent = () => {
     const [selectedFoodItems, setSelectedFoodItems] = useState([]);
     const [showOptions, setShowOptions] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    // Define state for filtered vendors
+    const [filteredVendors, setFilteredVendors] = useState([]);
+
     const [radius, setRadius] = useState(5); // Default radius is 5km
     const [customRadius, setCustomRadius] = useState(''); // Custom radius input
-    const [filteredVendors, setFilteredVendors] = useState([]);
     const mapRef = useRef();
     const base_url = process.env.REACT_APP_API_URL;
 
@@ -125,6 +126,7 @@ const MapComponent = () => {
         };
     }, []);
 
+    // Memoize the filtered vendors
     // Filter vendors based on search, food items, and radius
     useEffect(() => {
         const radiusValue = radius === 'other' ? parseFloat(customRadius) : radius;
@@ -143,32 +145,26 @@ const MapComponent = () => {
                     vendor.location.coordinates[0]
                 ) <= radiusValue : true);
         });
-        setFilteredVendors(filtered);
+
+        setFilteredVendors(filtered); // Update filteredVendors state
     }, [vendors, searchQuery, selectedFoodItems, userLocation, radius, customRadius]);
 
+    // Memoize the filtered options
+    const filteredOptions = useMemo(() => {
+        return Array.from(
+            new Set(vendors.flatMap((vendor) => vendor.foodItems))
+        ).filter((option) =>
+            typeof option === 'string' &&
+            option.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            !selectedFoodItems.includes(option)
+        );
+    }, [vendors, searchQuery, selectedFoodItems]);
+
     // Handle search input change
-   
     const handleSearch = (event) => {
         setSearchQuery(event.target.value);
-        setShowOptions(true); // Show options initially
-    
-        // Auto-scroll to map section after a delay (adjust delay time as needed)
-        setTimeout(() => {
-            const mapSection = document.getElementById('map-section');
-            if (mapSection) {
-                mapSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        }, 500); // Adjust delay as needed (in milliseconds)
+        setShowOptions(true);
     };
-    
-    
-    // Generate filtered food item options for autocomplete
-    const filteredOptions = Array.from(
-        new Set(vendors.flatMap((vendor) => vendor.foodItems))
-    ).filter((option) =>
-        option.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !selectedFoodItems.includes(option)
-    );
 
     // Adjust map view on user location or radius change
     useEffect(() => {
@@ -332,9 +328,7 @@ const MapComponent = () => {
                     ))}
                 </div>
             </div>
-          
-            <div id="map-section" className="w-full lg:w-2/3 h-2/3 lg:h-full relative order-1 lg:order-2">
-
+            <div className="w-full lg:w-2/3 h-2/3 lg:h-full relative order-1 lg:order-2">
                 <MapContainer
                     center={userLocation ? [userLocation.latitude, userLocation.longitude] : [51.505, -0.09]}
                     zoom={getZoomLevel(radius)}

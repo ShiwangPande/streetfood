@@ -176,8 +176,8 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                             initial={{ x: 0, opacity: 1 }}
                                             animate={controls}
                                         >
-                                            <Suspense fallback={<div className="relative  bg-black w-full text-black   lg:max-w-xl lg:h-[43rem] rounded-lg p-4 flex flex-col  justify-between">Loading Image...</div>}>
-                                                <div className='relative w-full p-2 rounded-xl lg:w-fit lg:h-[43rem] h-full'>
+                                            <Suspense fallback={<div className="relative  bg-black w-full text-black   lg:max-w-xl lg:h-[31rem] rounded-lg p-4 flex flex-col  justify-between">Loading Image...</div>}>
+                                                <div className='relative w-full p-2 rounded-xl lg:w-fit lg:h-[31rem] h-full'>
                                                     <LazyImage
                                                         src={character.photoUrl}
                                                         className="  w-full  lg:max-w-xl mx-auto h-full   rounded-sm  "
