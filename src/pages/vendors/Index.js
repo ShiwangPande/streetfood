@@ -51,7 +51,7 @@ const VendorPage = () => {
 
     const filteredVendors = vendors.filter((vendor) => {
         const vendorName = vendor.name.toLowerCase();
-        const foodItems = vendor.foodItems.join(' ').toLowerCase();
+        const foodItems = vendor.foodItems.filter(item => typeof item === 'string').join(' ').toLowerCase();
         const query = searchQuery.toLowerCase().trim();
         const searchWords = query.split(' ');
 
@@ -63,8 +63,9 @@ const VendorPage = () => {
             return matchesQuery;
         }
 
-        return matchesQuery && vendor.foodItems.some(item => item.toLowerCase().includes(selectedCategory.toLowerCase()));
+        return matchesQuery && vendor.foodItems.some(item => typeof item === 'string' && item.toLowerCase().includes(selectedCategory.toLowerCase()));
     });
+
 
 
     return (
