@@ -42,11 +42,18 @@ const VendorPage = () => {
     };
 
     const categories = [
-        { name: 'All', imageUrl: 'https://i.postimg.cc/xTSfD37k/allproduct.png' },
-        // { name: 'Tea ', imageUrl: 'https://i.postimg.cc/kgW9XW56/tea.png' },
-        { name: 'Sandwich', imageUrl: 'https://i.postimg.cc/wvWjG0WV/sandwich.jpg' },
-        { name: 'Chaat', imageUrl: 'https://i.postimg.cc/7PdxbTZB/screenshot-9.png' },
-        { name: 'Puchka', imageUrl: 'https://i.postimg.cc/43n771Xf/Premium-Photo-Cheese-puchka-indian-chat-with-lots-of-cheese-in-golgappe-panipuri-waterballs.jpg' }
+        
+        {name: 'All vendors' ,imageUrl: 'https://i.postimg.cc/TP753cf4/ALL-VENDORS.png'},
+        {name: 'Bhatura' ,imageUrl: 'https://i.postimg.cc/0QzMMJN2/BHATURA.png'},
+        {name: 'Dosa' ,imageUrl: 'https://i.postimg.cc/k4LVxXVN/DOSA.png'},
+        {name: 'Egg' ,imageUrl: 'https://i.postimg.cc/T1mKQMmz/EGG.png'},
+        {name: 'Jhalmuri' ,imageUrl: 'https://i.postimg.cc/qBC6pnY1/JHALMURI.png'},
+        {name: 'Momo' ,imageUrl: 'https://i.postimg.cc/dtPk33cw/MOMO.png'},
+        {name: 'Puchka' ,imageUrl: 'https://i.postimg.cc/5NBHCJfv/PUCHKA.png'},
+        {name: 'Sandwich' ,imageUrl: 'https://i.postimg.cc/zGqywQfQ/SANDWICH.png'},
+        {name: 'Tea' ,imageUrl: 'https://i.postimg.cc/Dw58xcJw/TEA.png'},
+        
+    
     ];
 
     const filteredVendors = vendors.filter((vendor) => {
