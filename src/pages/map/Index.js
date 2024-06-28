@@ -6,7 +6,9 @@ import { FaTimes } from 'react-icons/fa';
 import { IconCurrentLocation } from '@tabler/icons-react';
 import Tabbar from '../../components/Tabbar';
 import { Geolocation } from '@capacitor/geolocation';
+
 import { useMemo } from 'react';
+
 const streetVendorIcon = new L.Icon({
     iconUrl: 'https://i.postimg.cc/W1WXqByq/street-food.png',
     iconSize: [40, 40],
@@ -32,6 +34,57 @@ const MapComponent = () => {
     const [radius, setRadius] = useState(5); // Default radius is 5km
     const [customRadius, setCustomRadius] = useState('');
     const mapRef = useRef();
+
+
+    const apiKey = process.env.REACT_APP_API_URL; // Ensure correct environment variable name
+
+    // Function to calculate distance between two points
+    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+        const R = 6371; // Radius of the Earth in km
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c;
+        return distance; // Distance in km
+    };
+
+    // Function to reverse geocode coordinates to get address
+    const reverseGeocode = async (lat, lon) => {
+        const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${apiKey}`;
+
+        try {
+            const response = await axios.get(url);
+            const results = response.data.results;
+            if (results.length > 0) {
+                return results[0].formatted;
+            }
+            return 'Unknown location';
+        } catch (error) {
+            console.error('Error fetching address:', error);
+            return 'Unknown location';
+        }
+    };
+
+    // Request location PermissionStatus and fetch user location
+    const requestLocationPermission = async () => {
+        try {
+            const permission = await PermissionStatus.request({ name: 'geolocation' });
+
+            if (permission.state === 'granted') {
+                const position = await Geolocation.getCurrentPosition();
+                const { latitude, longitude } = position.coords;
+                setUserLocation({ latitude, longitude });
+            } else {
+                console.error('Location permission denied');
+            }
+        } catch (error) {
+            console.error('Error requesting location permission:', error);
+        }
+    };
 
     // Fetch vendors data and user location on component mount
     useEffect(() => {
@@ -60,23 +113,6 @@ const MapComponent = () => {
         requestLocationPermission();
     }, []);
 
-    // Request location PermissionStatus and fetch user location
-    const requestLocationPermission = async () => {
-        try {
-            const permission = await Geolocation.requestPermissions();
-            if (permission && permission.location === PermissionStatus.Granted) {
-                const position = await Geolocation.getCurrentPosition();
-                const { latitude, longitude } = position.coords;
-                setUserLocation({ latitude, longitude });
-            } else {
-                console.error('Location permission denied');
-                // Handle denied permission here (e.g., show a message to the user)
-            }
-        } catch (error) {
-            console.error('Error requesting location permission:', error);
-        }
-    };
-
     // Watch user's current location and update
     useEffect(() => {
         const watchId = Geolocation.watchPosition(
@@ -92,29 +128,43 @@ const MapComponent = () => {
         );
 
         return () => {
-            if (watchId) {
+            if (watchId !== null) {
                 Geolocation.clearWatch({ id: watchId });
             }
         };
     }, []);
 
-    // Function to reverse geocode coordinates to get address
-    const reverseGeocode = async (lat, lon) => {
-        const apiKey = process.env.REACT_APP_OPENCAGE_API_KEY; // Ensure correct environment variable name
-        const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${apiKey}`;
+    // Memoize the filtered vendors
+    useEffect(() => {
+        const radiusValue = radius === 'other' ? parseFloat(customRadius) : radius;
 
-        try {
-            const response = await axios.get(url);
-            const results = response.data.results;
-            if (results.length > 0) {
-                return results[0].formatted;
-            }
-            return 'Unknown location';
-        } catch (error) {
-            console.error('Error fetching address:', error);
-            return 'Unknown location';
-        }
-    };
+        const filtered = vendors.filter((vendor) => {
+            const matchesFoodItem = selectedFoodItems.length === 0 ||
+                (vendor.foodItems && vendor.foodItems.some((foodItem) => {
+                    if (typeof foodItem === 'string') {
+                        return selectedFoodItems.includes(foodItem);
+                    }
+                    return false;
+                }));
+            const matchesSearchQuery = searchQuery === '' ||
+                vendor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (vendor.foodItems && vendor.foodItems.some((foodItem) => {
+                    if (typeof foodItem === 'string') {
+                        return foodItem.toLowerCase().includes(searchQuery.toLowerCase());
+                    }
+                    return false;
+                }));
+            return matchesFoodItem && matchesSearchQuery &&
+                (userLocation ? calculateDistance(
+                    userLocation.latitude,
+                    userLocation.longitude,
+                    vendor.location.coordinates[1],
+                    vendor.location.coordinates[0]
+                ) <= radiusValue : true);
+        });
+
+        setFilteredVendors(filtered); // Update filteredVendors state
+    }, [vendors, searchQuery, selectedFoodItems, userLocation, radius, customRadius]);
 
     // Memoize filteredOptions for food item search
     const filteredOptions = useMemo(() => {
@@ -178,8 +228,10 @@ const MapComponent = () => {
         return `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${vendorLat},${vendorLon}`;
     };
 
+
     return (
         <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
+
             <div className="w-full lg:w-1/3 h-1/2 lg:h-full bg-white p-4 overflow-y-auto order-2 lg:order-1">
                 <div className="mb-4">
                     <label htmlFor="search" className="block text-gray-700 font-semibold mb-2">Search</label>
