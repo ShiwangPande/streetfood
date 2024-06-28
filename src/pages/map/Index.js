@@ -323,7 +323,7 @@ const MapComponent = () => {
                             </button>
                             <div className='flex flex-row gap-4'>
                                 <div>
-                                    <img src={vendor.photoUrl} alt={vendor.name} className="w-full h-32 object-cover rounded-lg mb-2" />
+                                    <img src={vendor.photoUrl} alt={vendor.name} className="min-w-32 h-48 object-cover rounded-lg mb-2" />
                                 </div>
                                 <div className='flex flex-col'>
                                     <h3 className="text-lg font-semibold">{vendor.name}</h3>
