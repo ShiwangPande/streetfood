@@ -7,7 +7,6 @@ import { IconCurrentLocation } from '@tabler/icons-react';
 import Tabbar from '../../components/Tabbar';
 import { Geolocation } from '@capacitor/geolocation';
 import { useMemo } from 'react';
-
 const streetVendorIcon = new L.Icon({
     iconUrl: 'https://i.postimg.cc/W1WXqByq/street-food.png',
     iconSize: [40, 40],
@@ -29,13 +28,13 @@ const MapComponent = () => {
     const [selectedFoodItems, setSelectedFoodItems] = useState([]);
     const [showOptions, setShowOptions] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    // Define state for filtered vendors
     const [filteredVendors, setFilteredVendors] = useState([]);
-    const [radius, setRadius] = useState(5); // Default radius is 5km
-    const [customRadius, setCustomRadius] = useState('');
-    const mapRef = useRef();
 
+    const [radius, setRadius] = useState(5); // Default radius is 5km
+    const [customRadius, setCustomRadius] = useState(''); // Custom radius input
+    const mapRef = useRef();
     const base_url = process.env.REACT_APP_API_URL;
-    const apiKey = process.env.REACT_APP_OPENCAGE_API_KEY; // Ensure correct environment variable name
 
     // Function to calculate distance between two points
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -53,7 +52,7 @@ const MapComponent = () => {
 
     // Function to reverse geocode coordinates to get address
     const reverseGeocode = async (lat, lon) => {
-        const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${apiKey}`;
+        const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${base_url}`;
 
         try {
             const response = await axios.get(url);
@@ -128,27 +127,16 @@ const MapComponent = () => {
     }, []);
 
     // Memoize the filtered vendors
-    // Memoize the filtered vendors
-    // Memoize the filtered vendors
+    // Filter vendors based on search, food items, and radius
     useEffect(() => {
         const radiusValue = radius === 'other' ? parseFloat(customRadius) : radius;
 
         const filtered = vendors.filter((vendor) => {
             const matchesFoodItem = selectedFoodItems.length === 0 ||
-                (vendor.foodItems && vendor.foodItems.some((foodItem) => {
-                    if (typeof foodItem === 'string') {
-                        return selectedFoodItems.includes(foodItem);
-                    }
-                    return false;
-                }));
+                vendor.foodItems.some((foodItem) => selectedFoodItems.includes(foodItem));
             const matchesSearchQuery = searchQuery === '' ||
                 vendor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (vendor.foodItems && vendor.foodItems.some((foodItem) => {
-                    if (typeof foodItem === 'string') {
-                        return foodItem.toLowerCase().includes(searchQuery.toLowerCase());
-                    }
-                    return false;
-                }));
+                vendor.foodItems.some((foodItem) => foodItem.toLowerCase().includes(searchQuery.toLowerCase()));
             return matchesFoodItem && matchesSearchQuery &&
                 (userLocation ? calculateDistance(
                     userLocation.latitude,
@@ -161,17 +149,16 @@ const MapComponent = () => {
         setFilteredVendors(filtered); // Update filteredVendors state
     }, [vendors, searchQuery, selectedFoodItems, userLocation, radius, customRadius]);
 
-    // Memoize filteredOptions for food item search
+    // Memoize the filtered options
     const filteredOptions = useMemo(() => {
         return Array.from(
             new Set(vendors.flatMap((vendor) => vendor.foodItems))
         ).filter((option) =>
-            typeof option === 'string' && // Ensure option is a string
+            typeof option === 'string' &&
             option.toLowerCase().includes(searchQuery.toLowerCase()) &&
             !selectedFoodItems.includes(option)
         );
     }, [vendors, searchQuery, selectedFoodItems]);
-
 
     // Handle search input change
     const handleSearch = (event) => {
