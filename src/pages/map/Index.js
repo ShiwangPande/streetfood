@@ -6,6 +6,7 @@ import { FaTimes } from 'react-icons/fa';
 import { IconCurrentLocation } from '@tabler/icons-react';
 import Tabbar from '../../components/Tabbar';
 import { Geolocation } from '@capacitor/geolocation';
+
 import { useMemo } from 'react';
 
 const streetVendorIcon = new L.Icon({
@@ -68,6 +69,23 @@ const MapComponent = () => {
         }
     };
 
+    // Request location PermissionStatus and fetch user location
+    const requestLocationPermission = async () => {
+        try {
+            const permission = await PermissionStatus.request({ name: 'geolocation' });
+
+            if (permission.state === 'granted') {
+                const position = await Geolocation.getCurrentPosition();
+                const { latitude, longitude } = position.coords;
+                setUserLocation({ latitude, longitude });
+            } else {
+                console.error('Location permission denied');
+            }
+        } catch (error) {
+            console.error('Error requesting location permission:', error);
+        }
+    };
+
     // Fetch vendors data and user location on component mount
     useEffect(() => {
         const fetchData = async () => {
@@ -92,18 +110,7 @@ const MapComponent = () => {
         };
 
         fetchData();
-
-        const getUserLocation = async () => {
-            try {
-                const position = await Geolocation.getCurrentPosition();
-                const { latitude, longitude } = position.coords;
-                setUserLocation({ latitude, longitude });
-            } catch (error) {
-                console.error('Error getting user location:', error);
-            }
-        };
-
-        getUserLocation();
+        requestLocationPermission();
     }, []);
 
     // Watch user's current location and update
@@ -127,8 +134,6 @@ const MapComponent = () => {
         };
     }, []);
 
-    // Memoize the filtered vendors
-    // Memoize the filtered vendors
     // Memoize the filtered vendors
     useEffect(() => {
         const radiusValue = radius === 'other' ? parseFloat(customRadius) : radius;
@@ -171,7 +176,6 @@ const MapComponent = () => {
             !selectedFoodItems.includes(option)
         );
     }, [vendors, searchQuery, selectedFoodItems]);
-
 
     // Handle search input change
     const handleSearch = (event) => {
@@ -223,6 +227,7 @@ const MapComponent = () => {
 
         return `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${vendorLat},${vendorLon}`;
     };
+
 
     return (
         <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
