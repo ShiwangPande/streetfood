@@ -6,9 +6,7 @@ import { FaTimes } from 'react-icons/fa';
 import { IconCurrentLocation } from '@tabler/icons-react';
 import Tabbar from '../../components/Tabbar';
 import { Geolocation } from '@capacitor/geolocation';
-
 import { useMemo } from 'react';
-
 const streetVendorIcon = new L.Icon({
     iconUrl: 'https://i.postimg.cc/W1WXqByq/street-food.png',
     iconSize: [40, 40],
@@ -66,12 +64,13 @@ const MapComponent = () => {
     const requestLocationPermission = async () => {
         try {
             const permission = await Geolocation.requestPermissions();
-            if (permission && permission.location === 'granted') {
+            if (permission && permission.location === PermissionStatus.Granted) {
                 const position = await Geolocation.getCurrentPosition();
                 const { latitude, longitude } = position.coords;
                 setUserLocation({ latitude, longitude });
             } else {
                 console.error('Location permission denied');
+                // Handle denied permission here (e.g., show a message to the user)
             }
         } catch (error) {
             console.error('Error requesting location permission:', error);
@@ -181,7 +180,6 @@ const MapComponent = () => {
 
     return (
         <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-
             <div className="w-full lg:w-1/3 h-1/2 lg:h-full bg-white p-4 overflow-y-auto order-2 lg:order-1">
                 <div className="mb-4">
                     <label htmlFor="search" className="block text-gray-700 font-semibold mb-2">Search</label>
