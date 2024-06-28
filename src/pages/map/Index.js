@@ -35,8 +35,8 @@ const MapComponent = () => {
     const [customRadius, setCustomRadius] = useState('');
     const mapRef = useRef();
 
-    const base_url = process.env.REACT_APP_API_URL;
-    const apiKey = process.env.REACT_APP_OPENCAGE_API_KEY; // Ensure correct environment variable name
+
+    const apiKey = process.env.REACT_APP_API_URL; // Ensure correct environment variable name
 
     // Function to calculate distance between two points
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
