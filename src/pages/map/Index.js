@@ -214,7 +214,7 @@ const MapComponent = () => {
     return (
         <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
 
-            <div className="w-full lg:w-1/3 h-1/3 lg:h-full bg-white p-4 overflow-y-auto order-2 lg:order-1">
+            <div className="w-full lg:w-1/3 h-1/2 lg:h-full bg-white p-4 overflow-y-auto order-2 lg:order-1">
                 <div className="mb-4">
                     <label htmlFor="search" className="block text-gray-700 font-semibold mb-2">Search</label>
                     <input
@@ -328,7 +328,7 @@ const MapComponent = () => {
                     ))}
                 </div>
             </div>
-            <div className="w-full lg:w-2/3 h-2/3 lg:h-full relative order-1 lg:order-2">
+            <div className="w-full lg:w-2/3 h-1/2 lg:h-full relative order-1 lg:order-2">
                 <MapContainer
                     center={userLocation ? [userLocation.latitude, userLocation.longitude] : [51.505, -0.09]}
                     zoom={getZoomLevel(radius)}

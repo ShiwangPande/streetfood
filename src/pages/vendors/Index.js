@@ -15,7 +15,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 // import required modules
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Pagination, Navigation } from 'swiper/modules';
 
 const VendorPage = () => {
     const [vendors, setVendors] = useState([]);
@@ -120,11 +120,11 @@ const VendorPage = () => {
                         </div>
                         <Swiper
                             spaceBetween={10}
-                            modules={[Autoplay, Pagination, Navigation]}
-                            autoplay={{
-                                delay: 2500,
-                                disableOnInteraction: false,
-                            }}
+                            modules={[ Pagination, Navigation]}
+                            // autoplay={{
+                            //     delay: 2500,
+                            //     disableOnInteraction: false,
+                            // }}
                             pagination={{
                                 clickable: true,
                             }}
@@ -145,12 +145,12 @@ const VendorPage = () => {
                             }}
                             className="category-swiper mySwiper mb-4">
                             {categories.map((category, index) => (
-                                <SwiperSlide className='min-h-60' key={index}>
+                                <SwiperSlide className='min-h-60 ' key={index}>
                                     <button
-                                        className={`category-button ${selectedCategory === category.name ? 'active' : ''}`}
+                                        className={`category-button   ${selectedCategory === category.name ? 'active' : ''}`}
                                         onClick={() => setSelectedCategory(category.name)} // Update selectedCategory with category.name
                                     >
-                                        <Card shadow="sm" className='h-60' key={index} isPressable onPress={() => console.log("item pressed")}>
+                                        <Card shadow="sm" className='h-full p-8 lg:p-0 lg:h-60 ' key={index} isPressable onPress={() => console.log("item pressed")}>
                                             <CardBody className="overflow-visible p-0">
                                                 <Image
                                                     shadow="sm"
