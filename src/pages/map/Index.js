@@ -232,19 +232,19 @@ const MapComponent = () => {
     return (
         <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
 
-            <div className="w-full lg:w-1/3 h-1/2 lg:h-full bg-white p-4 overflow-y-auto order-2 lg:order-1">
+            <div className="w-full lg:w-1/3 h-1/2 lg:h-full bg-background p-4 overflow-y-auto order-2 lg:order-1">
                 <div className="mb-4">
-                    <label htmlFor="search" className="block text-gray-700 font-semibold mb-2">Search</label>
+                    <label htmlFor="search" className="block text-yellow font-semibold mb-2">Search</label>
                     <input
                         id="search"
                         type="text"
                         value={searchQuery}
                         onChange={handleSearch}
                         placeholder="Search by food item or vendor name"
-                        className="block w-full p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
+                        className="block placeholder-yellow text-yellow w-full p-2 bg-background border border-yellow rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow"
                     />
                     {showOptions && searchQuery && (
-                        <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1">
+                        <div className="absolute z-10 w-full bg-background border border-yellow rounded-md shadow-lg mt-1">
                             {filteredOptions.map((option, index) => (
                                 <button
                                     key={index}
@@ -253,7 +253,7 @@ const MapComponent = () => {
                                         setSearchQuery('');
                                         setShowOptions(false);
                                     }}
-                                    className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 focus:outline-none"
+                                    className="block w-full text-left px-4 py-2 text-yellow hover:bg-yellow hover:text-background focus:outline-none"
                                 >
                                     {option}
                                 </button>
@@ -262,17 +262,17 @@ const MapComponent = () => {
                     )}
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="radius" className="block text-gray-700 font-semibold mb-2">Search Radius (km)</label>
+                    <label htmlFor="radius" className="block text-yellow font-semibold mb-2">Search Radius (km)</label>
                     <select
                         id="radius"
                         value={radius}
                         onChange={(e) => setRadius(e.target.value)}
-                        className="block w-full p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
+                        className="block text-yellow w-full p-2 bg-background border border-yellow rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow"
                     >
-                        <option value={5}>5 km</option>
-                        <option value={10}>10 km</option>
-                        <option value={20}>20 km</option>
-                        <option value="other">Other</option>
+                        <option className='text-yellow' value={5}>5 km</option>
+                        <option className='text-yellow' value={10}>10 km</option>
+                        <option className='text-yellow' value={20}>20 km</option>
+                        <option className='text-yellow' value="other">Other</option>
                     </select>
                     {radius === 'other' && (
                         <input
@@ -280,7 +280,7 @@ const MapComponent = () => {
                             value={customRadius}
                             onChange={(e) => setCustomRadius(e.target.value)}
                             placeholder="Enter custom radius in km"
-                            className="block w-full p-2 mt-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
+                            className="block placeholder-yellow text-yellow w-full p-2 mt-2 bg-background border border-yellow rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow"
                         />
                     )}
                 </div>
@@ -289,18 +289,18 @@ const MapComponent = () => {
                         <div className="mb-4">
                             <button
                                 onClick={toggleDropdown}
-                                className="text-gray-700 font-semibold focus:outline-none focus:ring-2 focus:ring-black w-full text-left"
+                                className="text-yellow font-semibold focus:outline-none focus:ring-2 focus:ring-yellow w-full text-left"
                             >
                                 {isOpen ? 'Hide Selected Food Items' : 'Show Selected Food Items'}
                             </button>
                             {isOpen && (
-                                <div className="bg-white rounded-lg shadow-md p-4">
+                                <div className="bg-background rounded-lg shadow-md p-4">
                                     {selectedFoodItems.map((item, index) => (
                                         <div key={index} className="flex justify-between items-center mb-2">
-                                            <span>{item}</span>
+                                            <span className='text-yellow'>{item}</span>
                                             <button
                                                 onClick={() => removeSelectedFoodItem(item)}
-                                                className="text-gray-600 hover:text-red-600 focus:outline-none"
+                                                className="text-yellow hover:text-red-600 focus:outline-none"
                                             >
                                                 <FaTimes />
                                             </button>
@@ -312,12 +312,12 @@ const MapComponent = () => {
                     )}
                 </div>
                 <div className="relative">
-                    <h2 className="text-xl font-bold mb-4">Vendors</h2>
+                    <h2 className="text-xl text-yellow font-bold mb-4">Vendors</h2>
                     {filteredVendors.map((vendor, index) => (
-                        <div key={index} className="bg-white rounded-lg shadow-md p-4 mb-4 relative">
+                        <div key={index} className="bg-background rounded-lg shadow-md p-4 mb-4 relative">
                             <button
                                 onClick={() => setFilteredVendors(filteredVendors.filter((_, i) => i !== index))}
-                                className="absolute top-2 right-2 text-gray-600 hover:text-red-600 focus:outline-none"
+                                className="absolute top-2 right-2 text-yellow hover:text-red-600 focus:outline-none"
                             >
                                 <FaTimes />
                             </button>
@@ -326,17 +326,17 @@ const MapComponent = () => {
                                     <img src={vendor.photoUrl} alt={vendor.name} className="min-w-32 h-48 object-cover rounded-lg mb-2" />
                                 </div>
                                 <div className='flex flex-col'>
-                                    <h3 className="text-lg font-semibold">{vendor.name}</h3>
-                                    <p className="text-gray-600">{vendor.address}</p>
-                                    <p>Food Items: {vendor.foodItems.join(', ')}</p>
-                                    <p>Hygiene Rating: {vendor.hygieneRating}</p>
-                                    <p>Taste Rating: {vendor.tasteRating}</p>
-                                    <p>Hospitality Rating: {vendor.hospitalityRating}</p>
+                                    <h3 className="text-lg text-yellow font-semibold">{vendor.name}</h3>
+
+                                    <p className='text-yellow'>Food Items: {vendor.foodItems.join(', ')}</p>
+                                    <p className='text-yellow'>Hygiene Rating: {vendor.hygieneRating}</p>
+                                    <p className='text-yellow'>Taste Rating: {vendor.tasteRating}</p>
+                                    <p className='text-yellow'>Hospitality Rating: {vendor.hospitalityRating}</p>
                                     <a
                                         href={getDirectionsUrl(vendor)}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-2 text-blue-500 hover:underline"
+                                        className="mt-2 text-yellow hover:underline"
                                     >
                                         Get Directions
                                     </a>
@@ -367,7 +367,7 @@ const MapComponent = () => {
                             <Circle
                                 center={[userLocation.latitude, userLocation.longitude]}
                                 radius={(radius === 'other' ? customRadius : radius) * 1000} // Convert km to meters
-                                color="blue"
+                                color="yellow"
                                 fillOpacity={0.2}
                             />
                         </Marker>
@@ -381,20 +381,20 @@ const MapComponent = () => {
                             ]}
                             icon={streetVendorIcon}
                         >
-                            <Popup>
-                                <div>
+                            <Popup className='bg-background'>
+                                <div >
                                     <img src={vendor.photoUrl} alt={vendor.name} className="w-full h-32 object-cover rounded-lg mb-2" />
-                                    <h3 className="text-lg font-semibold">{vendor.name}</h3>
-                                    <p className="text-gray-600">{vendor.address}</p>
-                                    <p>Food Items: {vendor.foodItems.join(', ')}</p>
-                                    <p>Hygiene Rating: {vendor.hygieneRating}</p>
-                                    <p>Taste Rating: {vendor.tasteRating}</p>
-                                    <p>Hospitality Rating: {vendor.hospitalityRating}</p>
+                                    <h3 className="text-lg text-yellow font-semibold">{vendor.name}</h3>
+
+                                    <p className='text-yellow'>Food Items: {vendor.foodItems.join(', ')}</p>
+                                    <p className='text-yellow'>Hygiene Rating: {vendor.hygieneRating}</p>
+                                    <p className='text-yellow'>Taste Rating: {vendor.tasteRating}</p>
+                                    <p className='text-yellow'>Hospitality Rating: {vendor.hospitalityRating}</p>
                                     <a
                                         href={getDirectionsUrl(vendor)}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-2 text-blue-500 hover:underline"
+                                        className="mt-2 text-yellow hover:underline"
                                     >
                                         Get Directions
                                     </a>
@@ -405,10 +405,10 @@ const MapComponent = () => {
                 </MapContainer>
                 <button
                     onClick={redirectToCurrentLocation}
-                    className="absolute z-[1000] bottom-24 right-8 bg-white text-white p-2 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-black"
+                    className="absolute z-[1000] bottom-24 right-8 text-black bg-black  p-2 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-background"
                     title="Go to Current Location"
                 >
-                    <IconCurrentLocation color="black" />
+                    <IconCurrentLocation color="yellow" />
                 </button>
             </div>
             <Tabbar />

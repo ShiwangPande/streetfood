@@ -16,7 +16,7 @@ const VendorCard = ({ vendor }) => {
         const stars = [];
         for (let i = 0; i < 5; i++) {
             if (i < rating) {
-                stars.push(<FaStar key={i} className="text-yellow-500 inline-block" />);
+                stars.push(<FaStar key={i} className="text-background-500 inline-block" />);
             } else {
                 stars.push(<FaStar key={i} className="text-gray-400 inline-block" />);
             }
@@ -26,8 +26,8 @@ const VendorCard = ({ vendor }) => {
 
     return (
         <div>
-            <Card>
-                <CardBody className="overflow-visible p-0">
+            <Card className='bg-yellow'>
+                <CardBody className="overflow-visible bg-yellow p-0">
                     <Image
                         shadow="sm"
                         radius="lg"
@@ -38,16 +38,16 @@ const VendorCard = ({ vendor }) => {
                     />
                 </CardBody>
                 <CardFooter className="text-small flex flex-col h-100 text-justify items-stretch lg:h-fit w-100 p-5 justify-between">
-                    <h2 className="text-xl font-bold capitalize mb-2">{name}</h2>
+                    <h2 className="text-xl font-bold capitalize mb-2 text-background">{name}</h2>
                     <div className='flex flex-col'>
-                        <strong>Food Items:</strong>
-                        <div className="food-items overflow-auto min-h-5">
+                        <strong className='text-background'>Food Items:</strong>
+                        <div className="food-items text-background overflow-auto min-h-5">
                             <p className='capitalize'>{foodItems.join(', ')}</p>
                         </div>
-                        <p><strong>Hygiene Rating:</strong> {renderStars(hygieneRating)}</p>
-                        <p><strong>Taste Rating:</strong> {renderStars(tasteRating)}</p>
-                        <p><strong>Hospitality Rating:</strong> {renderStars(hospitalityRating)}</p>
-                        <button className="mt-4 bg-black text-white px-4 py-2 rounded hover:bg-[white] hover:text-black border-2 border-black font-semibold focus:outline-none" onClick={handleGetDirections}>
+                        <p className='text-background'><strong>Hygiene Rating:</strong> {renderStars(hygieneRating)}</p>
+                        <p className='text-background'><strong>Taste Rating:</strong> {renderStars(tasteRating)}</p>
+                        <p className='text-background'><strong>Hospitality Rating:</strong> {renderStars(hospitalityRating)}</p>
+                        <button className="mt-4 bg-background text-yellow px-4 py-2 rounded hover:bg-yellow hover:text-background border-2 border-background font-semibold focus:outline-none" onClick={handleGetDirections}>
                             Get Directions
                         </button>
                     </div>

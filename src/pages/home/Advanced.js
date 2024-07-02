@@ -127,25 +127,25 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
     return (
         <div className='overflow-hidden h-screen'>
             <nav className=" ">
-                <div className=" fixed bg-white backdrop-blur-lg w-[100vw] ">
+                <div className=" fixed bg-background backdrop-blur-lg w-[100vw] ">
                     <div className="flex items-center z-100 justify-between mx-auto px-1 lg:px-6 py-4">
                         <div className="flex items-center ml-2">
                             <div onClick={() => goBack()} className="">
-                                <div className='flex items-center justify-center mr-6 h-10 w-10 py-auto bg-white font-semibold shadow-md rounded-full border-2 border-black'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M19 4v2.339A9 9 0 0 0 3 12h2a6.987 6.987 0 0 1 12.725-4H15v2h6V4zM12 19a6.957 6.957 0 0 1-5.726-3H9v-2H3v6h2v-2.339A9 9 0 0 0 21 12h-2a7.009 7.009 0 0 1-7 7z" /></svg>
+                                <div className='flex items-center justify-center mr-6 h-10 w-10 py-auto bg-background font-semibold shadow-md rounded-full border-2 border-yellow'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M19 4v2.339A9 9 0 0 0 3 12h2a6.987 6.987 0 0 1 12.725-4H15v2h6V4zM12 19a6.957 6.957 0 0 1-5.726-3H9v-2H3v6h2v-2.339A9 9 0 0 0 21 12h-2a7.009 7.009 0 0 1-7 7z" fill='#ffc412' /></svg>
                                 </div>
                             </div>
                         </div>
                         <div className="flex items-center">
-                            <span className="text-3xl font-semibold text-black">KartMatch</span>
+                            <span className="text-3xl font-semibold text-yellow"><img className='w-44' src="https://i.postimg.cc/bvqMjHYY/kartmatchlogo.png" alt="" /></span>
                         </div>
                         <Link to="/wishlist" className="text-lg font-semibold mr-2 flex items-center">
                             <div className="mr-1 h-10 w-10">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 24 24" style={{ position: ' absolute', top: '13px', right: '2' }}>
-                                    <path style={{ 'fill': '#00000' }} d="M20.808 11.079C19.829 16.132 12 20.5 12 20.5s-7.829-4.368-8.808-9.421C2.227 6.1 5.066 3.5 8 3.5a4.444 4.444 0 0 1 4 2 4.444 4.444 0 0 1 4-2c2.934 0 5.773 2.6 4.808 7.579z" />
+                                    <path style={{ 'fill': '#ffc412' }} d="M20.808 11.079C19.829 16.132 12 20.5 12 20.5s-7.829-4.368-8.808-9.421C2.227 6.1 5.066 3.5 8 3.5a4.444 4.444 0 0 1 4 2 4.444 4.444 0 0 1 4-2c2.934 0 5.773 2.6 4.808 7.579z" />
                                 </svg>
                                 <g width="20" height="20" style={{ position: ' absolute', top: '18px', right: '17px' }}>
-                                    <span className="relative text-white text-sm">{wishlist.length}</span>
+                                    <span className="relative text-background font-sans text-sm">{wishlist.length}</span>
                                 </g>
                             </div>
                         </Link>
@@ -154,17 +154,17 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
             </nav>
             <div className=''>
                 {loading ? (
-                    <div className="flex justify-center z-[1000000] items-center h-screen">
-                        <Loader type="bubble-loop" bgColor={"#000000"} size={100} />
+                    <div className="flex justify-center bg-background z-[1000000] items-center h-screen">
+                        <Loader type="bubble-loop" bgColor={"#ffc412"} size={100} />
                     </div>
                 ) : (
                     <>
                         {showSurvey && (
-                            <Suspense fallback={<Loader type="bubble-loop" bgColor={"#000000"} size={100} />}>
+                            <Suspense fallback={<Loader type="bubble-loop" bgColor={"#ffc412"} size={100} />}>
                                 <Survey onComplete={handleSurveyComplete} />
                             </Suspense>
                         )}
-                        <div className="flex flex-col pt-10 items-center justify-center min-h-screen h-full w-screen overflow-hidden bg-white">
+                        <div className="flex flex-col pt-10 items-center justify-center min-h-screen h-full w-screen overflow-hidden bg-background">
                             <div className="relative flex justify-center items-center mb-5 w-[100vw] lg:w-4/5 h-[80vh] lg-top-0 top-8 lg:h-[68vh] ">
                                 {filteredData.map((character, index) => (
                                     index === currentIndex && (
@@ -176,7 +176,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                             initial={{ x: 0, opacity: 1 }}
                                             animate={controls}
                                         >
-                                            <Suspense fallback={<div className="relative  bg-black w-full text-black   lg:max-w-xl lg:h-[31rem] rounded-lg p-4 flex flex-col  justify-between">Loading Image...</div>}>
+                                            <Suspense fallback={<div className="relative  bg-yellow w-full text-yellow   lg:max-w-xl lg:h-[31rem] rounded-lg p-4 flex flex-col  justify-between">Loading Image...</div>}>
                                                 <div className='relative w-full p-2 rounded-xl lg:w-fit lg:h-[31rem] h-full'>
                                                     <LazyImage
                                                         src={character.photoUrl}
@@ -184,17 +184,17 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                                     />
                                                     <div className='absolute inset-0 flex flex-col lg:my-5 lg:mx-8 justify-between items-center'>
                                                         <div>
-                                                            <h3 className="rounded-lg text-lg font-bold text-center capitalize mt-5 text-white">{character.name}</h3>
+                                                            <h3 className="rounded-lg text-lg font-bold text-center capitalize mt-5 text-yellow">{character.name}</h3>
                                                         </div>
-                                                        <div className="bg-black/25 lg:max-w-lg w-[90%] p-2 lg:mx-5 mx-5 mb-4 rounded-lg">
-                                                            <p className="text-white font-semibold">Hygiene Rating: {generateStars(character.hygieneRating)}</p>
-                                                            <p className="text-white font-semibold">Taste Rating: {generateStars(character.tasteRating)}</p>
-                                                            <p className="text-white font-semibold">Hospitality Rating: {generateStars(character.hospitalityRating)}</p>
+                                                        <div className="bg-yellow/50 lg:max-w-lg w-[90%] p-2 lg:mx-5 mx-5 mb-4 rounded-lg">
+                                                            <p className="text-background font-semibold">Hygiene Rating: {generateStars(character.hygieneRating)}</p>
+                                                            <p className="text-background font-semibold">Taste Rating: {generateStars(character.tasteRating)}</p>
+                                                            <p className="text-background font-semibold">Hospitality Rating: {generateStars(character.hospitalityRating)}</p>
                                                             <button
                                                                 onClick={() => handleGetDirections(character)}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
-                                                                className="text-white font-semibold bg-green-500 w-full p-2 rounded-lg"
+                                                                className="text-yellow font-semibold bg-background w-full p-2 rounded-lg"
                                                             >
                                                                 Get Directions
                                                             </button>
@@ -208,9 +208,9 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                             <div className='fixed bottom-2 hidden lg:bottom-14 lg:flex'>
                                 {filteredData.length > 0 && (
                                     <>
-                                        <button onClick={goBack} className="rounded-full text-black bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faUndo} /></button>
-                                        <button onClick={() => swiped('left', currentIndex)} className="rounded-full text-red-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faXmark} /></button>
-                                        <button onClick={() => swiped('right', currentIndex)} className="rounded-full text-green-500 bg-white text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faCheck} /></button>
+                                        <button onClick={goBack} className="rounded-full text-yellow bg-background text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faUndo} /></button>
+                                        <button onClick={() => swiped('left', currentIndex)} className="rounded-full text-red-500 bg-background text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faXmark} /></button>
+                                        <button onClick={() => swiped('right', currentIndex)} className="rounded-full text-green-500 bg-background text-3xl p-4 font-bold m-2 shadow-md"><FontAwesomeIcon icon={faCheck} /></button>
                                     </>
                                 )}
                             </div>

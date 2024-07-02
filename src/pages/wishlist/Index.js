@@ -71,13 +71,13 @@ function Wishlist() {
 
     return (
         <div className='overflow-y-hidden'>
-            <nav className="fixed items-center z-100 flex justify-between mx-auto px-6 py-4 bg-white h-20 w-screen">
+            <nav className="fixed items-center z-100 flex justify-between mx-auto px-6 py-4 bg-background h-20 w-screen">
                 <Link to="/" className="flex items-center mr-6">
                     {/* <img src={logo} className="h-10 mr-2" alt="KartMatch Logo" /> */}
-                    <span className="text-xl font-semibold text-black">KartMatch</span>
+                    <span className="text-xl font-semibold text-black"><img className='w-44' src="https://i.postimg.cc/bvqMjHYY/kartmatchlogo.png" alt="" /></span>
                 </Link>
             </nav>
-            <div className="min-h-screen bg-gray-100 py-10">
+            <div className="min-h-screen bg-background py-10">
                 <h1 className="text-3xl font-bold mb-6 text-gray-800">Wishlist</h1>
                 <div className="w-full max-w-md">
                     {wishlistItems.length > 0 ? (
@@ -92,7 +92,7 @@ function Wishlist() {
                             </div>
                             <div className='w-[95vw] mx-auto grid grid-cols-1 m-5 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-8'>
                                 {wishlistItems.map((item, index) => (
-                                    <div key={index} className="bg-white p-6 mb-6 lg:ml-10 flex justify-center shadow-lg rounded-lg">
+                                    <div key={index} className="bg-yellow p-6 mb-6 lg:ml-10 flex justify-center shadow-lg rounded-lg">
                                         <div className="flex flex-col md:flex-row items-center md:items-start">
                                             <img
                                                 src={item.photoUrl}

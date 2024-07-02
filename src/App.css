@@ -23,9 +23,9 @@
 
 .category-button {
   padding: 10px 15px;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ffc412; */
   border-radius: 5px;
-  background-color: #f5f5f5;
+  background-color: black;
   cursor: pointer;
   white-space: nowrap;
   margin: 0 5px;
@@ -33,9 +33,9 @@
 }
 
 .category-button.active {
-  background-color: #333;
-  color: #fff;
-  border-color: #333;
+  /* filter: invert(1); */
+  color: black;
+  border-color: black;
 }
 
 .swiper {
@@ -46,7 +46,7 @@
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: #fff;
+  background: black;
 
   /* Center slide text vertically */
   display: flex;
@@ -62,10 +62,10 @@
 }
 .swiper-button-prev,
 .swiper-button-next {
-  color: #000 !important;
+  color: #ffc412 !important;
 }
 .swiper-pagination-bullet {
-  /* background-color: #fff !important; */
+  background-color: #ffff !important;
   width: 13px !important;
   height: 13px !important;
   margin: 0 8px !important;
@@ -73,7 +73,7 @@
 
 /* Change active pagination bullet color */
 .swiper-pagination-bullet-active {
-  background-color: #000 !important;
+  background-color: #ffc412 !important;
 }
 
 /* Appropriate vendor prefixes should be added for broader browser support */
@@ -137,4 +137,8 @@
 
 .vendor-card.flipped .vendor-card-inner {
   transform: rotateY(180deg);
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: black;
 }

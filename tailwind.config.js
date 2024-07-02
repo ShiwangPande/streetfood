@@ -14,6 +14,9 @@ module.exports = {
         'blue-400': '#60a5fa',
         'red-400': '#f87171',
         'indigo-400': '#818cf8',
+        'background': '#000000',
+        'yellow': '#ffc412',
+        'wheat': '#fff',
         // Add more custom colors if needed
       },
       animation: {
