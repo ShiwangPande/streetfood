@@ -2,12 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import axios from 'axios';
-
+import {
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Button,
+    useDisclosure,
+} from "@nextui-org/react";
 const VendorCard = ({ vendor }) => {
     const { name, foodItems, hygieneRating, tasteRating, hospitalityRating } = vendor;
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
     const currentUser = "currentUserId"; // Replace with actual current user ID
+    const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -85,34 +94,64 @@ const VendorCard = ({ vendor }) => {
                         <button className="mt-4 bg-background text-yellow px-4 py-2 rounded hover:bg-yellow hover:text-background border-2 border-background font-semibold focus:outline-none" onClick={handleGetDirections}>
                             Get Directions
                         </button>
+                        <Button className="mt-4 bg-background text-yellow px-4 py-2 rounded hover:bg-yellow hover:text-background border-2 border-background font-semibold focus:outline-none" onPress={onOpen}>Comment</Button>
+
                     </div>
-                    <div className="mt-4">
-                        <h3 className="text-background font-bold mb-2">Comments:</h3>
-                        <ul className="list-disc list-inside text-background overflow-y-auto max-h-32">
-                            {comments.map((comment) => (
-                                <li key={comment._id} className="capitalize flex justify-between">
-                                    {comment.comment}
-                                    {comment.userId === currentUser && (
-                                        <button onClick={() => handleDeleteComment(comment._id)} className="ml-2 text-red-500">Delete</button>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                        <div className="mt-2">
-                            <textarea
-                                value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                                placeholder="Add a comment"
-                                className="w-full p-2 border rounded text-background"
-                            />
-                            <button
-                                onClick={handleAddComment}
-                                className="mt-2 bg-background text-yellow px-4 py-2 rounded hover:bg-yellow hover:text-background border-2 border-background font-semibold focus:outline-none"
-                            >
-                                Add Comment
-                            </button>
-                        </div>
-                    </div>
+                    <Modal isOpen={isOpen} size="5xl" scrollBehavior="outside" isDismissable={false} isKeyboardDismissDisabled={true} placement="center"
+                     className='top-14'   onOpenChange={onOpenChange}>
+                        <ModalContent>
+                            {(onClose) => (
+                                <>
+                                    <ModalHeader className="flex flex-col  text-2xl bg-background text-white gap-1">
+                                        Add comment
+                                    </ModalHeader>
+                                    <ModalBody className="px-4 bg-yellow lg:px-8">
+                                        <>
+                                            <div className="mt-4">
+                                                <h3 className="text-background font-bold mb-2">Comments:</h3>
+                                                <ul className="list-disc list-inside  text-background overflow-y-auto max-h-32">
+                                                    {comments.map((comment) => (
+                                                        <>
+                                                        <li key={comment._id} className="capitalize flex justify-between">
+                                                          
+                                                          
+                                                          <div className='bg-wheat/80 w-full p-2 font-semibold rounded-lg'> {comment.comment} </div> 
+                                                            {comment.userId === currentUser && (
+                                                                <button className="h-full flex flex-row rounded-lg  justify-around" onClick={() => handleDeleteComment(comment._id)}>
+                                                                <div className="px-2 w-10 h-10 my-auto" color="primary">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                                        <path d="M5.755 20.283L4 8h16l-1.755 12.283A2 2 0 0 1 16.265 22h-8.53a2 2 0 0 1-1.98-1.717zM21 4h-5V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v1H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2z" fill="#fd2222" />
+                                                                    </svg>
+                                                                </div>
+                                                            </button>
+                                                            )}
+                                                        </li>
+                                                        <hr className='border-1 my-2'/>
+                                                        </>
+                                                    ))}
+                                                </ul>
+                                                <div className="mt-2">
+                                                    <textarea
+                                                        value={newComment}
+                                                        onChange={(e) => setNewComment(e.target.value)}
+                                                        placeholder="Add a comment"
+                                                        className="w-full p-2 border rounded text-background"
+                                                    />
+                                                    <button
+                                                        onClick={handleAddComment}
+                                                        className="mt-2 bg-background text-yellow px-4 py-2 rounded hover:bg-yellow hover:text-background border-2 border-background font-semibold focus:outline-none"
+                                                    >
+                                                        Add Comment
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </>
+                                    </ModalBody>
+                                </>
+                            )}
+                        </ModalContent>
+                    </Modal>
+
                 </CardFooter>
             </Card>
         </div>

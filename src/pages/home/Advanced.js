@@ -186,7 +186,7 @@ function Advanced({ preferences = { hygieneRating: 0, tasteRating: 0, hospitalit
                                                         <div>
                                                             <h3 className="rounded-lg text-lg font-bold text-center capitalize mt-5 text-yellow">{character.name}</h3>
                                                         </div>
-                                                        <div className="bg-yellow/50 lg:max-w-lg w-[90%] p-2 lg:mx-5 mx-5 mb-4 rounded-lg">
+                                                        <div className="bg-wheat/50 lg:max-w-lg w-[90%] p-2 lg:mx-5 mx-5 mb-4 rounded-lg">
                                                             <p className="text-background font-semibold">Hygiene Rating: {generateStars(character.hygieneRating)}</p>
                                                             <p className="text-background font-semibold">Taste Rating: {generateStars(character.tasteRating)}</p>
                                                             <p className="text-background font-semibold">Hospitality Rating: {generateStars(character.hospitalityRating)}</p>
