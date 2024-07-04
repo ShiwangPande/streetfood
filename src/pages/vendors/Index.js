@@ -41,7 +41,32 @@ const VendorPage = () => {
         setSearchQuery(event.target.value);
     };
 
-   
+    const categories = [
+
+
+
+
+
+
+
+
+
+
+
+
+        { name: 'All', imageUrl: 'https://i.postimg.cc/4xLH90XH/ALL-VENDORS.png' },
+        { name: 'Bhatura', imageUrl: 'https://i.postimg.cc/R0W6QT0s/BHATURA.png' },
+        { name: 'Dosa', imageUrl: 'https://i.postimg.cc/4dtYjNVp/DOSA.png' },
+        { name: 'Egg', imageUrl: 'https://i.postimg.cc/SKHXZz2y/EGG.png' },
+        { name: 'Jhalmuri', imageUrl: 'https://i.postimg.cc/zvryNZF6/JHALMURI.png' },
+        { name: 'Momo', imageUrl: 'https://i.postimg.cc/FzV7sWPR/MOMO.png' },
+        { name: 'Puchka', imageUrl: 'https://i.postimg.cc/MZ7cDHWS/PUCHKA.png' },
+        { name: 'Sandwich', imageUrl: 'https://i.postimg.cc/28C1XY6B/SANDWICH.png' },
+        { name: 'Tea', imageUrl: 'https://i.postimg.cc/bNLs75DV/TEA.png' },
+
+
+    ];
+
     const filteredVendors = vendors.filter((vendor) => {
         const vendorName = vendor.name.toLowerCase();
         const foodItems = vendor.foodItems.filter(item => typeof item === 'string').join(' ').toLowerCase();
@@ -52,7 +77,9 @@ const VendorPage = () => {
             return vendorName.includes(word) || foodItems.includes(word);
         });
 
-      
+        if (selectedCategory === 'All') {
+            return matchesQuery;
+        }
 
         return matchesQuery && vendor.foodItems.some(item => typeof item === 'string' && item.toLowerCase().includes(selectedCategory.toLowerCase()));
     });
@@ -102,7 +129,7 @@ const VendorPage = () => {
                                 </button>
                             )}
                         </div>
-                     
+                       
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {filteredVendors.map((vendor, index) => (
                                 <VendorCard key={index} vendor={vendor} />
