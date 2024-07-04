@@ -52,17 +52,28 @@ const VendorPage = () => {
 
 
 
+        
+        
+        
+        
+        
 
+
+
+
+
+        
 
         { name: 'All', imageUrl: 'https://i.postimg.cc/4xLH90XH/ALL-VENDORS.png' },
-        { name: 'Bhatura', imageUrl: 'https://i.postimg.cc/R0W6QT0s/BHATURA.png' },
-        { name: 'Dosa', imageUrl: 'https://i.postimg.cc/4dtYjNVp/DOSA.png' },
-        { name: 'Egg', imageUrl: 'https://i.postimg.cc/SKHXZz2y/EGG.png' },
-        { name: 'Jhalmuri', imageUrl: 'https://i.postimg.cc/zvryNZF6/JHALMURI.png' },
-        { name: 'Momo', imageUrl: 'https://i.postimg.cc/FzV7sWPR/MOMO.png' },
-        { name: 'Puchka', imageUrl: 'https://i.postimg.cc/MZ7cDHWS/PUCHKA.png' },
-        { name: 'Sandwich', imageUrl: 'https://i.postimg.cc/28C1XY6B/SANDWICH.png' },
-        { name: 'Tea', imageUrl: 'https://i.postimg.cc/bNLs75DV/TEA.png' },
+        { name: 'Drink', imageUrl: 'https://i.postimg.cc/nzqgTNzk/beverages.webp' },
+        { name: 'Dosa', imageUrl: 'https://i.postimg.cc/8cH3gWLf/dosa.webp' },
+        { name: 'Egg', imageUrl: 'https://i.postimg.cc/jjpBHRs2/egg.webp' },
+        
+
+        { name: 'Puchka', imageUrl: 'https://i.postimg.cc/cHBKSJ6t/puchkaa.webp' },
+       
+  
+        { name: 'chat', imageUrl: 'https://i.postimg.cc/nrZ5WT9t/chat.webp' },
 
 
     ];
@@ -129,7 +140,56 @@ const VendorPage = () => {
                                 </button>
                             )}
                         </div>
-                       
+                        <Swiper
+                            spaceBetween={10}
+                            modules={[Pagination, Navigation]}
+                            // autoplay={{
+                            //     delay: 2500,
+                            //     disableOnInteraction: false,
+                            // }}
+                            pagination={{
+                                clickable: true,
+                            }}
+                            navigation={true}
+                            breakpoints={{
+                                640: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 20,
+                                },
+                                768: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 40,
+                                },
+                                1024: {
+                                    slidesPerView: 5,
+                                    spaceBetween: 50,
+                                },
+                            }}
+                            className="category-swiper mySwiper mb-4">
+                            {categories.map((category, index) => (
+                                <SwiperSlide className='min-h-60 bg-background' key={index}>
+                                    <button
+                                        className={`category-button bg-background  ${selectedCategory === category.name ? 'active' : ''}`}
+                                        onClick={() => setSelectedCategory(category.name)} // Update selectedCategory with category.name
+                                    >
+                                        <Card shadow="sm" className='h-full bg-background p-8 lg:p-0 lg:h-60 ' key={index} isPressable onPress={() => console.log("item pressed")}>
+                                            <CardBody className="overflow-visible bg-background p-0">
+                                                <Image
+                                                    shadow="sm"
+                                                    autoHeight={true}
+                                                    radius="lg"
+
+                                                    alt={category.name}
+                                                    className="object-cover bg-background min-h-52 "
+                                                    src={category.imageUrl}
+                                                    onClick={() => setSelectedCategory(category.name)}
+                                                />
+                                            </CardBody>
+                                        </Card>
+                                    </button>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {filteredVendors.map((vendor, index) => (
                                 <VendorCard key={index} vendor={vendor} />
