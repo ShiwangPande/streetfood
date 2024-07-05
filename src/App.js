@@ -10,6 +10,7 @@ import Wishlist from './pages/wishlist/Index';
 import { WishlistProvider } from './pages/wishlist/WishlistContext';
 import Loader from './components/Loader';
 import InstallPopup from './components/InstallButton';
+import PrivacyPolicy from './pages/privacypolicy/Index';
 import "./App.css";
 const App = () => {
   const [preferences, setPreferences] = useState(null);
@@ -58,6 +59,8 @@ const App = () => {
               <Route path="/map" element={<Map />} />
               <Route path="/vendors" element={<VendorPage />} />
               <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+
             </Routes>
           </>
     </div>
