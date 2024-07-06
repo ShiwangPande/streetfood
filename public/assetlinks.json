@@ -1,13 +1,11 @@
 [
-    {
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.yourcompany.yourapp",
-        "sha256_cert_fingerprints": [
-          "YOUR_APP_SHA256_CERT_FINGERPRINT"
-        ]
-      }
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.kartmatch.app",
+      "sha256_cert_fingerprints":
+        ["3A:7E:B1:DA:A6:55:45:DC:26:A3:D7:8E:3E:64:3D:DD:5B:B6:85:21:E3:7C:3E:BE:EA:1F:F0:31:BB:CE:3D:1F"]
     }
-  ]
-  
+  }
+]
