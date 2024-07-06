@@ -44,7 +44,7 @@ const VendorPage = () => {
 
     const categories = [
         { name: 'All', show:"All", imageUrl: 'https://i.postimg.cc/50DSzDbZ/all-vendors.jpg' },
-        { name: 'Drink', show:"Beverage", imageUrl: 'https://i.postimg.cc/nzqgTNzk/beverages.webp' },
+        { name: 'Lassi', show:"Beverage", imageUrl: 'https://i.postimg.cc/nzqgTNzk/beverages.webp' },
         { name: 'Dosa', show:"Dosa", imageUrl: 'https://i.postimg.cc/8cH3gWLf/dosa.webp' },
         { name: 'Egg', show:"Egg", imageUrl: 'https://i.postimg.cc/jjpBHRs2/egg.webp' },
         { name: 'Puchka', show:"Puchka", imageUrl: 'https://i.postimg.cc/cHBKSJ6t/puchkaa.webp' },
