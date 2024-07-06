@@ -22,6 +22,7 @@ const VendorPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState('All');
+    const [focusedCategory, setFocusedCategory] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,38 +43,12 @@ const VendorPage = () => {
     };
 
     const categories = [
-
-
-
-
-
-
-
-
-
-
-        
-        
-        
-        
-        
-
-
-
-
-
-        
-
-        { name: 'All', imageUrl: 'https://i.postimg.cc/4xLH90XH/ALL-VENDORS.png' },
-        { name: 'Drink', imageUrl: 'https://i.postimg.cc/nzqgTNzk/beverages.webp' },
-        { name: 'Dosa', imageUrl: 'https://i.postimg.cc/8cH3gWLf/dosa.webp' },
-        { name: 'Egg', imageUrl: 'https://i.postimg.cc/jjpBHRs2/egg.webp' },
-        
-
-        { name: 'Puchka', imageUrl: 'https://i.postimg.cc/cHBKSJ6t/puchkaa.webp' },
-       
-  
-        { name: 'chat', imageUrl: 'https://i.postimg.cc/nrZ5WT9t/chat.webp' },
+        { name: 'All', show:"All", imageUrl: 'https://i.postimg.cc/50DSzDbZ/all-vendors.jpg' },
+        { name: 'Drink', show:"Beverage", imageUrl: 'https://i.postimg.cc/nzqgTNzk/beverages.webp' },
+        { name: 'Dosa', show:"Dosa", imageUrl: 'https://i.postimg.cc/8cH3gWLf/dosa.webp' },
+        { name: 'Egg', show:"Egg", imageUrl: 'https://i.postimg.cc/jjpBHRs2/egg.webp' },
+        { name: 'Puchka', show:"Puchka", imageUrl: 'https://i.postimg.cc/cHBKSJ6t/puchkaa.webp' },
+        { name: 'chat', show:"Chaat", imageUrl: 'https://i.postimg.cc/nrZ5WT9t/chat.webp' },
 
 
     ];
@@ -141,56 +116,62 @@ const VendorPage = () => {
                             )}
                         </div>
                         <Swiper
-                            spaceBetween={10}
-                            modules={[Pagination, Navigation]}
-                            // autoplay={{
-                            //     delay: 2500,
-                            //     disableOnInteraction: false,
-                            // }}
-                            pagination={{
-                                clickable: true,
-                            }}
-                            navigation={true}
-                            breakpoints={{
-                                640: {
-                                    slidesPerView: 2,
-                                    spaceBetween: 20,
-                                },
-                                768: {
-                                    slidesPerView: 4,
-                                    spaceBetween: 40,
-                                },
-                                1024: {
-                                    slidesPerView: 5,
-                                    spaceBetween: 50,
-                                },
-                            }}
-                            className="category-swiper mySwiper mb-4">
-                            {categories.map((category, index) => (
-                                <SwiperSlide className='min-h-60 bg-background' key={index}>
-                                    <button
-                                        className={`category-button bg-background  ${selectedCategory === category.name ? 'active' : ''}`}
-                                        onClick={() => setSelectedCategory(category.name)} // Update selectedCategory with category.name
-                                    >
-                                        <Card shadow="sm" className='h-full bg-background p-8 lg:p-0 lg:h-60 ' key={index} isPressable onPress={() => console.log("item pressed")}>
-                                            <CardBody className="overflow-visible bg-background p-0">
-                                                <Image
-                                                    shadow="sm"
-                                                    autoHeight={true}
-                                                    radius="lg"
-
-                                                    alt={category.name}
-                                                    className="object-cover bg-background min-h-52 "
-                                                    src={category.imageUrl}
-                                                    onClick={() => setSelectedCategory(category.name)}
-                                                />
-                                            </CardBody>
-                                        </Card>
-                                    </button>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                spaceBetween={10}
+                modules={[Pagination, Navigation]}
+                pagination={{ clickable: true }}
+                navigation={true}
+                breakpoints={{
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    768: {
+                        slidesPerView: 4,
+                        spaceBetween: 40,
+                    },
+                    1024: {
+                        slidesPerView: 5,
+                        spaceBetween: 50,
+                    },
+                }}
+                className="category-swiper h-fit mySwiper mb-4"
+            >
+                {categories.map((category, index) => (
+                    <SwiperSlide className='min-h-72' key={index}>
+                        <button
+                            className={`category-button ${selectedCategory === category.name ? 'active' : ''}`}
+                            onClick={() => setSelectedCategory(category.name)}
+                        >
+                            <div className={`card ${focusedCategory === category.name ? 'focused' : ''}`} key={index} onClick={() => setFocusedCategory(category.name)}>
+                                <div className="card-body h-52">
+                                    <img
+                                        alt={category.show}
+                                        className="object-cover rounded-lg min-h-52"
+                                        src={category.imageUrl}
+                                    />
+                                    <div className="overlay text-center">
+                                        {category.show}
+                                    </div>
+                                </div>
+                                <div className="card-footer text-xl my-2 text-yellow">
+                                    {category.show}
+                                </div>
+                            </div>
+                        </button>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+{/* 
+            {focusedCategory && (
+                <div className="focused-category-modal" onClick={() => setFocusedCategory(null)}>
+                    <div className="modal-content">
+                        <img src={categories.find(category => category.name === focusedCategory).imageUrl} alt={focusedCategory} />
+                        <div className="category-name">{focusedCategory}</div>
+                    </div>
+                </div>
+            )} */}
+      
+                        <div className="grid grid-cols-1 mt-10 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {filteredVendors.map((vendor, index) => (
                                 <VendorCard key={index} vendor={vendor} />
                             ))}
