@@ -36,6 +36,7 @@
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
     "react-tinder-card": "^1.6.4",
+    "react-toggle-switch": "^3.0.4",
     "react-window": "^1.8.10",
     "swiper": "^11.1.4",
     "web-vitals": "^2.1.4",

@@ -7,7 +7,7 @@ import Tabbar from '../../components/Tabbar';
 import Loader from 'react-js-loader';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
-
+import Settings from '../../components/Settings';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -17,7 +17,7 @@ import 'swiper/css/navigation';
 // import required modules
 import { Pagination, Navigation } from 'swiper/modules';
 
-const VendorPage = () => {
+const VendorPage = ({ handleToggleComments, commentsEnabled, userId }) => {
     const [vendors, setVendors] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
@@ -43,12 +43,12 @@ const VendorPage = () => {
     };
 
     const categories = [
-        { name: 'All', show:"All", imageUrl: 'https://i.postimg.cc/50DSzDbZ/all-vendors.jpg' },
-        { name: 'Lassi', show:"Beverage", imageUrl: 'https://i.postimg.cc/nzqgTNzk/beverages.webp' },
-        { name: 'Dosa', show:"Dosa", imageUrl: 'https://i.postimg.cc/8cH3gWLf/dosa.webp' },
-        { name: 'Egg', show:"Egg", imageUrl: 'https://i.postimg.cc/jjpBHRs2/egg.webp' },
-        { name: 'Puchka', show:"Puchka", imageUrl: 'https://i.postimg.cc/cHBKSJ6t/puchkaa.webp' },
-        { name: 'chat', show:"Chaat", imageUrl: 'https://i.postimg.cc/nrZ5WT9t/chat.webp' },
+        { name: 'All', show: "All", imageUrl: 'https://i.postimg.cc/50DSzDbZ/all-vendors.jpg' },
+        { name: 'Lassi', show: "Beverage", imageUrl: 'https://i.postimg.cc/nzqgTNzk/beverages.webp' },
+        { name: 'Dosa', show: "Dosa", imageUrl: 'https://i.postimg.cc/8cH3gWLf/dosa.webp' },
+        { name: 'Egg', show: "Egg", imageUrl: 'https://i.postimg.cc/jjpBHRs2/egg.webp' },
+        { name: 'Puchka', show: "Puchka", imageUrl: 'https://i.postimg.cc/cHBKSJ6t/puchkaa.webp' },
+        { name: 'chat', show: "Chaat", imageUrl: 'https://i.postimg.cc/nrZ5WT9t/chat.webp' },
 
 
     ];
@@ -75,7 +75,7 @@ const VendorPage = () => {
     return (
         <div className='bg-background'>
             <nav className="shadow-md relative z-[1000]">
-                <div className="fixed shadow-lg bg-background backdrop-blur-lg w-[100vw]">
+                <div className="sticky shadow-lg bg-background backdrop-blur-lg w-[100vw]">
                     <div className="flex items-center z-100 justify-center mx-auto px-6 py-3">
                         <div className="flex items-center">
                             <Link to="/" className="flex items-center mr-6">
@@ -91,7 +91,8 @@ const VendorPage = () => {
                 </div>
             ) : (
                 <>
-                    <div className="container mx-auto px-5 lg:px-20 py-24">
+                        <Settings onToggleComments={handleToggleComments} commentsEnabled={commentsEnabled} />
+                    <div className="container mx-auto px-5 lg:px-20 pt-14">
                         <h1 className="text-3xl font-bold text-yellow mb-4">All Vendors</h1>
                         <div className="relative mb-4">
                             <div className="flex items-center border-b border-yellow py-2">
@@ -116,52 +117,52 @@ const VendorPage = () => {
                             )}
                         </div>
                         <Swiper
-                spaceBetween={10}
-                modules={[Pagination, Navigation]}
-                pagination={{ clickable: true }}
-                navigation={true}
-                breakpoints={{
-                    640: {
-                        slidesPerView: 2,
-                        spaceBetween: 20,
-                    },
-                    768: {
-                        slidesPerView: 4,
-                        spaceBetween: 40,
-                    },
-                    1024: {
-                        slidesPerView: 5,
-                        spaceBetween: 50,
-                    },
-                }}
-                className="category-swiper h-fit mySwiper mb-4"
-            >
-                {categories.map((category, index) => (
-                    <SwiperSlide className='min-h-72' key={index}>
-                        <button
-                            className={`category-button ${selectedCategory === category.name ? 'active' : ''}`}
-                            onClick={() => setSelectedCategory(category.name)}
+                            spaceBetween={10}
+                            modules={[Pagination, Navigation]}
+                            pagination={{ clickable: true }}
+                            navigation={true}
+                            breakpoints={{
+                                640: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 20,
+                                },
+                                768: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 40,
+                                },
+                                1024: {
+                                    slidesPerView: 5,
+                                    spaceBetween: 50,
+                                },
+                            }}
+                            className="category-swiper h-fit mySwiper mb-4"
                         >
-                            <div className={`card ${focusedCategory === category.name ? 'focused' : ''}`} key={index} onClick={() => setFocusedCategory(category.name)}>
-                                <div className="card-body h-52">
-                                    <img
-                                        alt={category.show}
-                                        className="object-cover rounded-lg min-h-52"
-                                        src={category.imageUrl}
-                                    />
-                                    <div className="overlay text-center">
-                                        {category.show}
-                                    </div>
-                                </div>
-                                <div className="card-footer text-xl my-2 text-yellow">
-                                    {category.show}
-                                </div>
-                            </div>
-                        </button>
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-{/* 
+                            {categories.map((category, index) => (
+                                <SwiperSlide className='min-h-72' key={index}>
+                                    <button
+                                        className={`category-button ${selectedCategory === category.name ? 'active' : ''}`}
+                                        onClick={() => setSelectedCategory(category.name)}
+                                    >
+                                        <div className={`card ${focusedCategory === category.name ? 'focused' : ''}`} key={index} onClick={() => setFocusedCategory(category.name)}>
+                                            <div className="card-body h-52">
+                                                <img
+                                                    alt={category.show}
+                                                    className="object-cover rounded-lg min-h-52"
+                                                    src={category.imageUrl}
+                                                />
+                                                <div className="overlay text-center">
+                                                    {category.show}
+                                                </div>
+                                            </div>
+                                            <div className="card-footer text-xl my-2 text-yellow">
+                                                {category.show}
+                                            </div>
+                                        </div>
+                                    </button>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                        {/* 
             {focusedCategory && (
                 <div className="focused-category-modal" onClick={() => setFocusedCategory(null)}>
                     <div className="modal-content">
@@ -170,10 +171,10 @@ const VendorPage = () => {
                     </div>
                 </div>
             )} */}
-      
+
                         <div className="grid grid-cols-1 mt-10 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {filteredVendors.map((vendor, index) => (
-                                <VendorCard key={index} vendor={vendor} />
+                                <VendorCard userId={userId} handleToggleComments={handleToggleComments} commentsEnabled={commentsEnabled} key={index} vendor={vendor} />
                             ))}
                         </div>
                     </div>
