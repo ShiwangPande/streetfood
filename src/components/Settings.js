@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Settings = ({ onToggleComments, commentsEnabled }) => {
+const Settings = ({ handleToggleComments, commentsEnabled }) => {
     return (
         <div className="flex flex-col items-center justify-center">
             <div className="bg-yellow text-background rounded-lg shadow-lg p-6 max-w-md w-full">
@@ -13,7 +13,7 @@ const Settings = ({ onToggleComments, commentsEnabled }) => {
                             id="toggle"
                             className="sr-only"
                             checked={commentsEnabled}
-                            onChange={onToggleComments}
+                            onChange={handleToggleComments}
                         />
                         <div className="w-12 h-6 bg-background rounded-full shadow-inner ring-2 ring-background ring-offset-2 ring-offset-background transition-all duration-200 ease-in-out">
                             <div className={`w-6 h-6 bg-yellow rounded-full shadow-md transform ${commentsEnabled ? 'translate-x-full' : ''} transition-transform duration-200 ease-in-out`}></div>

@@ -17,7 +17,7 @@ import 'swiper/css/navigation';
 // import required modules
 import { Pagination, Navigation } from 'swiper/modules';
 
-const VendorPage = ({ handleToggleComments, commentsEnabled, userId }) => {
+const VendorPage = ({ handleToggleComments, commentsEnabled }) => {
     const [vendors, setVendors] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
@@ -91,7 +91,7 @@ const VendorPage = ({ handleToggleComments, commentsEnabled, userId }) => {
                 </div>
             ) : (
                 <>
-                        <Settings onToggleComments={handleToggleComments} commentsEnabled={commentsEnabled} />
+                        <Settings handleToggleComments={handleToggleComments} commentsEnabled={commentsEnabled} />
                     <div className="container mx-auto px-5 lg:px-20 pt-14">
                         <h1 className="text-3xl font-bold text-yellow mb-4">All Vendors</h1>
                         <div className="relative mb-4">
@@ -174,7 +174,7 @@ const VendorPage = ({ handleToggleComments, commentsEnabled, userId }) => {
 
                         <div className="grid grid-cols-1 mt-10 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {filteredVendors.map((vendor, index) => (
-                                <VendorCard userId={userId} handleToggleComments={handleToggleComments} commentsEnabled={commentsEnabled} key={index} vendor={vendor} />
+                                <VendorCard handleToggleComments={handleToggleComments} commentsEnabled={commentsEnabled} key={index} vendor={vendor} />
                             ))}
                         </div>
                     </div>

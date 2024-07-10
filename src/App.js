@@ -79,7 +79,7 @@ const App = () => {
             <Route path="/map" element={<Map />} />
             <Route
               path="/vendors"
-              element={<VendorPage onToggleComments={handleToggleComments} commentsEnabled={commentsEnabled} />}
+              element={<VendorPage handleToggleComments={handleToggleComments} commentsEnabled={commentsEnabled} />}
             />
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/privacypolicy" element={<PrivacyPolicy />} />
